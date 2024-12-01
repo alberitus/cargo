@@ -126,7 +126,7 @@
                                     <button id="items" data-bs-target="#modalUbah"
                                         class="ubah_cart btn btn-warning btn-xs" title="Ubah Jumlah"><i
                                             class="fas fa-edit"></i></button>
-                                            <button id="items" data-bs-target="#modalUbah"
+                                    <button id="items" data-bs-target="#modalUbah"
                                         class="ubah_cart btn btn-danger btn-xs" title="Ubah Jumlah"><i
                                             class="fas fa-trash"></i></button>
                                 </td>
@@ -141,7 +141,7 @@
                                     <button id="items" data-bs-target="#modalUbah"
                                         class="ubah_cart btn btn-warning btn-xs" title="Ubah Jumlah"><i
                                             class="fas fa-edit"></i></button>
-                                            <button id="items" data-bs-target="#modalUbah"
+                                    <button id="items" data-bs-target="#modalUbah"
                                         class="ubah_cart btn btn-danger btn-xs" title="Ubah Jumlah"><i
                                             class="fas fa-trash"></i></button>
                                 </td>
@@ -163,7 +163,7 @@
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                id="tax2" value="16.500"checked />
+                                                id="tax2" value="16.500" checked />
                                             <label class="form-check-label" for="flexRadioDefault2">
                                                 11%
                                             </label>
@@ -185,15 +185,15 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="d-flex justify-content-center">
                                     <h5 style="width: 80%; text-align: left;">RP
-                                            150.000</h5>
+                                        150.000</h5>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <h5 style="width: 80%; text-align: left;">RP
-                                            16.500</h5>
+                                        16.500</h5>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <h5 style="width: 80%; text-align: left;">RP
-                                            166.500</h5>
+                                        166.500</h5>
                                 </div>
                             </div>
                         </div>
@@ -240,19 +240,19 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="d-flex justify-content-center">
                                     <h6 style="width: 80%; text-align: left;">RP
-                                            63.000</h6>
+                                        63.000</h6>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <h6 style="width: 80%; text-align: left;">RP
-                                            103.000</h6>
+                                        103.000</h6>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <h6 style="width: 80%; text-align: left;">RP
-                                            3.000</h6>
+                                        3.000</h6>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <h5 style="width: 80%; text-align: left;">RP
-                                            100.000</h5>
+                                        100.000</h5>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +264,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 @include('invoice/modal-item')
 @include('invoice/modal-ubah')
