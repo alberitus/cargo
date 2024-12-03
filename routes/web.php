@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\JobController;
-
 
 Route::get('/', function () {
-    return view('index');
+    return view('welcome');
 });
+
+
+Route::get('/index', function () {
+    return view('index');
+})->middleware(['auth', 'verified'])->name('index');
 
 //invoice
 Route::get('/invoice/list', [InvoiceController::class, 'list']);
@@ -23,5 +25,10 @@ Route::delete('/company/delete/{company_id}', [CompanyController::class, 'destro
 Route::resource('company', CompanyController::class);
 
 
-//job
-Route::resource('job', JobController::class);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

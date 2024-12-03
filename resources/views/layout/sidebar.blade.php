@@ -106,7 +106,7 @@
         </li>
         <li class="nav-item">
             <a>
-                <p>Customer Service</p>
+                <p>{{ session('role_name') }}cek</p>
             </a>
         </li>
     </ul>
