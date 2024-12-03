@@ -23,25 +23,33 @@ class RoleManager
         $authUserRole = Auth::user()->role;
 
         $roleNames = [
-            1 => 'customer_service',
-            2 => 'admin',
+            1 => 'Customer Service',
+            2 => 'Admin',
+            3 => 'Supervisor',
         ];
 
+        // dd($authUserRole);
         $authUserRole = Auth::user()->role;
 
         session(['role_name' => $roleNames[$authUserRole] ?? 'Unknown Role']);
 
         switch ($role) {
-            case 'customer_service':
-                if ($authUserRole == 1) {
-                    return $next($request);
-                }
-                break;
             case 'admin':
                 if ($authUserRole == 2) {
                     return $next($request);
                 }
                 break;
+            case 'customer_service':
+                if ($authUserRole == 1) {
+                    return $next($request);
+                }
+                break;
+            case 'supervisor':
+                if ($authUserRole == 3) {
+                    return $next($request);
+                }
+                break;
         }
+        return abort(403, 'Unauthorized action.');
     }
 }

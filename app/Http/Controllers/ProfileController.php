@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+// use App\Http\Controllers\DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 
@@ -23,6 +25,12 @@ class ProfileController extends Controller
     {
         $users = User::all();  // Fetch all users
         return view('user.index', compact('users'));
+    }
+
+    public function view()
+    {
+        $users = User::all();  // Fetch all users
+        return view('user.view', compact('users'));
     }
 
     public function edit(Request $request): View
@@ -72,7 +80,7 @@ class ProfileController extends Controller
     public function editById($id): View
     {
         $user = User::findOrFail($id); // Menarik data berdasarkan ID
-        return view('user.index', [
+        return view('user.editById', [
             'user' => $user,
         ]);
     }
@@ -80,47 +88,65 @@ class ProfileController extends Controller
     /**
      * Update a specific user's profile information by ID.
      */
-    public function updateById(ProfileUpdateRequest $request, $id): RedirectResponse
-    {
-        $user = User::findOrFail($id); // Menarik data berdasarkan ID
-        $user->fill($request->validated());
-
-        // Jika email diubah, setel ulang status verifikasi email
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
-        }
-
-        $user->save();
-
-        return Redirect::route('profile.editById', ['id' => $user->id])->with('status', 'Profile updated successfully');
+    public function updateById(ProfileUpdateRequest $request, $id)
+{
+    $user = User::findOrFail($id);
+    
+    // Debug untuk memeriksa data yang dikirimkan
+    // dd($request->all());
+    
+    $user->fill($request->validated());
+    
+    if ($user->isDirty('email')) {
+        $user->email_verified_at = null;
     }
+    
+$user->save();
+
+if ($request->has('role') && in_array($request->role, [1, 2, 3])) {
+    $user->role = $request->role;  // Update the role
+    $user->save();  // Save after role update
+}
+
+    return Redirect::route('profile.index')->with('status', 'Profile updated successfully');
+}
+
 
     /**
      * Delete a specific user's account by ID.
      */
-    public function destroyById(Request $request, $id): RedirectResponse
+    public function destroyById($id)
     {
+        // Cari user berdasarkan ID
         $user = User::findOrFail($id);
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
-
-        Auth::logout();
-
+    
+        // Hapus user
         $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+    
+        // Redirect dengan pesan sukses
+        return redirect()->route('profile.index')->with('status', 'Account deleted successfully.');
     }
+
+    public function updateRole(Request $request, $id)
+{
+    $request->validate([
+        'role' => 'required|in:1,2,3', // Validasi agar hanya menerima angka 1, 2, atau 3
+    ]);
+
+    $user = User::findOrFail($id);
+    $user->role = $request->role; // Menyimpan role yang dipilih
+    $user->save();
+
+    return redirect()->route('user.index')->with('status', 'Role updated successfully.');
+}
+
 
     public function store(Request $request)
     {
         // Validasi input
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            // 'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|string|in:admin,user',
         ]);
