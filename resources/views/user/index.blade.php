@@ -7,6 +7,9 @@
         {{ session('success') }}
     </div>
     @endif
+    @if (session('status'))
+    <div class="alert alert-success">{{ session('status') }}</div>
+@endif
     <div class="page-header">
         <h3 class="fw-bold mb-3">User Data</h3>
         <ul class="breadcrumbs mb-3">
@@ -80,7 +83,6 @@
         </div>
     </div>
 </div>
-@include('user.modal-create')
 @endSection
 <script>
     $(document).ready(function () {

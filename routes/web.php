@@ -9,16 +9,16 @@ use App\Http\Controllers\ReportController;
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'rolemanager:admin,customer_service,manager'])->get('/', function () {
+Route::middleware(['auth'])->get('/', function () {
     return view('index');
 })->middleware(['auth', 'verified'])->name('index');;
 
 
-Route::middleware(['auth', 'rolemanager:admin,customer_service,manager'])->get('/index', function () {
+Route::middleware(['auth'])->get('/index', function () {
     return view('index');
 })->middleware(['auth', 'verified'])->name('index');
 
-Route::middleware(['auth', 'rolemanager:admin,customer_service,manager'])->get('/dashboard', function () {
+Route::middleware(['auth'])->get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -42,6 +42,8 @@ Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile/index', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/view', [ProfileController::class, 'view'])->name('profile.view');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -50,10 +52,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Route untuk edit profil berdasarkan ID
     Route::get('/profile/edit/{id}', [ProfileController::class, 'editById'])->name('profile.editById');
     Route::patch('/profile/edit/{id}', [ProfileController::class, 'updateById'])->name('profile.updateById');
-    Route::delete('/profile/{id}', [ProfileController::class, 'destroyById'])->name('profile.destroyById');
+    Route::delete('/profile/{id}', [ProfileController::class, 'destroyById'])
+    ->name('profile.destroyById')
+    ->middleware('auth', 'admin'); 
 });
 
 Route::middleware('auth')->group(function () {

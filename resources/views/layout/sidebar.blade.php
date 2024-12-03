@@ -70,7 +70,7 @@
             <div class="collapse" id="forms">
                 <ul class="nav nav-collapse">
                     <li>
-                        <a href="/report">
+                        <a href="forms/forms.html">
                             <span class="sub-item">Order</span>
                         </a>
                     </li>
@@ -101,7 +101,8 @@
             onclick="event.preventDefault();
                         this.closest('form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
-                {{ __('Log Out') }}
+                <p>{{ __('Log Out') }}</p>
+                
             </a>
             </form>
         </li>

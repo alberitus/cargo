@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\User;
+
 
 class NewPasswordController extends Controller
 {
@@ -57,5 +59,30 @@ class NewPasswordController extends Controller
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'current_password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required', 'string', 'min:8'],
+        ]);
+
+        // Mendapatkan user berdasarkan ID
+        $user = User::findOrFail($id);
+
+        // Cek apakah password lama cocok
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password does not match.']);
+        }
+
+        // Update password dengan password baru yang sudah di-hash
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Kembalikan ke halaman profil dengan status sukses
+        return back()->with('status', 'password-updated');
     }
 }

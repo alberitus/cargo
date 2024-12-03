@@ -1,66 +1,52 @@
-<!-- Modal Add User -->
-<div class="modal fade" id="modalTambahUser" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title">
-                    <span class="fw-mediumbold"> Add</span>
-                    <span class="fw-light"> User </span>
-                </h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="small">
-                    Add a new user
-                </p>
-                <form method="POST" action="{{ route('user.submit') }}">
-                    @csrf
+<x-guest-layout>
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-                    <!-- Name -->
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input id="name" name="name" type="text" class="form-control" placeholder="Enter name" required />
-                    </div>
-
-                    <!-- Email -->
-                    <div class="form-group mt-3">
-                        <label for="email">Email</label>
-                        <input id="email" name="email" type="email" class="form-control" placeholder="Enter email" required />
-                    </div>
-
-                    <!-- Password -->
-                    <div class="form-group mt-3">
-                        <label for="password">Password</label>
-                        <input id="password" name="password" type="password" class="form-control" placeholder="Enter password" required />
-                    </div>
-
-                    <!-- Confirm Password -->
-                    <div class="form-group mt-3">
-                        <label for="password_confirmation">Confirm Password</label>
-                        <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Confirm password" required />
-                    </div>
-
-                    <!-- Role -->
-                    <div class="form-group mt-3">
-                        <label for="role">Role</label>
-                        <select id="role" name="role" class="form-control" required>
-                            <option value="admin">Admin</option>
-                            <option value="user">User</option>
-                        </select>
-                    </div>
-
-                    <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-primary">
-                            Add User
-                        </button>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-hidden="true">
-                            Close
-                        </button>
-                    </div>
-                </form>
-            </div>
+        <!-- Name -->
+        <div>
+            <x-input-label for="name" :value="__('Name')" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
-    </div>
-</div>
+
+        <!-- Email Address -->
+        <div class="mt-4">
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
+
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mt-4">
+            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+
+            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                            type="password"
+                            name="password_confirmation" required autocomplete="new-password" />
+
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+                {{ __('Already registered?') }}
+            </a>
+
+            <x-primary-button class="ms-4">
+                {{ __('Register') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
