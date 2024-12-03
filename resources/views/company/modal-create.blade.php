@@ -43,9 +43,6 @@
                         <button type="submit" id="modalTambah" class="btn btn-primary">
                             Add
                         </button>
-                        <button class="btn btn-danger btn" data-dismiss="modal">
-                            Close
-                        </button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-hidden="true">
                             Close
                         </button>

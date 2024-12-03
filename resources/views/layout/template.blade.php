@@ -114,7 +114,7 @@
     <script src="{{ asset('import/assets/js/plugin/chart-circle/circles.min.js') }}"></script>
 
     <!-- Datatables -->
-    <script src="{{ asset('js/plugin/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('import/assets/js/plugin/datatables/datatables.min.js') }}"></script>
 
     <!-- Bootstrap Notify -->
     <script src="{{ asset('import/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
@@ -132,10 +132,6 @@
 
     <script src="{{ asset('import/assets/js/demo.js') }}"></script>
     <script src="{{ asset('import/assets/js/setting-demo2.js') }}"></script>
-
-    <!-- Pastikan jQuery dan Bootstrap JS sudah terinclude -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
@@ -200,27 +196,6 @@
               });
           },
         });
-
-        // Add Row
-        $("#add-row").DataTable({
-          pageLength: 5,
-        });
-
-        var action =
-          '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-        $("#addRowButton").click(function () {
-          $("#add-row")
-            .dataTable()
-            .fnAddData([
-              $("#addName").val(),
-              $("#addPosition").val(),
-              $("#addOffice").val(),
-              action,
-            ]);
-          $("#addRowModal").modal("hide");
-        });
-      });
     </script>
 </body>
 
