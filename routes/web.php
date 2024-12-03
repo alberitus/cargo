@@ -39,9 +39,23 @@ Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/profile/index', [ProfileController::class, 'index'])->name('profile.index');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+});
+
+Route::middleware('auth')->group(function () {
+    // Route untuk edit profil berdasarkan ID
+    Route::get('/profile/edit/{id}', [ProfileController::class, 'editById'])->name('profile.editById');
+    Route::patch('/profile/edit/{id}', [ProfileController::class, 'updateById'])->name('profile.updateById');
+    Route::delete('/profile/{id}', [ProfileController::class, 'destroyById'])->name('profile.destroyById');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/user/add', [ProfileController::class, 'store'])->name('user.submit');
 });
 
 require __DIR__.'/auth.php';
