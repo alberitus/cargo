@@ -89,7 +89,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="../../documentation/index.html">
+            <a href="/profile/index">
                 <i class="fas fa-user"></i>
                 <p>Account</p>
             </a>
