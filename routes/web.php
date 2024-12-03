@@ -60,6 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/add', [ProfileController::class, 'store'])->name('user.submit');
 });
 
+// item
+Route::resource('item', ItemController::class);
+
+// report
 Route::resource('report', ReportController::class);
 // Route::get('/pdf', [InvoiceController::class, 'export_pdf']);
 // Route::get('/csv', [InvoiceController::class, 'export_csv']);
