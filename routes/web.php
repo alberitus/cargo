@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ReportController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -58,4 +60,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/add', [ProfileController::class, 'store'])->name('user.submit');
 });
 
+Route::resource('report', ReportController::class);
+// Route::get('/pdf', [InvoiceController::class, 'export_pdf']);
+// Route::get('/csv', [InvoiceController::class, 'export_csv']);
+// Route::get('/excel', [InvoiceController::class, 'export_excel']);
+// Route::get('/print', [InvoiceController::class, 'print_invoice']);
+
 require __DIR__.'/auth.php';
+
