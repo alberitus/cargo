@@ -95,10 +95,15 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="../../documentation/index.html">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+            <a href="route('logout')"
+            onclick="event.preventDefault();
+                        this.closest('form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
-                <p>Logout</p>
+                {{ __('Log Out') }}
             </a>
+        </form>
         </li>
         <br><br>
         <li class="nav-item">
