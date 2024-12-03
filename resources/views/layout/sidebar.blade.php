@@ -12,6 +12,7 @@
             </span>
             <h4 class="text-section">Components</h4>
         </li>
+        @if(Auth::user()->role == 2) <!-- Role 2 is Admin -->
         <li class="nav-item">
             <a data-bs-toggle="collapse" href="#base">
                 <i class="fas fa-layer-group"></i>
@@ -33,6 +34,7 @@
                 </ul>
             </div>
         </li>
+        @endif
         <li class="nav-item">
             <a data-bs-toggle="collapse" href="#sidebarLayouts">
                 <i class="fas fa-th-list"></i>
@@ -87,16 +89,21 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="../../documentation/index.html">
+            <a href="/profile/index">
                 <i class="fas fa-user"></i>
                 <p>Account</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="../../documentation/index.html">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+            <a href="route('logout')"
+            onclick="event.preventDefault();
+                        this.closest('form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
-                <p>Logout</p>
+                {{ __('Log Out') }}
             </a>
+            </form>
         </li>
         <br><br>
         <li class="nav-item">
@@ -106,7 +113,7 @@
         </li>
         <li class="nav-item">
             <a>
-                <p>Customer Service</p>
+                <p>{{ session('role_name', 'No role assigned') }}</p>
             </a>
         </li>
     </ul>
