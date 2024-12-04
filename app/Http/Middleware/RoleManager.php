@@ -14,7 +14,7 @@ class RoleManager
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!Auth::check()) {
             return redirect()->route('login');
@@ -33,23 +33,22 @@ class RoleManager
 
         session(['role_name' => $roleNames[$authUserRole] ?? 'Unknown Role']);
 
-        switch ($role) {
-            case 'admin':
-                if ($authUserRole == 2) {
-                    return $next($request);
-                }
-                break;
-            case 'customer_service':
-                if ($authUserRole == 1) {
-                    return $next($request);
-                }
-                break;
-            case 'supervisor':
-                if ($authUserRole == 3) {
-                    return $next($request);
-                }
-                break;
+        $roleMap = [
+            'customer_service' => 1,
+            'admin' => 2,
+            'supervisor' => 3,
+        ];
+    
+        // Konversi roles yang diizinkan menjadi array angka
+        $allowedRoles = array_map(function($role) use ($roleMap) {
+            return $roleMap[$role];
+        }, $roles);
+    
+        // Cek apakah role user termasuk dalam roles yang diizinkan
+        if (in_array($authUserRole, $allowedRoles)) {
+            return $next($request);
         }
+    
         return abort(403, 'Unauthorized action.');
     }
 }

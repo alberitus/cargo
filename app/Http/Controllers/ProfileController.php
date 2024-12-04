@@ -167,4 +167,15 @@ if ($request->has('role') && in_array($request->role, [1, 2, 3])) {
         // Redirect atau beri pesan sukses
         return redirect()->route('user.index')->with('success', 'User has been added successfully');
     }
+
+    public function resetPassword($id)
+{
+    $user = User::findOrFail($id);
+    
+    // Set password menjadi admin1234
+    $user->password = Hash::make('admin1234');
+    $user->save();
+
+    return back()->with('success', 'Password berhasil direset menjadi admin1234');
+}
 }

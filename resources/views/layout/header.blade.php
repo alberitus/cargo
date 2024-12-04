@@ -50,7 +50,8 @@
         <li class="nav-item topbar-user dropdown hidden-caret">
             <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                 <div class="avatar-sm">
-                    <img src="{{ asset('import/assets/img/profile.png') }}" alt="..." class="avatar-img rounded-circle" />
+                    <img src="{{ asset('import/assets/img/profile.png') }}" alt="..."
+                        class="avatar-img rounded-circle" />
                 </div>
                 <span class="profile-username">
                     <span class="op-7">Hi,</span>
@@ -62,7 +63,8 @@
                     <li>
                         <div class="user-box">
                             <div class="avatar-lg">
-                                <img src="{{ asset('import/assets/img/profile.png') }}" alt="image profile" class="avatar-img rounded" />
+                                <img src="{{ asset('import/assets/img/profile.png') }}" alt="image profile"
+                                    class="avatar-img rounded" />
                             </div>
                             <div class="u-text">
                                 <h4>User</h4>
@@ -76,7 +78,13 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/profile">Account Setting</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/login">Logout</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <a class="dropdown-item" href="route('logout')" onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </a>
+                        </form>
                     </li>
                 </div>
             </ul>

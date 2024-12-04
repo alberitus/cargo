@@ -52,8 +52,16 @@ Route::middleware('auth')->group(function () {
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
-    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+    Route::put('/password/update', [PasswordController::class, 'update'])->name('password.update');
+
+
+    //by id
     Route::put('/password/update/{id}', [PasswordController::class, 'updatePassword'])->name('password.updateByID');
+
+    Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->group(function () {
+        Route::get('/admin/create-account', [RegisteredUserController::class, 'createByAdmin'])->name('admin.create-account');
+        Route::post('/admin/create-account', [RegisteredUserController::class, 'storeByAdmin']);
+    });
 
 
 
