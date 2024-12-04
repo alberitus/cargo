@@ -5,6 +5,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
 
 use Illuminate\Support\Facades\Route;
@@ -13,15 +14,13 @@ use Illuminate\Support\Facades\Route;
 //     return view('index');
 // })->middleware(['auth', 'verified'])->name('index');;
 
-Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('/', function () {
-    return view('index');
-})->name('index');
+Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('/', [DashboardController::class, 'index'])->name('index');
 
 
 
-Route::middleware(['auth'])->get('/index', function () {
-    return view('index');
-})->middleware(['auth', 'verified'])->name('index');
+
+Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('index', [DashboardController::class, 'index'])->name('index');
+
 
 Route::middleware(['auth'])->get('/dashboard', function () {
     return view('dashboard');
@@ -42,6 +41,13 @@ Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
     Route::resource('company', CompanyController::class);
 
     Route::resource('job', JobController::class);
+});
+
+Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
+    Route::post('/item/submit', [ItemController::class, 'submit'])->name('item.submit');
+    Route::post('/item/update/{item_id}', [ItemController::class, 'update'])->name('item.update');
+    Route::delete('/item/delete/{item_id}', [ItemController::class, 'destroy'])->name('item.delete');
+    Route::resource('item', ItemController::class);
 });
 
 
