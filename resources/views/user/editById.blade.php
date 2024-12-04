@@ -24,6 +24,7 @@
         </ul>
     </div>
 
+
     <!-- Profile Information Section -->
     <div class="row">
         @if(session('success'))
@@ -92,7 +93,8 @@
                                 <div class="form-group">
                                     <label for="role">Role</label>
                                     <select class="form-select form-control" id="role" name="role">
-                                        <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>Customer Service</option>
+                                        <option value="1" {{ $user->role == 1 ? 'selected' : '' }}>Customer Service
+                                        </option>
                                         <option value="2" {{ $user->role == 2 ? 'selected' : '' }}>Admin</option>
                                         <option value="3" {{ $user->role == 3 ? 'selected' : '' }}>Supervisor
                                         </option>
@@ -168,6 +170,34 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Password Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <section class="space-y-6">
+                        <header>
+                            <h2 class="text-lg font-medium text-gray-900">
+                                {{ __('Reset Password') }}
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-600">
+                                {{ __('Click the button below to reset the password for this account to "admin1234".') }}
+                            </p>
+                        </header>
+
+                        <!-- Tombol Reset Password -->
+                        <form action="{{ route('reset.password', ['id' => $user->id]) }}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-warning">
+                                {{ __('Reset Password') }}
+                            </button>
+                        </form>
+                    </section>
                 </div>
             </div>
         </div>

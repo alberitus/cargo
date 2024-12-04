@@ -9,9 +9,14 @@ use App\Http\Controllers\ReportController;
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->get('/', function () {
+// Route::middleware(['auth'])->get('/', function () {
+//     return view('index');
+// })->middleware(['auth', 'verified'])->name('index');;
+
+Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('/', function () {
     return view('index');
-})->middleware(['auth', 'verified'])->name('index');;
+})->name('index');
+
 
 
 Route::middleware(['auth'])->get('/index', function () {
@@ -41,7 +46,6 @@ Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile/index', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/view', [ProfileController::class, 'view'])->name('profile.view');
 
 
@@ -51,17 +55,19 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified', 'rolemanager:supervisor')->group(function () {
+    Route::get('/profile/index', [ProfileController::class, 'index'])->name('profile.index');
+
     Route::get('/profile/edit/{id}', [ProfileController::class, 'editById'])->name('profile.editById');
     Route::patch('/profile/edit/{id}', [ProfileController::class, 'updateById'])->name('profile.updateById');
-    Route::delete('/profile/{id}', [ProfileController::class, 'destroyById'])
-    ->name('profile.destroyById')
-    ->middleware('auth', 'admin'); 
+    Route::post('/reset-password/{id}', [ProfileController::class, 'resetPassword'])->name('reset.password');
+    Route::delete('/profile/{id}', [ProfileController::class, 'destroyById'])->name('profile.destroyById'); 
 });
 
 Route::middleware('auth')->group(function () {
     Route::post('/user/add', [ProfileController::class, 'store'])->name('user.submit');
 });
+
 
 // item
 Route::resource('item', ItemController::class);
@@ -74,4 +80,3 @@ Route::resource('report', ReportController::class);
 // Route::get('/print', [InvoiceController::class, 'print_invoice']);
 
 require __DIR__.'/auth.php';
-

@@ -88,12 +88,14 @@
                 <p>Item</p>
             </a>
         </li>
+        @if(Auth::user()->role == 3)  <!-- Role 2 is Admin -->
         <li class="nav-item">
             <a href="/profile/index">
                 <i class="fas fa-user"></i>
                 <p>Account</p>
             </a>
         </li>
+        @endif
         <li class="nav-item">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
