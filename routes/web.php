@@ -29,6 +29,9 @@ Route::middleware(['auth'])->get('/dashboard', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/list', [InvoiceController::class, 'list'])->name('invoice.list');
+    // Route::post('/invoice/{id}/add-item', [InvoiceController::class, 'addItem'])->name('invoice.addItem');
+    Route::get('/invoice/loadCart', [InvoiceController::class, 'loadCart'])->name('loadCart');
+    Route::post('/invoice/addItem', [InvoiceController::class, 'addItem'])->name('addItem');
     Route::get('/invoice/report', [InvoiceController::class, 'report'])->name('invoice.report');
     Route::get('/invoice/pdf', [InvoiceController::class, 'export_pdf'])->name('invoice.pdf');
     Route::resource('invoice', InvoiceController::class);
