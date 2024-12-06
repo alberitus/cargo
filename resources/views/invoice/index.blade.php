@@ -40,11 +40,11 @@
                         <div class="col-md-6 col-lg-6">
                             <div class="form-group">
                                 <label for="defaultSelect">CUTOMER</label>
-                                <select class="form-select form-control" id="defaultSelect">
-                                    <option>Pt. example</option>
-                                    <option>Pt. example</option>
-                                    <option>Pt. example</option>
-                                    <option>Pt. example</option>
+                                <select name="company_id" id="company_id" class="form-select">
+                                    <option value="" disabled selected>-- Pilih Perusahaan --</option>
+                                    @foreach ($company as $customer)
+                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
@@ -100,52 +100,21 @@
                         <div class="row">
                             <div class="d-grid gap-3 d-md-flex justify-content-md-end">
                                 <button class="btn btn-primary" data-bs-target="#modalItem" data-bs-toggle="modal">Pilih
-                                    Produk</button>
+                                    Item</button>
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover mt-4">
+                    <table id="cartTable" class="table table-striped table-hover mt-4">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Produk</th>
-                                <th>Jumlah</th>
-                                <th>Harga Satuan</th>
-                                <th>Subtotal</th>
+                                <th>Item</th>
+                                <th>QTY</th>
+                                <th>Satuan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="detail_cart">
-                            <tr>
-                                <td>1</td>
-                                <td>HANDLING</td>
-                                <td>1</td>
-                                <td>Rp 140.000</td>
-                                <td>Rp 140.000</td>
-                                <td>
-                                    <button id="items" data-bs-target="#modalUbah"
-                                        class="ubah_cart btn btn-warning btn-xs" title="Ubah Jumlah"><i
-                                            class="fas fa-edit"></i></button>
-                                    <button id="items" data-bs-target="#modalUbah"
-                                        class="ubah_cart btn btn-danger btn-xs" title="Ubah Jumlah"><i
-                                            class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>PICK UP DOKUMEN</td>
-                                <td>1</td>
-                                <td>Rp 10.000</td>
-                                <td>Rp 10.000</td>
-                                <td>
-                                    <button id="items" data-bs-target="#modalUbah"
-                                        class="ubah_cart btn btn-warning btn-xs" title="Ubah Jumlah"><i
-                                            class="fas fa-edit"></i></button>
-                                    <button id="items" data-bs-target="#modalUbah"
-                                        class="ubah_cart btn btn-danger btn-xs" title="Ubah Jumlah"><i
-                                            class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                     <div class="container">
@@ -207,18 +176,10 @@
                                 <th>No</th>
                                 <th width="17%">Produk</th>
                                 <th width="16%">Jumlah</th>
-                                <th width="19%">Harga Satuan</th>
-                                <th>Subtotal</th>
+                                <th width="19%">Satuan</th>
                             </tr>
                         </thead>
-                        <tbody id="detail_cart">
-                            <tr>
-                                <td>1</td>
-                                <td>HANDLING</td>
-                                <td>1</td>
-                                <td>Rp 47.000</td>
-                                <td>Rp 47.000</td>
-                            </tr>
+                        <tbody>
                         </tbody>
                     </table>
                     <div class="container">
@@ -268,3 +229,50 @@
 @include('invoice/modal-item')
 @include('invoice/modal-ubah')
 @endSection
+<script>
+    function loadCart() {
+        $.ajax({
+            url: "{{ route('loadCart') }}",  // Pastikan route loadCart sudah didefinisikan
+            method: "GET",
+            success: function(data) {
+                // Menampilkan data keranjang di halaman
+                var cartHTML = '';
+                data.forEach(function(item) {
+                    cartHTML += `<tr>
+                        <td>${item.nama_item}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.satuan}</td>
+                    </tr>`;
+                });
+                $('#cartTable tbody').html(cartHTML);  // Pastikan ada tabel dengan ID #cartTable
+            },
+            error: function(xhr, status, error) {
+                console.log("Terjadi kesalahan: " + error);
+            }
+        });
+    }
+
+    function add_cart(id, name, qty, satuan) {
+        $.ajax({
+            url: "{{ route('addItem') }}", 
+            method: "POST",
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                nama_item: name,
+                quantity: qty,
+            },
+            success: function(data) {
+                // Menutup modal setelah menambahkan item
+                $('#modalItem').modal('hide');
+                // Memuat ulang data keranjang
+                loadCart();  // Fungsi untuk menampilkan data keranjang terbaru
+            },
+            error: function(xhr, status, error) {
+                console.log("Terjadi kesalahan: " + error);
+            }
+        });
+    }
+</script>
+
+
