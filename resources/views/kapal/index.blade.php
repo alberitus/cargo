@@ -1,4 +1,4 @@
-@extends('layout/template')
+@extends('layout.template')
 @section('content')
 <div class="page-inner">
     @if(session('success'))
@@ -7,7 +7,7 @@
     </div>
     @endif
     <div class="page-header">
-        <h3 class="fw-bold mb-3">Job Category</h3>
+        <h3 class="fw-bold mb-3">Kapal</h3>
         <ul class="breadcrumbs mb-3">
             <li class="nav-home">
                 <a href="/">
@@ -24,7 +24,7 @@
                 <i class="icon-arrow-right"></i>
             </li>
             <li class="nav-item">
-                <a href="#">Job </a>
+                <a href="#">Kapal </a>
             </li>
         </ul>
     </div>
@@ -33,11 +33,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <h4 class="card-title">Job</h4>
+                        <h4 class="card-title">Kapal</h4>
                         <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
                             data-bs-target="#modalTambah">
                             <i class="fa fa-plus"></i>
-                            Add Job
+                            Add Kapal
                         </button>
 
                     </div>
@@ -47,7 +47,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Job</th>
+                                <th>Nama Kapal</th>
                                 {{-- <th>Position</th>
                                     <th>Office</th> --}}
                                 <th style="width: 10%">Action</th>
@@ -56,7 +56,7 @@
                         <tfoot>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Job</th>
+                                <th>Nama Kapal</th>
                                 {{-- <th>Position</th>
                                     <th>Office</th> --}}
                                 <th>Action</th>
@@ -66,28 +66,27 @@
                             @php
                             $no = 1;
                             @endphp
-                            @foreach ($job as $J)
+                            @foreach ($kapal as $K)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td> {{ $J->name_job }}</td>
+                                <td> {{ $K->nama_kapal }}</td>
                                 <td>
-                                        <div class="form-button-action">
-                                            <button type="button" class="btn btn-link btn-primary btn-lg"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalUbah{{ $J->job_id }}">
-                                                <i class="fa fa-edit"></i>
+                                    <div class="form-button-action">
+                                        <button type="button" class="btn btn-link btn-primary btn-lg"
+                                            data-bs-toggle="modal" data-bs-target="#modalUbah{{ $K->kapal_id }}">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <form action="{{ route('kapal.delete', $K->kapal_id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this kapal?');">
+                                                <i class="fa fa-times"></i>
                                             </button>
-                                            <form action="{{ route('job.delete', $J->job_id) }}"
-                                                method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-link btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this job?');">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </form>
+                                        </form>
 
-                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
@@ -99,6 +98,6 @@
     </div>
 </div>
 </div>
-@include('job.modal-create')
-@include('job.modal-edit')
-@endSection
+@include('kapal.modal-create')
+@include('kapal.modal-edit')
+@endsection

@@ -5,7 +5,7 @@
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
-@endif
+    @endif
     <div class="page-header">
         <h3 class="fw-bold mb-3">Company Data</h3>
         <ul class="breadcrumbs mb-3">
@@ -39,7 +39,7 @@
                             <i class="fa fa-plus"></i>
                             Add Company
                         </button>
-                        
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -57,7 +57,7 @@
                             <tbody>
                                 @php
                                 $no = 1;
-                                @endphp 
+                                @endphp
                                 @foreach ($company as $data)
                                 <tr>
                                     <td>{{ $no++ }}</td>
@@ -66,18 +66,21 @@
                                     <td>{{ $data->city }}</td>
                                     <td>
                                         <div class="form-button-action">
-                                            <button type="button" class="btn btn-link btn-primary btn-lg" 
-                                            data-bs-toggle="modal" data-bs-target="#modalUbah{{ $data->company_id }}">
+                                            <button type="button" class="btn btn-link btn-primary btn-lg"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalUbah{{ $data->company_id }}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
-                                            <form action="{{ route('company.delete', $data->company_id) }}" method="POST" style="display:inline;">
+                                            <form action="{{ route('company.delete', $data->company_id) }}"
+                                                method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-link btn-danger" onclick="return confirm('Are you sure you want to delete this company?');">
+                                                <button type="submit" class="btn btn-link btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this company?');">
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </form>
-                                            
+
                                         </div>
                                     </td>
                                 </tr>
