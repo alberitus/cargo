@@ -7,6 +7,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\KapalController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -43,7 +44,16 @@ Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
     Route::delete('/company/delete/{company_id}', [CompanyController::class, 'destroy'])->name('company.delete');
     Route::resource('company', CompanyController::class);
 
+    Route::post('/job/submit', [JobController::class, 'submit'])->name('job.submit');
+    Route::post('/job/update/{job_id}', [jobController::class, 'update'])->name('job.update');
+    Route::delete('/job/delete/{job_id}', [jobController::class, 'destroy'])->name('job.delete');
     Route::resource('job', JobController::class);
+
+    // kapal
+    Route::post('/kapal/submit', [KapalController::class,'submit'])->name('kapal.submit');
+    Route::post('/kapal/update/{kapal_id}', [KapalController::class, 'update'])->name('kapal.update');
+    Route::delete('/kapal/delete/{kapal_id}', [KapalController::class, 'destroy'])->name('kapal.delete');
+    Route::resource('kapal', KapalController::class);
 });
 
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
@@ -78,8 +88,8 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// item
-Route::resource('item', ItemController::class);
+// // item
+// Route::resource('item', ItemController::class);
 
 // report
 Route::resource('report', ReportController::class);
@@ -87,5 +97,8 @@ Route::resource('report', ReportController::class);
 // Route::get('/csv', [InvoiceController::class, 'export_csv']);
 // Route::get('/excel', [InvoiceController::class, 'export_excel']);
 // Route::get('/print', [InvoiceController::class, 'print_invoice']);
+
+// kapal
+Route::resource('kapal', KapalController::class);
 
 require __DIR__.'/auth.php';
