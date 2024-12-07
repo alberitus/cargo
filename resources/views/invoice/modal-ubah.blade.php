@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <div class="row mt-3">
                     <div class="col-sm-7">
-                        <input type="hidden" id="rowid">
+                        <input type="hidden" id="item_id">
                         <input type="number" id="qty" class="form-control" placeholder="Masukan Jumlah Produk" min="1" value="1">
                     </div>
                     <div class="col-sm-5">
