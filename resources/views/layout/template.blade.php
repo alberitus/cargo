@@ -98,6 +98,7 @@
     </div>
     <!--   Core JS Files   -->
     <script src="{{ asset('import/assets/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('import/assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('import/assets/js/core/bootstrap.min.js') }}"></script>
 

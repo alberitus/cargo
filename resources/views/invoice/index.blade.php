@@ -99,7 +99,7 @@
                         </div>
                         <div class="row">
                             <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                                <button class="btn btn-primary" data-bs-target="#modalItem" data-bs-toggle="modal">Pilih
+                                <button class="btn btn-primary" data-bs-target="#modalCart" data-bs-toggle="modal">Pilih
                                     Item</button>
                             </div>
                         </div>
@@ -110,7 +110,8 @@
                                 <th>No</th>
                                 <th>Item</th>
                                 <th>QTY</th>
-                                <th>Satuan</th>
+                                <th>Harga Satuan</th>
+                                <th>Harga Total</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -153,8 +154,7 @@
                             </div>
                             <div class="col-md-6 col-lg-4">
                                 <div class="d-flex justify-content-center">
-                                    <h5 style="width: 80%; text-align: left;">RP
-                                        150.000</h5>
+                                    <h5 style="width: 80%; text-align: left;"  id="total-price">RP 0</h5>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <h5 style="width: 80%; text-align: left;">RP
@@ -226,53 +226,139 @@
         </div>
     </div>
 </div>
-@include('invoice/modal-item')
-@include('invoice/modal-ubah')
-@endSection
+
 <script>
     function loadCart() {
         $.ajax({
-            url: "{{ route('loadCart') }}",  // Pastikan route loadCart sudah didefinisikan
+            url: "{{ route('loadCart') }}",
             method: "GET",
-            success: function(data) {
-                // Menampilkan data keranjang di halaman
+            success: function (data) {
                 var cartHTML = '';
-                data.forEach(function(item) {
-                    cartHTML += `<tr>
-                        <td>${item.nama_item}</td>
-                        <td>${item.quantity}</td>
-                        <td>${item.satuan}</td>
-                    </tr>`;
+                var counter = 1;
+
+                data.forEach(function (item) {
+                    var totalPrice = item.price * item.qty;
+                    var formattedPrice = formatRupiah(item.price);
+                    var formattedTotalPrice = formatRupiah(totalPrice);
+                    cartHTML += `<tr id="item-${item.item_id}">
+                    <td>${counter}</td>
+                    <td>${item.nama_item}</td>
+                    <td>${item.qty}</td>
+                    <td>${formattedPrice}</td>
+                    <td>${formattedTotalPrice}</td>
+                    <td><button class="btn btn-warning btn-sm" onclick="openModal(${item.item_id}, ${item.qty})"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteItem(${item.item_id})"><i class="fa fa-trash"></i></button></td>
+                </tr>`;
+                    counter++;
                 });
-                $('#cartTable tbody').html(cartHTML);  // Pastikan ada tabel dengan ID #cartTable
+                $('#cartTable tbody').html(cartHTML);
+                var formattedTotalPrice = formatRupiah(totalPrice);
+                $('#totalPrice').text(formattedTotalPrice);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.log("Terjadi kesalahan: " + error);
             }
         });
     }
 
-    function add_cart(id, name, qty, satuan) {
+    function openModal(itemId, qty) {
+        $('#item_id').val(itemId);
+        $('#qty').val(qty);
+        $('#modalUbah').modal('show');
+    }
+
+    $(document).ready(function () {
+        loadCart();
+    });
+
+    function add_cart(id, name, satuan) {
+        var price = document.getElementById('price-' + id).value;
+        if (price === "" || price <= 0) {
+            alert("Silahkan Masukkan Harga!");
+            return;
+        }
+        price = parseInt(price.replace(/[^0-9]/g, ''), 10);
+        var totalPrice = price * qty
         $.ajax({
-            url: "{{ route('addItem') }}", 
+            url: "{{ route('addItem') }}",
             method: "POST",
             data: {
                 _token: '{{ csrf_token() }}',
-                id: id,
+                item_id: id,
                 nama_item: name,
-                quantity: qty,
+                qty: 1,
+                satuan: satuan,
+                price,
+                total_price: totalPrice
             },
-            success: function(data) {
-                // Menutup modal setelah menambahkan item
-                $('#modalItem').modal('hide');
-                // Memuat ulang data keranjang
-                loadCart();  // Fungsi untuk menampilkan data keranjang terbaru
+            success: function (data) {
+                $('#modalCart').modal('hide');
+                loadCart();
+                $('#total-price').text('RP ' + response.totalPrice('id-ID'));
+                
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.log("Terjadi kesalahan: " + error);
             }
         });
     }
+
+    function update_cart() {
+        var itemId = $('#item_id').val();
+        var qty = $('#qty').val();
+
+        $.ajax({
+            url: "{{ route('updateCart') }}",
+            method: "POST",
+            data: {
+                item_id: itemId,
+                qty: qty,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response) {
+                console.log('Jumlah item berhasil diperbarui');
+                $('#modalUbah').modal('hide');
+                loadCart();
+            },
+            error: function (xhr, status, error) {
+                console.log("Terjadi kesalahan: " + error);
+            }
+        });
+    }
+
+    function deleteItem(itemId) {
+        $.ajax({
+            url: "{{ route('deleteItem') }}",
+            method: "POST",
+            data: {
+                item_id: itemId,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function (response) {
+                alert(response.message);
+
+                $('#item-' + itemId).remove();
+                loadCart();
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                alert('Terjadi kesalahan saat menghapus item');
+            }
+        });
+    }
+
+    function formatRupiah(angka) {
+        var reverse = angka.toString().split('').reverse().join(''),
+            ribuan = reverse.match(/\d{1,3}/g);
+
+        ribuan = ribuan.join('.').split('').reverse().join('');
+        return 'Rp ' + ribuan;
+    }
+
+    
+
 </script>
-
-
+@include('invoice/modal-cart')
+@include('invoice/modal-ubah')
+@endSection
