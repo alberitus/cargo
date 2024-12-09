@@ -133,6 +133,7 @@
 
     <script src="{{ asset('import/assets/js/demo.js') }}"></script>
     <script src="{{ asset('import/assets/js/setting-demo2.js') }}"></script>
+    <script src="{{ asset('import/assets/js/invoice.js') }}"></script>
 
     <script>
         $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {

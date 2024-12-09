@@ -110,6 +110,7 @@
                                 <th>No</th>
                                 <th>Item</th>
                                 <th>QTY</th>
+                                <th>Satuan</th>
                                 <th>Harga Satuan</th>
                                 <th>Harga Total</th>
                                 <th>Aksi</th>
@@ -125,16 +126,16 @@
                                     <label>TAX</label><br />
                                     <div class="d-flex">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                id="tax1" value="6.600" />
-                                            <label class="form-check-label" for="flexRadioDefault1">
+                                            <input class="form-check-input tax-radio" type="radio"
+                                                name="flexRadioDefault" id="tax1" value="6600" />
+                                            <label class="form-check-label" for="tax1">
                                                 1.1%
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                id="tax2" value="16.500" checked />
-                                            <label class="form-check-label" for="flexRadioDefault2">
+                                            <input class="form-check-input tax-radio" type="radio"
+                                                name="flexRadioDefault" id="tax2" value="16500" checked />
+                                            <label class="form-check-label" for="tax2">
                                                 11%
                                             </label>
                                         </div>
@@ -154,15 +155,13 @@
                             </div>
                             <div class="col-md-6 col-lg-4">
                                 <div class="d-flex justify-content-center">
-                                    <h5 style="width: 80%; text-align: left;"  id="total-price">RP 0</h5>
+                                    <h5 style="width: 80%; text-align: left;" id="total-price">RP 0</h5>
                                 </div>
                                 <div class="d-flex justify-content-center">
-                                    <h5 style="width: 80%; text-align: left;">RP
-                                        16.500</h5>
+                                    <h5 id="tax-value" style="width: 80%; text-align: left;">RP 0</h5>
                                 </div>
                                 <div class="d-flex justify-content-center">
-                                    <h5 style="width: 80%; text-align: left;">RP
-                                        166.500</h5>
+                                    <h5 style="width: 80%; text-align: left;" id="grand-total">RP 0</h5>
                                 </div>
                             </div>
                         </div>
@@ -228,6 +227,14 @@
 </div>
 
 <script>
+    window.addEventListener('load', loadCart);
+
+    let totalPrice = 0;
+
+    function formatRupiah(angka) {
+        return angka.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+    }
+
     function loadCart() {
         $.ajax({
             url: "{{ route('loadCart') }}",
@@ -235,25 +242,29 @@
             success: function (data) {
                 var cartHTML = '';
                 var counter = 1;
+                totalPrice = 0;
 
                 data.forEach(function (item) {
-                    var totalPrice = item.price * item.qty;
+                    var itemTotalPrice = item.price * item.qty;
+                    totalPrice += itemTotalPrice;
                     var formattedPrice = formatRupiah(item.price);
-                    var formattedTotalPrice = formatRupiah(totalPrice);
+                    var formattedTotalPrice = formatRupiah(itemTotalPrice);
                     cartHTML += `<tr id="item-${item.item_id}">
-                    <td>${counter}</td>
-                    <td>${item.nama_item}</td>
-                    <td>${item.qty}</td>
-                    <td>${formattedPrice}</td>
-                    <td>${formattedTotalPrice}</td>
-                    <td><button class="btn btn-warning btn-sm" onclick="openModal(${item.item_id}, ${item.qty})"><i class="fa fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteItem(${item.item_id})"><i class="fa fa-trash"></i></button></td>
-                </tr>`;
+                        <td>${counter}</td>
+                        <td>${item.nama_item}</td>
+                        <td>${item.qty}</td>
+                        <td>${item.satuan}</td>
+                        <td>${formattedPrice}</td>
+                        <td>${formattedTotalPrice}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="openModal(${item.item_id}, ${item.qty})"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteItem(${item.item_id})"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>`;
                     counter++;
                 });
                 $('#cartTable tbody').html(cartHTML);
-                var formattedTotalPrice = formatRupiah(totalPrice);
-                $('#totalPrice').text(formattedTotalPrice);
+                updateTotalPrice();
             },
             error: function (xhr, status, error) {
                 console.log("Terjadi kesalahan: " + error);
@@ -261,15 +272,38 @@
         });
     }
 
+    function updateTaxValue() {
+        const selectedTax = parseFloat(document.querySelector('input[name="flexRadioDefault"]:checked').value) || 0;
+        const formattedTax = formatRupiah(selectedTax);
+        document.getElementById('tax-value').textContent = formattedTax;
+        updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+        const selectedTax = parseFloat(document.querySelector('input[name="flexRadioDefault"]:checked').value) || 0;
+        const grandTotal = totalPrice + selectedTax;
+        const formattedGrandTotal = formatRupiah(grandTotal);
+        document.getElementById('grand-total').textContent = formattedGrandTotal;
+
+        const formattedTotalPrice = formatRupiah(totalPrice);
+        document.getElementById('total-price').textContent = formattedTotalPrice;
+    }
+
+    const taxRadios = document.querySelectorAll('.tax-radio');
+    taxRadios.forEach(radio => {
+        radio.addEventListener('change', updateTaxValue);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCart();
+        updateTaxValue();
+    });
+
     function openModal(itemId, qty) {
         $('#item_id').val(itemId);
         $('#qty').val(qty);
         $('#modalUbah').modal('show');
     }
-
-    $(document).ready(function () {
-        loadCart();
-    });
 
     function add_cart(id, name, satuan) {
         var price = document.getElementById('price-' + id).value;
@@ -278,7 +312,7 @@
             return;
         }
         price = parseInt(price.replace(/[^0-9]/g, ''), 10);
-        var totalPrice = price * qty
+        var totalPrice = price * qty;
         $.ajax({
             url: "{{ route('addItem') }}",
             method: "POST",
@@ -293,9 +327,9 @@
             },
             success: function (data) {
                 $('#modalCart').modal('hide');
+                updateTotalPrice();
                 loadCart();
                 $('#total-price').text('RP ' + response.totalPrice('id-ID'));
-                
             },
             error: function (xhr, status, error) {
                 console.log("Terjadi kesalahan: " + error);
@@ -336,10 +370,8 @@
             },
             success: function (response) {
                 alert(response.message);
-
                 $('#item-' + itemId).remove();
                 loadCart();
-
             },
             error: function (xhr, status, error) {
                 console.error(error);
@@ -355,9 +387,6 @@
         ribuan = ribuan.join('.').split('').reverse().join('');
         return 'Rp ' + ribuan;
     }
-
-    
-
 </script>
 @include('invoice/modal-cart')
 @include('invoice/modal-ubah')
