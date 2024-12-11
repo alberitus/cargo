@@ -48,20 +48,10 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Job</th>
-                                {{-- <th>Position</th>
-                                    <th>Office</th> --}}
+                                <th>Code</th>
                                 <th style="width: 10%">Action</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Job</th>
-                                {{-- <th>Position</th>
-                                    <th>Office</th> --}}
-                                <th>Action</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             @php
                             $no = 1;
@@ -70,6 +60,7 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td> {{ $J->name_job }}</td>
+                                <td> {{ $J->job_code }}</td>
                                 <td>
                                         <div class="form-button-action">
                                             <button type="button" class="btn btn-link btn-primary btn-lg"
@@ -86,7 +77,6 @@
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </form>
-
                                         </div>
                                 </td>
                             </tr>

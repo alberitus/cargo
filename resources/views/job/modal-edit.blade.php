@@ -15,10 +15,9 @@
                     <p class="small">
                         Update Job
                     </p>
-                    <!-- Perhatikan route harus sesuai dengan id perusahaan -->
                     <form action="{{ route('job.update', $J->job_id) }}" method="POST">
                         @csrf
-                        @method('PUT') <!-- Untuk method update -->
+                        @method('PUT')
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group form-group-default">
@@ -27,20 +26,13 @@
                                         value="{{ $J->name_job }}" placeholder="Fill name" />
                                 </div>
                             </div>
-                            {{-- <div class="col-md-6 pe-0">
+                            <div class="col-sm-12">
                                 <div class="form-group form-group-default">
-                                    <label>Address</label>
-                                    <input id="addAddress" name="address" type="text" class="form-control"
-                                        value="{{ $data->address }}" placeholder="Fill address" />
+                                    <label>Code</label>
+                                    <input id="addJob" name="job_code" type="text" class="form-control"
+                                        value="{{ $J->job_code }}" placeholder="Fill code" />
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group form-group-default">
-                                    <label>City</label>
-                                    <input id="addCity" name="city" type="text" class="form-control"
-                                        value="{{ $data->city }}" placeholder="Fill city" />
-                                </div>
-                            </div> --}}
                         </div>
                         <div class="modal-footer border-0">
                             <button type="submit" class="btn btn-primary">

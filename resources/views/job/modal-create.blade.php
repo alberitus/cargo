@@ -25,6 +25,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label>Code</label>
+                                <input id="addCode" name="job_code" type="text" class="form-control"
+                                    placeholder="fill Code" />
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal-footer border-0">
                         <button type="submit" id="modalTambah" class="btn btn-primary">
                             Add

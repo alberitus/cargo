@@ -15,8 +15,10 @@ class JobController extends Controller
 
     function submit(Request $request)
     {
+
         $job = new Job();
         $job->name_job = $request->name_job;
+        $job->job_code = $request->job_code;
         $job->save();
 
         return redirect()->route('job.index')->with('success', 'Job created successfully.');
@@ -29,6 +31,8 @@ class JobController extends Controller
             return redirect()->route('job.index')->with('error', 'Job not found');
         }
         $job->name_job = $request->name_job;
+        $job->job_code = $request->job_code;
+
         $job->update();
 
         return redirect()->route('job.index')->with('success', 'Job updated successfully.');
