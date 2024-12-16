@@ -6,17 +6,28 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
 use App\Models\Company;
+use App\Models\Job;
 use App\Models\Item;
+use App\Models\Transaction;
+use App\Models\Transaction_detail;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
     function index()
     {
         $company = Company::all();
+        $job = Job::all();
+        $id = Auth::id();
+        $currentDate = date('y/m');
+        $jobsWithDate = $job->map(function ($jobs) use ($currentDate) {
+            $jobs->display_date = $currentDate;
+            return $jobs;
+        });
         $item = Item::all();
         $cart = session('cart_items', []);
         
-        return view('invoice.index', compact('company', 'cart', 'item'));
+        return view('invoice.index', compact('company', 'jobsWithDate', 'id', 'cart', 'item'));
     }
 
     public function loadCart()
@@ -114,6 +125,55 @@ public function deleteItem(Request $request)
 }
 
 
+public function store(Request $request)
+{
+    $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+    $lastTransaction = Transaction::orderBy('transaction_id', 'desc')->first();
+    $prefix = 'B';
+    $lastNumber = 0;
+    if ($lastTransaction) {
+        $lastNumber = (int)substr($lastTransaction->transaction_id, 1);
+    }
+
+    $newNumber = $lastNumber + 1;
+
+    $transactionId = $prefix . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+
+    while (Transaction::where('transaction_id', $transactionId)->exists()) {
+        $newNumber++;
+        $transactionId = $prefix . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+    }
+
+
+    $transaction = Transaction::create([
+        'id' => Auth::id(),
+        'company_id' => $request->company_id,
+        'transaction_id' => $transactionId, 
+    ]);
+    $transaction->save();
+
+    $cart = session('cart_items', []);
+    foreach ($cart as $item) {
+        $total = $item['price'] * $item['qty'];
+    Transaction_detail::create([
+            'transaction_id' => $transactionId,
+            'item_id' => $item['item_id'], // ID item dari cart
+            'amount' => $item['qty'],      // Quantity dari cart
+            'price' => $item['price'],
+            'tax' => $request->tax,
+            'total_price' => $total,
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Transaction submitted successfully!');
+}
+
+
 
     function list()
     {
@@ -141,3 +201,14 @@ public function deleteItem(Request $request)
         $mpdf->Output();
     }
 }
+
+
+// 'job_no' => $request->job_no. ' ' . date('y/m'),
+        // 'job_ref' => $request->job_ref,
+        // 'flightdate' => $request->flightdate,
+        // 'destination' => $request->destination,
+        // 'mawb' => $request->mawb,
+        // 'hawb' => $request->hawb,
+        // 'consigne' => $request->consigne,
+        // 'shipper' => $request->shipper,
+        // 'detail' => $request->detail ?? '-',

@@ -59,7 +59,7 @@
                             @foreach ($job as $J)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td> {{ $J->name_job }}</td>
+                                <td> {{ $J->job_name }}</td>
                                 <td> {{ $J->job_code }}</td>
                                 <td>
                                         <div class="form-button-action">
