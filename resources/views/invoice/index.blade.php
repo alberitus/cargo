@@ -36,190 +36,209 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label for="defaultSelect">CUTOMER</label>
-                                <select name="company_id" id="company_id" class="form-select">
-                                    <option value="" disabled selected>-- Pilih Perusahaan --</option>
-                                    @foreach ($company as $customer)
-                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="defaultSelect">JOB</label>
-                                <select class="form-select form-control" id="defaultSelect">
-                                    <option>OB</option>
-                                    <option>OB</option>
-                                    <option>OB</option>
-                                    <option>OB</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="largeInput">FLIGHT / DATE</label>
-                                <input type="text" class="form-control form-control" id="defaultInput"
-                                    placeholder="FLIGHT / DATE">
-                            </div>
-                            <div class="form-group">
-                                <label for="largeInput">MAWB NUMBER</label>
-                                <input type="text" class="form-control form-control" id="defaultInput"
-                                    placeholder="MAWB NUMBER">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-6">
-                            <div class="form-group">
-                                <label for="largeInput">DESTINATION</label>
-                                <input type="text" class="form-control form-control" id="defaultInput"
-                                    placeholder="DESTINATION">
-                            </div>
-                            <div class="form-group">
-                                <label for="largeInput">HAWB NUMBER</label>
-                                <input type="text" class="form-control form-control" id="defaultInput"
-                                    placeholder="HAWB NUMBER">
-                            </div>
-                            <div class="form-group">
-                                <label for="largeInput">JOB REF</label>
-                                <input type="text" class="form-control form-control" id="defaultInput"
-                                    placeholder="JOB REF">
-                            </div>
-                            <div class="form-group">
-                                <label for="comment">Details</label>
-                                <textarea class="form-control" id="comment" rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="card-title">SELLING</div>
-                    <br>
-                    <div class="container">
-                        <div class="col">
-                            <label class="col-form-label">Tanggal: </label>
-                            <input type="text" value="<?= date('d/m/y') ?>" disabled>
-                        </div>
+                    <form method="POST" action="invoice/submit-transaction">
+                        @csrf
                         <div class="row">
-                            <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                                <button class="btn btn-primary" data-bs-target="#modalCart" data-bs-toggle="modal">Pilih
-                                    Item</button>
-                            </div>
-                        </div>
-                    </div>
-                    <table id="cartTable" class="table table-striped table-hover mt-4">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Item</th>
-                                <th>QTY</th>
-                                <th>Satuan</th>
-                                <th>Harga Satuan</th>
-                                <th>Harga Total</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detail_cart">
-                        </tbody>
-                    </table>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-4">
+                            <div class="card-title">Order</div>
+                            <div class="col-md-6 col-lg-6">
                                 <div class="form-group">
-                                    <label>TAX</label><br />
-                                    <div class="d-flex">
-                                        <div class="form-check">
-                                            <input class="form-check-input tax-radio" type="radio"
-                                                name="flexRadioDefault" id="tax1" value="6600" />
-                                            <label class="form-check-label" for="tax1">
-                                                1.1%
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input tax-radio" type="radio"
-                                                name="flexRadioDefault" id="tax2" value="16500" checked />
-                                            <label class="form-check-label" for="tax2">
-                                                11%
-                                            </label>
+                                    <label for="defaultSelect">CUTOMER</label>
+                                    <select name="company_id" class="form-select">
+                                        @foreach ($company as $customer)
+                                        <option value="{{ $customer->company_id }}"
+                                            {{ old('company_id') == $customer->company_id ? 'selected' : '' }}>
+                                            {{ $customer->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="defaultSelect">JOB No</label>
+                                    <select name="job_no" class="form-select">
+                                        @foreach ($jobsWithDate as $job)
+                                        <option value="{{ $job->job_name }}"
+                                            {{ old('job_id') == $job->job_name ? 'selected' : '' }}>
+                                            {{ $job->job_name }} / {{ $job->display_date }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="largeInput">JOB REF</label>
+                                    <input type="text" class="form-control form-control" name="job_ref"
+                                        id="defaultInput" placeholder="JOB REF">
+                                </div>
+                                <div class="form-group">
+                                    <label for="largeInput">FLIGHT / DATE</label>
+                                    <input type="text" class="form-control form-control" name="flightdate"
+                                        id="defaultInput" placeholder="FLIGHT / DATE">
+                                </div>
+                                <div class="form-group">
+                                    <label for="largeInput">DESTINATION</label>
+                                    <input type="text" class="form-control form-control" name="destination"
+                                        id="defaultInput" placeholder="DESTINATION">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="largeInput">MAWB NUMBER</label>
+                                    <input type="text" class="form-control form-control" name="mawb" id="defaultInput"
+                                        placeholder="MAWB NUMBER">
+                                </div>
+                                <div class="form-group">
+                                    <label for="largeInput">HAWB NUMBER</label>
+                                    <input type="text" class="form-control form-control" name="hawb" id="defaultInput"
+                                        placeholder="HAWB NUMBER">
+                                </div>
+                                <div class="form-group">
+                                    <label for="largeInput">CONSIGNE</label>
+                                    <input type="text" class="form-control form-control" name="consigne"
+                                        id="defaultInput" placeholder="CONSIGNE">
+                                </div>
+                                <div class="form-group">
+                                    <label for="largeInput">SHIPPER</label>
+                                    <input type="text" class="form-control form-control" name="shipper"
+                                        id="defaultInput" placeholder="SHIPPER">
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment">Details</label>
+                                    <textarea class="form-control" id="comment" name="detail" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="card-title">SELLING</div>
+                        <br>
+                        <div class="container">
+                            <div class="col">
+                                <label class="col-form-label">Tanggal: </label>
+                                <input type="text" value="<?= date('d/m/y') ?>" disabled>
+                            </div>
+                            <div class="row">
+                                <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-primary" data-bs-target="#modalCart"
+                                        data-bs-toggle="modal">Pilih
+                                        Item</button>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="cartTable" class="table table-striped table-hover mt-4">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Item</th>
+                                    <th>QTY</th>
+                                    <th>Satuan</th>
+                                    <th>Harga Satuan</th>
+                                    <th>Harga Total</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detail_cart">
+                            </tbody>
+                        </table>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label>TAX</label><br />
+                                        <div class="d-flex">
+                                            <div class="form-check">
+                                                <input class="form-check-input tax-radio" type="radio"
+                                                    name="tax" id="tax1" value="6600" />
+                                                <label class="form-check-label" for="tax1">
+                                                    1.1%
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input tax-radio" type="radio"
+                                                    name="tax" id="tax2" value="16500" checked />
+                                                <label class="form-check-label" for="tax2">
+                                                    11%
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                    <h5>TOTAL HARGA</h5>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="d-grip gap-3 d-md-flex justify-content-md-end">
+                                        <h5>TOTAL HARGA</h5>
+                                    </div>
+                                    <div class="d-grip gap-3 d-md-flex justify-content-md-end">
+                                        <h5>TAX 11%</h5>
+                                    </div>
+                                    <div class="d-grip gap-3 d-md-flex justify-content-md-end">
+                                        <h5>GRAND TOTAL</h5>
+                                    </div>
                                 </div>
-                                <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                    <h5>TAX 11%</h5>
-                                </div>
-                                <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                    <h5>GRAND TOTAL</h5>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="d-flex justify-content-center">
-                                    <h5 style="width: 80%; text-align: left;" id="total-price">RP 0</h5>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <h5 id="tax-value" style="width: 80%; text-align: left;">RP 0</h5>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <h5 style="width: 80%; text-align: left;" id="grand-total">RP 0</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="card-title">COST</div>
-                    <br>
-                    <table class="table table-striped table-hover mt-4">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th width="17%">Produk</th>
-                                <th width="16%">Jumlah</th>
-                                <th width="19%">Satuan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-8">
-                                <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                    <h6>TOTAL COST</h6>
-                                </div>
-                                <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                    <h6>GROSS PROFIT</h6>
-                                </div>
-                                <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                    <h6>PPH 23</h6>
-                                </div>
-                                <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                    <h5>PROFIT</h5>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="d-flex justify-content-center">
-                                    <h6 style="width: 80%; text-align: left;">RP
-                                        63.000</h6>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <h6 style="width: 80%; text-align: left;">RP
-                                        103.000</h6>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <h6 style="width: 80%; text-align: left;">RP
-                                        3.000</h6>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <h5 style="width: 80%; text-align: left;">RP
-                                        100.000</h5>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="d-flex justify-content-center">
+                                        <h5 style="width: 80%; text-align: left;" id="total-price">RP 0</h5>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <h5 id="tax-value" style="width: 80%; text-align: left;">RP 0</h5>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <h5 style="width: 80%; text-align: left;" name="total" id="grand-total">RP 0</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                        <button class="btn btn-success me-md-2" type="button"> Submit</button>
-                    </div>
+                        <br>
+                        <div class="card-title">COST</div>
+                        <br>
+                        <table class="table table-striped table-hover mt-4">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th width="17%">Produk</th>
+                                    <th width="16%">Jumlah</th>
+                                    <th width="19%">Satuan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-8">
+                                    <div class="d-grip gap-3 d-md-flex justify-content-md-end">
+                                        <h6>TOTAL COST</h6>
+                                    </div>
+                                    <div class="d-grip gap-3 d-md-flex justify-content-md-end">
+                                        <h6>GROSS PROFIT</h6>
+                                    </div>
+                                    <div class="d-grip gap-3 d-md-flex justify-content-md-end">
+                                        <h6>PPH 23</h6>
+                                    </div>
+                                    <div class="d-grip gap-3 d-md-flex justify-content-md-end">
+                                        <h5>PROFIT</h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="d-flex justify-content-center">
+                                        <h6 style="width: 80%; text-align: left;">RP
+                                            63.000</h6>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <h6 style="width: 80%; text-align: left;">RP
+                                            103.000</h6>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <h6 style="width: 80%; text-align: left;">RP
+                                            3.000</h6>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <h5 style="width: 80%; text-align: left;">RP
+                                            100.000</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+                            <button class="btn btn-success me-md-2" id="save-transaction" type="submit"> Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -232,7 +251,10 @@
     let totalPrice = 0;
 
     function formatRupiah(angka) {
-        return angka.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+        return angka.toLocaleString('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        });
     }
 
     function loadCart() {
@@ -273,14 +295,14 @@
     }
 
     function updateTaxValue() {
-        const selectedTax = parseFloat(document.querySelector('input[name="flexRadioDefault"]:checked').value) || 0;
+        const selectedTax = parseFloat(document.querySelector('input[name="tax"]:checked').value) || 0;
         const formattedTax = formatRupiah(selectedTax);
         document.getElementById('tax-value').textContent = formattedTax;
         updateTotalPrice();
     }
 
     function updateTotalPrice() {
-        const selectedTax = parseFloat(document.querySelector('input[name="flexRadioDefault"]:checked').value) || 0;
+        const selectedTax = parseFloat(document.querySelector('input[name="tax"]:checked').value) || 0;
         const grandTotal = totalPrice + selectedTax;
         const formattedGrandTotal = formatRupiah(grandTotal);
         document.getElementById('grand-total').textContent = formattedGrandTotal;
@@ -305,7 +327,7 @@
         $('#modalUbah').modal('show');
     }
 
-    function add_cart(id, name, satuan) {
+    function add_cart(item_id, name, satuan) {
         var price = document.getElementById('price-' + id).value;
         if (price === "" || price <= 0) {
             alert("Silahkan Masukkan Harga!");
@@ -318,12 +340,12 @@
             method: "POST",
             data: {
                 _token: '{{ csrf_token() }}',
-                item_id: id,
+                item_id: item_id,
                 nama_item: name,
                 qty: 1,
                 satuan: satuan,
                 price,
-                total_price: totalPrice
+                total_price: total_price
             },
             success: function (data) {
                 $('#modalCart').modal('hide');

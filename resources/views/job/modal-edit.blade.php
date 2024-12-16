@@ -22,8 +22,8 @@
                             <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                     <label>Name</label>
-                                    <input id="addName" name="name_job" type="text" class="form-control"
-                                        value="{{ $J->name_job }}" placeholder="Fill name" />
+                                    <input id="addName" name="job_name" type="text" class="form-control"
+                                        value="{{ $J->job_name }}" placeholder="Fill name" />
                                 </div>
                             </div>
                             <div class="col-sm-12">

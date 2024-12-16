@@ -20,7 +20,7 @@
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
                                 <label>Name Job</label>
-                                <input id="addName" name="name_job" type="text" class="form-control"
+                                <input id="addName" name="job_name" type="text" class="form-control"
                                     placeholder="fill name" />
                             </div>
                         </div>

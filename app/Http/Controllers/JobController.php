@@ -17,7 +17,7 @@ class JobController extends Controller
     {
 
         $job = new Job();
-        $job->name_job = $request->name_job;
+        $job->job_name = $request->job_name;
         $job->job_code = $request->job_code;
         $job->save();
 
@@ -30,7 +30,7 @@ class JobController extends Controller
         if (!$job) {
             return redirect()->route('job.index')->with('error', 'Job not found');
         }
-        $job->name_job = $request->name_job;
+        $job->job_name = $request->job_name;
         $job->job_code = $request->job_code;
 
         $job->update();
