@@ -183,6 +183,8 @@
                         $("#addName").val(),
                         $("#addPosition").val(),
                         $("#addOffice").val(),
+                        $("#addtax").val(),
+                        $("#adduser").val(),
                         action,
                     ]);
                 $("#addRowModal").modal("hide");

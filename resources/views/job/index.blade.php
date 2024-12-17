@@ -88,7 +88,6 @@
         </div>
     </div>
 </div>
-</div>
 @include('job.modal-create')
 @include('job.modal-edit')
 @endSection
