@@ -45,7 +45,7 @@
                                     <label for="defaultSelect">CUTOMER</label>
                                     <select name="company_id" class="form-select">
                                         @foreach ($company as $customer)
-                                        <option value="{{ $customer->company_id }}"
+                                        <option id="addName" value="{{ $customer->company_id }}"
                                             {{ old('company_id') == $customer->company_id ? 'selected' : '' }}>
                                             {{ $customer->name }}
                                         </option>
@@ -56,34 +56,46 @@
                                     <label for="defaultSelect">JOB No</label>
                                     <select name="job_no" class="form-select">
                                         @foreach ($jobsWithDate as $job)
-                                        <option value="{{ $job->job_name }}"
+                                        <option id="addPosition" value="{{ $job->job_name }}"
                                             {{ old('job_id') == $job->job_name ? 'selected' : '' }}>
                                             {{ $job->job_name }} / {{ $job->display_date }}
                                         </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group @error('job_ref') has-error has-feedback @enderror">
                                     <label for="largeInput">JOB REF</label>
                                     <input type="text" class="form-control form-control" name="job_ref"
-                                        id="defaultInput" placeholder="JOB REF">
+                                        id="defaultInput" placeholder="JOB REF" value="{{ old('job_ref') }}">
+                                    @error('job_ref')
+                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group @error('flight_date') has-error has-feedback @enderror">
                                     <label for="largeInput">FLIGHT / DATE</label>
-                                    <input type="text" class="form-control form-control" name="flightdate"
+                                    <input type="text" class="form-control form-control" name="flight_date"
                                         id="defaultInput" placeholder="FLIGHT / DATE">
+                                        @error('flight_date')
+                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @enderror
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group @error('destination') has-error has-feedback @enderror">
                                     <label for="largeInput">DESTINATION</label>
                                     <input type="text" class="form-control form-control" name="destination"
                                         id="defaultInput" placeholder="DESTINATION">
+                                        @error('destination')
+                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-6">
-                                <div class="form-group">
+                                <div class="form-group @error('mawb') has-error has-feedback @enderror">
                                     <label for="largeInput">MAWB NUMBER</label>
                                     <input type="text" class="form-control form-control" name="mawb" id="defaultInput"
                                         placeholder="MAWB NUMBER">
+                                        @error('mawb')
+                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="largeInput">HAWB NUMBER</label>
@@ -95,10 +107,13 @@
                                     <input type="text" class="form-control form-control" name="consigne"
                                         id="defaultInput" placeholder="CONSIGNE">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group @error('shipper') has-error has-feedback @enderror">
                                     <label for="largeInput">SHIPPER</label>
                                     <input type="text" class="form-control form-control" name="shipper"
                                         id="defaultInput" placeholder="SHIPPER">
+                                        @error('shipper')
+                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="comment">Details</label>
@@ -116,7 +131,7 @@
                             </div>
                             <div class="row">
                                 <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                                    <button class="btn btn-primary" data-bs-target="#modalCart"
+                                    <button class="btn btn-primary" type="button" data-bs-target="#modalCart"
                                         data-bs-toggle="modal">Pilih
                                         Item</button>
                                 </div>
@@ -144,15 +159,15 @@
                                         <label>TAX</label><br />
                                         <div class="d-flex">
                                             <div class="form-check">
-                                                <input class="form-check-input tax-radio" type="radio"
-                                                    name="tax" id="tax1" value="6600" />
+                                                <input class="form-check-input tax-radio" type="radio" name="tax"
+                                                    id="tax1" value="6600" />
                                                 <label class="form-check-label" for="tax1">
                                                     1.1%
                                                 </label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input tax-radio" type="radio"
-                                                    name="tax" id="tax2" value="16500" checked />
+                                                <input class="form-check-input tax-radio" type="radio" name="tax"
+                                                    id="tax2" value="16500" checked />
                                                 <label class="form-check-label" for="tax2">
                                                     11%
                                                 </label>
@@ -179,7 +194,8 @@
                                         <h5 id="tax-value" style="width: 80%; text-align: left;">RP 0</h5>
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <h5 style="width: 80%; text-align: left;" name="total" id="grand-total">RP 0</h5>
+                                        <h5 style="width: 80%; text-align: left;" name="total" id="grand-total">RP 0
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
@@ -328,7 +344,7 @@
     }
 
     function add_cart(item_id, name, satuan) {
-        var price = document.getElementById('price-' + id).value;
+        var price = document.getElementById('price-' + item_id).value;
         if (price === "" || price <= 0) {
             alert("Silahkan Masukkan Harga!");
             return;
@@ -345,7 +361,7 @@
                 qty: 1,
                 satuan: satuan,
                 price,
-                total_price: total_price
+                total_price: totalPrice
             },
             success: function (data) {
                 $('#modalCart').modal('hide');

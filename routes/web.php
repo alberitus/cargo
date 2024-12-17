@@ -11,15 +11,7 @@ use App\Http\Controllers\KapalController;
 
 use Illuminate\Support\Facades\Route;
 
-// Route::middleware(['auth'])->get('/', function () {
-//     return view('index');
-// })->middleware(['auth', 'verified'])->name('index');;
-
 Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('/', [DashboardController::class, 'index'])->name('index');
-
-
-
-
 Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('index', [DashboardController::class, 'index'])->name('index');
 
 
@@ -35,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/invoice/update-cart', [InvoiceController::class, 'updateCart'])->name('updateCart');
     Route::post('/invoice/update-price', [InvoiceController::class, 'updatePrice'])->name('updatePrice');
     Route::post('/invoice/addItem', [InvoiceController::class, 'addItem'])->name('addItem');
-    Route::post('invoice/submit-transaction', [InvoiceController::class, 'store'])->name('store');
+    Route::post('/invoice/submit-transaction', [InvoiceController::class, 'store'])->name('store');
     Route::get('/invoice/report', [InvoiceController::class, 'report'])->name('invoice.report');
     Route::get('/invoice/pdf', [InvoiceController::class, 'export_pdf'])->name('invoice.pdf');
     Route::post('/invoice/save-transaction-details', [InvoiceController::class, 'saveTransactionDetails'])->name('invoice.inv');

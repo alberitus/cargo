@@ -31,7 +31,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="basic-datatables" class="display table table-striped table-hover">
+                        <table id="add-row" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -40,6 +40,7 @@
                                     <th>Tax</th>
                                     <th>Grand Total</th>
                                     <th>User</th>
+                                    <th style="width: 10%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,8 +55,22 @@
                                     <td>{{ 'Rp ' . number_format($report->total_tax, 0, ',', '.') }}</td>
                                     <td>{{ 'Rp ' . number_format($report->grand_total, 0, ',', '.') }}</td>
                                     <td>{{ $report->user->name }}</td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <form action="{{ route('job.delete', $report->transaction_id) }}"
+                                                method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-link btn-danger"
+                                                    onclick="return confirm('Are you sure you want to delete this job?');">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                </td>
+                                @endforeach
                             </tbody>
-                            @endforeach
+                            
                         </table>
                     </div>
                 </div>
