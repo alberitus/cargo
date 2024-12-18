@@ -6,8 +6,6 @@
     <title>System - Admin Dashboard</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="{{ asset('import/assets/img/kaiadmin/favicon.ico') }}" type="image/x-icon" />
-
-    <!-- Fonts and icons -->
     <script src="{{ asset('import/assets/js/plugin/webfont/webfont.min.js') }}"></script>
     <script>
         WebFont.load({
@@ -29,21 +27,16 @@
         });
     </script>
 
-    <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('import/assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('import/assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('import/assets/css/kaiadmin.min.css') }}" />
-
-    <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('import/assets/css/demo.css') }}" />
 </head>
 
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
-        <div class="sidebar" data-background-color="dark">
+        <div class="sidebar sidebar-style-2" data-background-color="dark">
             <div class="sidebar-logo">
-                <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -60,7 +53,7 @@
                 <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
-                @include('layout.sidebar')
+                @include('layout.sidebar2')
             </div>
         </div>
         <!-- End Sidebar -->
@@ -192,6 +185,7 @@
         });
 
     </script>
+
 </body>
 
 </html>

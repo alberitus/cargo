@@ -68,23 +68,23 @@
                                     <input type="text" class="form-control form-control" name="job_ref"
                                         id="defaultInput" placeholder="JOB REF" value="{{ old('job_ref') }}">
                                     @error('job_ref')
-                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    <small class="form-text text-muted">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="form-group @error('flight_date') has-error has-feedback @enderror">
                                     <label for="largeInput">FLIGHT / DATE</label>
                                     <input type="text" class="form-control form-control" name="flight_date"
                                         id="defaultInput" placeholder="FLIGHT / DATE">
-                                        @error('flight_date')
-                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @error('flight_date')
+                                    <small class="form-text text-muted">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="form-group @error('destination') has-error has-feedback @enderror">
                                     <label for="largeInput">DESTINATION</label>
                                     <input type="text" class="form-control form-control" name="destination"
                                         id="defaultInput" placeholder="DESTINATION">
-                                        @error('destination')
-                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @error('destination')
+                                    <small class="form-text text-muted">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
@@ -93,8 +93,8 @@
                                     <label for="largeInput">MAWB NUMBER</label>
                                     <input type="text" class="form-control form-control" name="mawb" id="defaultInput"
                                         placeholder="MAWB NUMBER">
-                                        @error('mawb')
-                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @error('mawb')
+                                    <small class="form-text text-muted">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="form-group">
@@ -111,8 +111,8 @@
                                     <label for="largeInput">SHIPPER</label>
                                     <input type="text" class="form-control form-control" name="shipper"
                                         id="defaultInput" placeholder="SHIPPER">
-                                        @error('shipper')
-                                        <small class="form-text text-muted">{{ $message }}</small>
+                                    @error('shipper')
+                                    <small class="form-text text-muted">{{ $message }}</small>
                                     @enderror
                                 </div>
                                 <div class="form-group">
@@ -425,7 +425,13 @@
         ribuan = ribuan.join('.').split('').reverse().join('');
         return 'Rp ' + ribuan;
     }
+
 </script>
 @include('invoice/modal-cart')
 @include('invoice/modal-ubah')
+@if(session()->has('notify'))
+    @notifyCss
+    @notifyJs
+    @include('notify::components.notify')
+@endif
 @endSection

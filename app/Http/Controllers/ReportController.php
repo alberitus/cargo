@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
-use App\Models\Transaction_detail;
-use App\Models\Company;
 
 
 class ReportController extends Controller
 {
     function index(){
+
+    }
+
+    function company(){
         $transactions = Transaction::with('transactionDetails.item', 'company', 'user')->get();
 
         foreach ($transactions as $transaction) {
@@ -20,5 +22,20 @@ class ReportController extends Controller
         }
         
         return view('report.report', compact('transactions'));
+    }
+
+    function show()
+    {
+
+    }
+
+    function list()
+    {
+
+    }
+
+    function report()
+    {
+
     }
 }

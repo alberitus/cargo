@@ -1,0 +1,33 @@
+/* notify-custom.css */
+.notify {
+    position: fixed;
+    bottom: 20px;  /* Jarak dari bawah */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    max-width: 350px;  /* Lebar maksimal notifikasi */
+    margin: 10px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.notify-info {
+    background-color: #2196F3;
+    color: white;
+}
+
+.notify-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.notify-error {
+    background-color: #F44336;
+    color: white;
+}
+
+.notify-warning {
+    background-color: #FF9800;
+    color: white;
+}

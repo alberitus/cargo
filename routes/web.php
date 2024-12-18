@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ItemController;
@@ -15,23 +15,23 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,super
 Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('index', [DashboardController::class, 'index'])->name('index');
 
 
-Route::middleware(['auth'])->get('/dashboard', function () {
+Route::middleware(['auth'])->get('/', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/invoice/list', [InvoiceController::class, 'list'])->name('invoice.list');
-    Route::post('/invoice/delete', [InvoiceController::class, 'deleteItem'])->name('deleteItem');
-    Route::get('/invoice/loadCart', [InvoiceController::class, 'loadCart'])->name('loadCart');
-    Route::post('/invoice/update-cart', [InvoiceController::class, 'updateCart'])->name('updateCart');
-    Route::post('/invoice/update-price', [InvoiceController::class, 'updatePrice'])->name('updatePrice');
-    Route::post('/invoice/addItem', [InvoiceController::class, 'addItem'])->name('addItem');
-    Route::post('/invoice/submit-transaction', [InvoiceController::class, 'store'])->name('store');
-    Route::get('/invoice/report', [InvoiceController::class, 'report'])->name('invoice.report');
-    Route::get('/invoice/pdf', [InvoiceController::class, 'export_pdf'])->name('invoice.pdf');
-    Route::post('/invoice/save-transaction-details', [InvoiceController::class, 'saveTransactionDetails'])->name('invoice.inv');
-    Route::resource('invoice', InvoiceController::class);
+    Route::get('/invoice/list', [TransactionController::class, 'list'])->name('invoice.list');
+    Route::post('/invoice/delete', [TransactionController::class, 'deleteItem'])->name('deleteItem');
+    Route::get('/invoice/loadCart', [TransactionController::class, 'loadCart'])->name('loadCart');
+    Route::post('/invoice/update-cart', [TransactionController::class, 'updateCart'])->name('updateCart');
+    Route::post('/invoice/update-price', [TransactionController::class, 'updatePrice'])->name('updatePrice');
+    Route::post('/invoice/addItem', [TransactionController::class, 'addItem'])->name('addItem');
+    Route::post('/invoice/submit-transaction', [TransactionController::class, 'store'])->name('store');
+    Route::get('/invoice/report', [TransactionController::class, 'report'])->name('invoice.report');
+    Route::get('/invoice/pdf', [TransactionController::class, 'export_pdf'])->name('invoice.pdf');
+    Route::post('/invoice/save-transaction-details', [TransactionController::class, 'saveTransactionDetails'])->name('invoice.inv');
+    Route::resource('transaction', TransactionController::class);
 })->middleware('auth');
 
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
@@ -60,23 +60,18 @@ Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
 });
 
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile/view', [ProfileController::class, 'view'])->name('profile.view');
-
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-});
-
-Route::middleware('auth', 'verified', 'rolemanager:supervisor')->group(function () {
-    Route::get('/profile/index', [ProfileController::class, 'index'])->name('profile.index');
-
     Route::get('/profile/edit/{id}', [ProfileController::class, 'editById'])->name('profile.editById');
     Route::patch('/profile/edit/{id}', [ProfileController::class, 'updateById'])->name('profile.updateById');
     Route::post('/reset-password/{id}', [ProfileController::class, 'resetPassword'])->name('reset.password');
     Route::delete('/profile/{id}', [ProfileController::class, 'destroyById'])->name('profile.destroyById'); 
+    Route::resource('profile', ProfileController::class);
+
 });
 
 Route::middleware('auth')->group(function () {
@@ -84,15 +79,15 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// // item
-// Route::resource('item', ItemController::class);
-
 // report
+Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
+    Route::get('/report/company', [ReportController::class, 'company'])->name('report.company');
 Route::resource('report', ReportController::class);
 // Route::get('/pdf', [InvoiceController::class, 'export_pdf']);
 // Route::get('/csv', [InvoiceController::class, 'export_csv']);
 // Route::get('/excel', [InvoiceController::class, 'export_excel']);
 // Route::get('/print', [InvoiceController::class, 'print_invoice']);
+});
 
 // kapal
 Route::resource('kapal', KapalController::class);
