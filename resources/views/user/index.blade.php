@@ -38,9 +38,8 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center">
                         <h4 class="card-title">User</h4>
-                        <a href="{{ url('/admin/create-account') }}"><button id="items" 
-                            class="ubah_cart btn btn-primary btn-xs" title="view"><i
-                                class="fas fa-user">  </i> Add User Account</button></a>                    
+                        <a href="{{ url('/admin/create-account') }}" class="btn btn-primary btn-round ms-auto">
+                            <i class="fas fa-user"></i>  Add User Account</a>                    
                     </div>
                 </div>
                 <div class="card-body">

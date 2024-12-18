@@ -13,7 +13,7 @@ use App\Models\Orders;
 use App\Models\Transaction_detail;
 use Illuminate\Support\Facades\Auth;
 
-class InvoiceController extends Controller
+class TransactionController extends Controller
 {
     function index()
     {
@@ -128,7 +128,6 @@ class InvoiceController extends Controller
     function store(Request $request)
     {
         $user = Auth::user();
-
             if (!$user) {
                 return redirect()->route('login');
             }
@@ -139,11 +138,8 @@ class InvoiceController extends Controller
         if ($lastTransaction) {
             $lastNumber = (int)substr($lastTransaction->transaction_id, 1);
         }
-
         $newNumber = $lastNumber + 1;
-
         $transactionId = $prefix . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
-
         while (Transaction::where('transaction_id', $transactionId)->exists()) {
             $newNumber++;
             $transactionId = $prefix . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
@@ -157,6 +153,16 @@ class InvoiceController extends Controller
         ]);
         $transaction->save();
 
+        $cart = session('cart_items', []);
+
+    // Validasi: pastikan keranjang tidak kosong
+    if (empty($cart)) {
+        // Set the notification before redirecting
+        notify()->error('Your cart is empty. Please add items to the cart before proceeding.');
+    
+        // Redirect back with an error message
+        return redirect()->back()->withErrors(['cart' => 'Your cart is empty. Please add items to the cart before proceeding.']);
+    }
         $cart = session('cart_items', []);
         foreach ($cart as $item) {
             $total = $item['price'] * $item['qty'];
@@ -206,7 +212,6 @@ class InvoiceController extends Controller
         ]);
 
         return redirect()->route('index')->with('success', 'Transaction submitted successfully!');
-
     }
 
 
