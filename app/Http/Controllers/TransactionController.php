@@ -12,6 +12,7 @@ use App\Models\Transaction;
 use App\Models\Orders;
 use App\Models\Transaction_detail;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TransactionController extends Controller
 {
@@ -110,9 +111,7 @@ class TransactionController extends Controller
     function deleteItem(Request $request)
     {
         $itemId = $request->input('item_id');
-
         $cart = session('cart_items', []);
-
         $cart = array_filter($cart, function ($cartItem) use ($itemId) {
             return $cartItem['item_id'] !== $itemId;
         });
@@ -158,7 +157,9 @@ class TransactionController extends Controller
     // Validasi: pastikan keranjang tidak kosong
     if (empty($cart)) {
         // Set the notification before redirecting
-        notify()->error('Your cart is empty. Please add items to the cart before proceeding.');
+        // notify()->error('Your cart is empty. Please add items to the cart before proceeding.');
+        Alert::toast('Your cart is empty. Please add items to the cart before proceeding.', 'error');
+
     
         // Redirect back with an error message
         return redirect()->back()->withErrors(['cart' => 'Your cart is empty. Please add items to the cart before proceeding.']);
@@ -210,8 +211,8 @@ class TransactionController extends Controller
             'shipper' => $request->shipper,
             'detail' => $request->detail ?? '-',
         ]);
-
-        return redirect()->route('index')->with('success', 'Transaction submitted successfully!');
+        alert()->success('Success', 'Transaction submitted successfully!');
+        return redirect()->route('index');
     }
 
 

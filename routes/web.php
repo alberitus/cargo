@@ -18,7 +18,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,super
 Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/list', [TransactionController::class, 'list'])->name('invoice.list');
     Route::post('/invoice/delete', [TransactionController::class, 'deleteItem'])->name('deleteItem');
-    Route::get('/invoice/loadCart', [TransactionController::class, 'loadCart'])->name('loadCart');
+    Route::get('/invoice/loadCart', [TransactionController::class, 'loadCart'])->name('transaction.loadCart');
     Route::post('/invoice/update-cart', [TransactionController::class, 'updateCart'])->name('updateCart');
     Route::post('/invoice/update-price', [TransactionController::class, 'updatePrice'])->name('updatePrice');
     Route::post('/invoice/addItem', [TransactionController::class, 'addItem'])->name('addItem');

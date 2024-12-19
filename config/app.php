@@ -117,6 +117,11 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
+    // 'providers' => [
+    //     RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+    // ],
+
+    // 'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
 
 
     'maintenance' => [
