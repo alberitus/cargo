@@ -45,6 +45,14 @@
         </li>
         @endif
         @if(Auth::user()->role == 2)
+        <li class="nav-item {{ Request::routeIs('kapal.index') ? 'active' : '' }}">
+            <a href="{{ route('kapal.index') }}">
+                <i class="fas fa-th-list"></i>
+                <p>Kapal</p>
+            </a>
+        </li>
+        @endif
+        @if(Auth::user()->role == 2)
         <li class="nav-item {{ Request::routeIs('transaction.index') ? 'active' : '' }}">
             <a href="{{ route('transaction.index') }}">
                 <i class="fas fa-th-list"></i>

@@ -15,11 +15,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,super
 Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('index', [DashboardController::class, 'index'])->name('index');
 
 
-Route::middleware(['auth'])->get('/', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/list', [TransactionController::class, 'list'])->name('invoice.list');
     Route::post('/invoice/delete', [TransactionController::class, 'deleteItem'])->name('deleteItem');
