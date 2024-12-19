@@ -1,11 +1,11 @@
-@foreach ($kapal as $K)
-    <div class="modal fade" id="modalUbah{{ $K->kapal_id }}" tabindex="-1" role="dialog" aria-hidden="true">
+@foreach ($consigne as $K)
+    <div class="modal fade" id="modalUbah{{ $K->consigne_id }}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header border-0">
                     <h5 class="modal-title">
                         <span class="fw-mediumbold">Update</span>
-                        <span class="fw-light">Kapal</span>
+                        <span class="fw-light">consigne</span>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -13,18 +13,18 @@
                 </div>
                 <div class="modal-body">
                     <p class="small">
-                        Update Kapal
+                        Update consigne
                     </p>
                     <!-- Perhatikan route harus sesuai dengan id perusahaan -->
-                    <form action="{{ route('kapal.update', $K->kapal_id) }}" method="POST">
+                    <form action="{{ route('consigne.update', $K->consigne_id) }}" method="POST">
                         @csrf
                         @method('PUT') <!-- Untuk method update -->
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                     <label>Name</label>
-                                    <input id="addName" name="nama_kapal" type="text" class="form-control"
-                                        value="{{ $K->nama_kapal }}" placeholder="Fill name" />
+                                    <input id="addName" name="nama_consigne" type="text" class="form-control"
+                                        value="{{ $K->nama_consigne }}" placeholder="Fill name" />
                                 </div>
                             </div>
                             {{-- <div class="col-md-6 pe-0">

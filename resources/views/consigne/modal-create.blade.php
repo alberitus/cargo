@@ -4,7 +4,7 @@
             <div class="modal-header border-0">
                 <h5 class="modal-title">
                     <span class="fw-mediumbold"> New</span>
-                    <span class="fw-light"> Kapal </span>
+                    <span class="fw-light"> Consigne </span>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -12,15 +12,15 @@
             </div>
             <div class="modal-body">
                 <p class="small">
-                    Add a new Kapal
+                    Add a new Consigne
                 </p>
-                <form action="{{ route('kapal.submit') }}" method="post">
+                <form action="{{ route('consigne.submit') }}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
-                                <label>Name Kapal</label>
-                                <input id="addName" name="nama_kapal" type="text" class="form-control"
+                                <label>Name Consigne</label>
+                                <input id="addName" name="nama_consigne" type="text" class="form-control"
                                     placeholder="fill name" />
                             </div>
                         </div>

@@ -89,9 +89,9 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="/kapal">
+            <a href="/consigne">
                 <i class="fas fa-ship"></i>
-                <p>Kapal</p>
+                <p>Consigne</p>
             </a>
         </li>
         @if(Auth::user()->role == 3)  <!-- Role 2 is Admin -->

@@ -7,7 +7,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\KapalController;
+use App\Http\Controllers\ConsigneController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -40,11 +40,11 @@ Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
     Route::delete('/job/delete/{job_id}', [jobController::class, 'destroy'])->name('job.delete');
     Route::resource('job', JobController::class);
 
-    // kapal
-    Route::post('/kapal/submit', [KapalController::class,'submit'])->name('kapal.submit');
-    Route::post('/kapal/update/{kapal_id}', [KapalController::class, 'update'])->name('kapal.update');
-    Route::delete('/kapal/delete/{kapal_id}', [KapalController::class, 'destroy'])->name('kapal.delete');
-    Route::resource('kapal', KapalController::class);
+    // consigne
+    Route::post('/consigne/submit', [ConsigneController::class,'submit'])->name('consigne.submit');
+    Route::post('/consigne/update/{consigne_id}', [ConsigneController::class, 'update'])->name('consigne.update');
+    Route::delete('/consigne/delete/{consigne_id}', [ConsigneController::class, 'destroy'])->name('consigne.delete');
+    Route::resource('consigne', ConsigneController::class);
 });
 
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
@@ -76,15 +76,16 @@ Route::middleware('auth')->group(function () {
 
 // report
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
-    Route::get('/report/company', [ReportController::class, 'company'])->name('report.company');
+Route::get('/report/company', [ReportController::class, 'company'])->name('report.company');
 Route::resource('report', ReportController::class);
+Route::get('/report/item', [ReportController::class, 'item'])->name('report.item');
 // Route::get('/pdf', [InvoiceController::class, 'export_pdf']);
-// Route::get('/csv', [InvoiceController::class, 'export_csv']);
+// Route::get('/csv', [InvoiceController::class, 'export_csv']); 
 // Route::get('/excel', [InvoiceController::class, 'export_excel']);
 // Route::get('/print', [InvoiceController::class, 'print_invoice']);
 });
 
-// kapal
-Route::resource('kapal', KapalController::class);
+// consigne
+Route::resource('consigne', ConsigneController::class);
 
 require __DIR__.'/auth.php';
