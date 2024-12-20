@@ -31,6 +31,21 @@ class TransactionController extends Controller
         return view('invoice.index', compact('company', 'jobsWithDate', 'cart', 'item'));
     }
 
+    function cek()
+    {
+        $company = Company::all();
+        $job = Job::all();
+        $currentDate = date('y/m');
+        $jobsWithDate = $job->map(function ($jobs) use ($currentDate) {
+            $jobs->display_date = $currentDate;
+            return $jobs;
+        });
+        $item = Item::all();
+        $cart = session('cart_items', []);
+        
+        return view('invoice.index', compact('company', 'jobsWithDate', 'cart', 'item'));
+    }
+
     function loadCart()
     {
         $items = session('cart_items', []);
