@@ -275,7 +275,7 @@
 
     function loadCart() {
         $.ajax({
-            url: "{{ route('loadCart') }}",
+            url: "{{ route('transaction.loadCart') }}",
             method: "GET",
             success: function (data) {
                 var cartHTML = '';
@@ -425,13 +425,19 @@
         ribuan = ribuan.join('.').split('').reverse().join('');
         return 'Rp ' + ribuan;
     }
+    
+    var loadCartUrl = "{{ route('transaction.loadCart') }}";  // Pastikan rute diproses oleh Blade
+    console.log(loadCartUrl);  // Cek apakah URL rute sudah benar
+
+    // Contoh pemakaian
+    fetch(loadCartUrl)
+        .then(response => response.json())
+        .then(data => {
+            // Proses data yang diterima
+        })
+        .catch(error => console.error("Terjadi kesalahan: " + error));
 
 </script>
 @include('invoice/modal-cart')
 @include('invoice/modal-ubah')
-@if(session()->has('notify'))
-    @notifyCss
-    @notifyJs
-    @include('notify::components.notify')
-@endif
 @endSection

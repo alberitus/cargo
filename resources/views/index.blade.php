@@ -44,8 +44,8 @@
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
-                                <p class="card-category">Request</p>
-                                <h4 class="card-title">1303</h4>
+                                <p class="card-category">Transaction</p>
+                                <h4 class="card-title">{{ $totalTransaction }}</h4>
                             </div>
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
-                                <p class="card-category">Sales</p>
-                                <h4 class="card-title">$ 1,345</h4>
+                                <p class="card-category">Income</p>
+                                <h4 class="card-title"> Rp {{ number_format($totalIncome, 0, ',', '.') }}</h4>
                             </div>
                         </div>
                     </div>
@@ -126,24 +126,16 @@
                 <div class="card-header">
                     <div class="card-head-row">
                         <div class="card-title">Daily Sales</div>
-                        <div class="card-tools">
-                            <div class="dropdown">
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
-                    <div class="card-category">March 25 - April 02</div>
+                    <div class="card-category"> {{ date('F d', strtotime($startDate)) }} - {{ date('F d, Y', strtotime($endDate)) }}</div>
                 </div>
                 <div class="card-body pb-0">
                     <div class="mb-4 mt-2">
-                        <h1>$4,578.58</h1>
+                        <h1>Rp {{ number_format(array_sum($data), 0, ',', '.') }}</h1>
                     </div>
                     <div class="pull-in">
-                        <canvas id="dailySalesChart"></canvas>
+                        <canvas id="reportIncome"></canvas>
                     </div>
                 </div>
             </div>
@@ -282,4 +274,51 @@
         </div>
     </div>
 </div>
+<script>
+    var reportIncome = document.getElementById('reportIncome').getContext('2d');
+
+
+var labels = {!! json_encode($labels) !!}; 
+var incomeData = {!! json_encode($data) !!};
+
+var dailySalesChart = document.getElementById('dailySalesChart').getContext('2d');
+
+var myDailySalesChart = new Chart(dailySalesChart, {
+	type: 'line',
+	data: {
+		labels:labels,
+		datasets:[ {
+			label: "Sales Analytics", fill: !0, backgroundColor: "rgba(255,255,255,0.2)", borderColor: "#fff", borderCapStyle: "butt", borderDash: [], borderDashOffset: 0, pointBorderColor: "#fff", pointBackgroundColor: "#fff", pointBorderWidth: 1, pointHoverRadius: 5, pointHoverBackgroundColor: "#fff", pointHoverBorderColor: "#fff", pointHoverBorderWidth: 1, pointRadius: 1, pointHitRadius: 5, data: incomeData
+		}]
+	},
+	options : {
+		maintainAspectRatio:!1, 
+		legend: {
+			display: !1
+		}, 
+		animation: {
+			easing: "easeInOutBack"
+		}
+		, scales: {
+			yAxes:[ {
+				display:!1, ticks: {
+					fontColor: "rgba(0,0,0,0.5)", fontStyle: "bold", beginAtZero: !0, maxTicksLimit: 10, padding: 0
+				}
+				, gridLines: {
+					drawTicks: !1, display: !1
+				}
+			}
+			], xAxes:[ {
+				display:!1, gridLines: {
+					zeroLineColor: "transparent"
+				}
+				, ticks: {
+					padding: -20, fontColor: "rgba(255,255,255,0.2)", fontStyle: "bold"
+				}
+			}
+			]
+		}
+	}
+});
+</script>
 @endSection
