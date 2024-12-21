@@ -14,10 +14,9 @@ class transaction_detail extends Model
         'transaction_id', 'item_id', 'amount', 'price', 'tax', 'total_price'
     ];
 
-    // Model TransactionDetail
-public function item()
-{
-    return $this->belongsTo(Item::class, 'item_id'); // Menyambungkan ke tabel 'items'
-}
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'item_id', 'item_id',);
+    }
 
 }

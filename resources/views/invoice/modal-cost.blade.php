@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalCart" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1"> 
+<div class="modal fade" id="modalCost" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1"> 
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,7 +6,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
             </div>
             <div class="modal-body">
-                <!-- Tabel Buku -->
                 <table id="datatablesSimple">
                     <thead>
                         <tr>
@@ -21,16 +20,16 @@
                         @php
                         $no = 1;
                         @endphp
-                        @foreach ($item as $items)
+                        @foreach ($itemCost as $itemcost)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $items->nama_item }}</td>
-                            <td>{{ $items->satuan }}</td>
+                            <td>{{ $itemcost->nama_item }}</td>
+                            <td>{{ $itemcost->satuan }}</td>
                             <td>
-                                <input type="number" class="form-control" id="price-{{ $items->item_id }}" placeholder="Masukkan Harga" min="0" value="0">
+                                <input type="number" class="form-control" id="cost-price-{{ $itemcost->item_id }}" placeholder="Masukkan Harga" min="0" value="0">
                             </td>
                             <td>
-                                <button onclick="add_cart('{{ $items->item_id }}', '{{ $items->nama_item }}', '{{ $items->satuan }}')" class="btn btn-success">
+                                <button onclick="add_cost('{{ $itemcost->item_id }}', '{{ $itemcost->nama_item }}', '{{ $itemcost->satuan }}')" class="btn btn-success">
                                     <i class="fas fa-cart-plus"></i> Tambahkan
                                 </button>
                             </td>

@@ -49,34 +49,33 @@
                                 @php
                                 $no = 1;
                                 @endphp
-                                @foreach ($transactions as $inv)
-                                <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $inv->transaction_id }}</td>
-                                    <td>{{ $inv->item->nama_item }}</td>
-                                    <td>{{ $inv->qty }}</td>
-                                    <td>{{ 'Rp '. number_format($inv->price, 0, ',', '.') }}</td>
-                                    <td>{{ 'Rp '. number_format($inv->tax, 0, ',', '.') }}</td>
-                                    <td>{{ 'Rp '. number_format($inv->grand_total, 0, ',', '.') }}</td>
-                                    {{-- <td>{{ 'Rp ' . number_format($report->total_tax, 0, ',', '.') }}</td>
-                                    <td>{{ 'Rp ' . number_format($report->grand_total, 0, ',', '.') }}</td> --}}
-                                    <td>{{ $inv->user->name }}</td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <form action="{{ route('job.delete', $inv->transaction_id) }}"
-                                                method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-link btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this job?');">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                </td>
+                                @foreach ($transaction as $inv)
+                                @foreach ($inv->transactionDetails as $detail)
+                                    <tr>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $inv->transaction_id }}</td>
+                                        <td>{{ $detail->item->nama_item }}</td>
+                                        <td>{{ $detail->amount }}</td>
+                                        <td>{{ 'Rp ' . number_format($detail->price, 0, ',', '.') }}</td>
+                                        <td>{{ 'Rp ' . number_format($detail->tax, 0, ',', '.') }}</td>
+                                        <td>{{ 'Rp ' . number_format($inv->grand_total, 0, ',', '.') }}</td>
+                                        <td>{{ $inv->user->name }}</td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <form action="{{ route('job.delete', $inv->transaction_id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-link btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this job?');">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 @endforeach
+                            @endforeach
                             </tbody>
-                            
                         </table>
                     </div>
                 </div>
