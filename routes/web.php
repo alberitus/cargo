@@ -17,11 +17,18 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,super
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/list', [TransactionController::class, 'list'])->name('invoice.list');
-    Route::post('/invoice/delete', [TransactionController::class, 'deleteItem'])->name('deleteItem');
+    // cart
     Route::get('/invoice/loadCart', [TransactionController::class, 'loadCart'])->name('transaction.loadCart');
-    Route::post('/invoice/update-cart', [TransactionController::class, 'updateCart'])->name('updateCart');
-    Route::post('/invoice/update-price', [TransactionController::class, 'updatePrice'])->name('updatePrice');
     Route::post('/invoice/addItem', [TransactionController::class, 'addItem'])->name('addItem');
+    Route::post('/invoice/update-cart', [TransactionController::class, 'updateCart'])->name('updateCart');
+    Route::post('/invoice/delete', [TransactionController::class, 'deleteItem'])->name('deleteItem');
+    Route::post('/invoice/update-price', [TransactionController::class, 'updatePrice'])->name('updatePrice');
+    // cost
+    Route::get('/invoice/loadCost', [TransactionController::class, 'loadCost'])->name('transaction.loadCost');
+    Route::post('/invoice/addCost', [TransactionController::class, 'addCost'])->name('addCost');
+    Route::post('/invoice/update-cost', [TransactionController::class, 'updateCost'])->name('updateCost');
+    Route::post('/invoice/delete-cost', [TransactionController::class, 'deleteCost'])->name('deleteCost');
+    // transaction
     Route::post('/invoice/submit-transaction', [TransactionController::class, 'store'])->name('store');
     Route::get('/invoice/report', [TransactionController::class, 'report'])->name('invoice.report');
     Route::get('/invoice/pdf', [TransactionController::class, 'export_pdf'])->name('invoice.pdf');
@@ -77,8 +84,8 @@ Route::middleware('auth')->group(function () {
 // report
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
 Route::get('/report/company', [ReportController::class, 'company'])->name('report.company');
-Route::resource('report', ReportController::class);
 Route::get('/report/item', [ReportController::class, 'item'])->name('report.item');
+Route::resource('report', ReportController::class);
 // Route::get('/pdf', [InvoiceController::class, 'export_pdf']);
 // Route::get('/csv', [InvoiceController::class, 'export_csv']); 
 // Route::get('/excel', [InvoiceController::class, 'export_excel']);

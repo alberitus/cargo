@@ -13,11 +13,10 @@ class ReportController extends Controller
     }
 
     function company(){
-        $transactions = Transaction::with('transactionDetails.item', 'company', 'user')->get();
+        $transactions = Transaction::with( 'company', 'user')->get();
 
         foreach ($transactions as $transaction) {
             $transaction->grand_total = $transaction->transactionDetails->sum('total_price');
-
             $transaction->total_tax = $transaction->transactionDetails->sum('tax');
         }
         
@@ -25,7 +24,8 @@ class ReportController extends Controller
     }
 
     function item(){
-        $transaction = Transaction::with('transactionDetails.item', 'item', 'user')->get();
+        $transaction = Transaction::with('transactionDetails.item', 'user')->get();
+
 
         foreach ($transaction as $trans) {
             $trans->total_price = $trans->transactionDetails->sum('total_price');
@@ -33,7 +33,7 @@ class ReportController extends Controller
             $trans->grand_total = $trans->total_price + $trans->total_tax;
         }
 
-        return view('report.invoice', compact('transactions'));
+        return view('report.invoice', compact('transaction'));
     }
 
     function show()

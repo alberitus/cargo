@@ -10,6 +10,7 @@ use App\Models\Job;
 use App\Models\Item;
 use App\Models\Transaction;
 use App\Models\Orders;
+use App\Models\Cost;
 use App\Models\Transaction_detail;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -26,30 +27,23 @@ class TransactionController extends Controller
             return $jobs;
         });
         $item = Item::all();
+        $itemCost = Item::all();
         $cart = session('cart_items', []);
+        $cost = session('cost_items', []);
         
-        return view('invoice.index', compact('company', 'jobsWithDate', 'cart', 'item'));
-    }
-
-    function cek()
-    {
-        $company = Company::all();
-        $job = Job::all();
-        $currentDate = date('y/m');
-        $jobsWithDate = $job->map(function ($jobs) use ($currentDate) {
-            $jobs->display_date = $currentDate;
-            return $jobs;
-        });
-        $item = Item::all();
-        $cart = session('cart_items', []);
-        
-        return view('invoice.index', compact('company', 'jobsWithDate', 'cart', 'item'));
+        return view('invoice.index', compact('company', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
     }
 
     function loadCart()
     {
         $items = session('cart_items', []);
         return response()->json($items);
+    }
+
+    function loadCost()
+    {
+        $costItem = session('cost_items', []);
+        return response()->json($costItem);
     }
 
     function showCart()
@@ -61,7 +55,19 @@ class TransactionController extends Controller
             $totalPrice += $item['price'] * $item['quantity'];
         }
 
-        return view('cart.index', compact('cart', 'totalPrice'));
+        return view('invoice.index', compact('cart', 'totalPrice'));
+    }
+
+    function showCost()
+    {
+        $cost = session()->get('cost', []);
+
+        $totalPriceCost = 0;
+        foreach ($cost as $item) {
+            $totalPriceCost += $item['price'] * $item['quantity'];
+        }
+
+        return view('invoice.index', compact('cost', 'totalPriceCost'));
     }
 
     function addItem(Request $request)
@@ -104,6 +110,46 @@ class TransactionController extends Controller
         ]);
     }
 
+    function addCost(Request $request)
+    {
+        $itemCost = [
+            'item_id' => $request->item_id,
+            'nama_item' => $request->nama_item,
+            'qty' => 1,
+            'satuan' => $request->satuan,
+            'price' => $request->price,
+        ];
+
+        $cost = session('cost_items', []);
+        
+        $found = false;
+        foreach ($cost as &$costItem) {
+            if (isset($costItem['item_id']) && $costItem['item_id'] == $itemCost['item_id']) {
+                $costItem['qty'] += 1;
+                $found = true;
+                break;
+            }
+        }
+
+        if (!$found) {
+            $cost[] = $itemCost;
+        }
+        
+
+        session(['cost_items' => $cost]);
+
+        $totalPriceCost = 0;
+        foreach ($cost as $contents) {
+            $totalPriceCost += $contents['price'] * $contents['qty'];
+        }
+
+        return response()->json([
+            'msg' => 'Item added to cart',
+            'status' => true,
+            'totalPriceCost' => number_format($totalPriceCost, 0, ',', '.')
+        ]);
+    }
+
     function updateCart(Request $request)
     {
         $itemId = $request->input('item_id');
@@ -123,6 +169,25 @@ class TransactionController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Jumlah item berhasil diperbarui']);
     }
 
+    function updateCost(Request $request)
+    {
+        $itemId = $request->input('item_id');
+        $qty = $request->input('qty');
+
+        $cost = session('cost_items', []);
+
+        foreach ($cost as &$costItem) {
+            if ($costItem['item_id'] == $itemId) {
+                $costItem['qty'] = $qty; 
+                break;
+            }
+        }
+
+        session(['cost_items' => $cost]);
+
+        return response()->json(['status' => 'success', 'message' => 'Jumlah cost berhasil diperbarui']);
+    }
+
     function deleteItem(Request $request)
     {
         $itemId = $request->input('item_id');
@@ -134,8 +199,19 @@ class TransactionController extends Controller
         $cart = array_values($cart);
 
         session(['cart_items' => $cart]);
+    }
 
-        return response()->json(['status' => 'success', 'message' => "Item dengan ID {$itemId} berhasil dihapus"]);
+    function deleteCost(Request $request)
+    {
+        $itemId = $request->input('item_id');
+        $cost = session('cost_items', []);
+        $cost = array_filter($cost, function ($costItem) use ($itemId) {
+            return $costItem['item_id'] !== $itemId;
+        });
+
+        $cost = array_values($cost);
+
+        session(['cost_items' => $cost]);
     }
 
 
@@ -167,18 +243,12 @@ class TransactionController extends Controller
         ]);
         $transaction->save();
 
+        // cart
         $cart = session('cart_items', []);
-
-    // Validasi: pastikan keranjang tidak kosong
-    if (empty($cart)) {
-        // Set the notification before redirecting
-        // notify()->error('Your cart is empty. Please add items to the cart before proceeding.');
-        Alert::toast('Your cart is empty. Please add items to the cart before proceeding.', 'error');
-
-    
-        // Redirect back with an error message
-        return redirect()->back()->withErrors(['cart' => 'Your cart is empty. Please add items to the cart before proceeding.']);
-    }
+        if (empty($cart)) {
+            Alert::toast('Your cart is empty. Please add items to the cart before proceeding.', 'error');
+            return redirect()->back();
+        }
         $cart = session('cart_items', []);
         foreach ($cart as $item) {
             $total = $item['price'] * $item['qty'];
@@ -192,6 +262,28 @@ class TransactionController extends Controller
             ]);
         }
         session()->forget('cart_items');
+
+        // cost
+        $cost = session('cost_items', []);
+        if (empty($cost)) {
+            Alert::toast('Your cost is empty. Please add items to the cart before proceeding.', 'error');
+            return redirect()->back();
+        }
+        $cost = session('cost_items', []);
+        foreach ($cost as $items) {
+            $total = $items['price'] * $items['qty'];
+        Cost::create([
+                'transaction_id' => $transactionId,
+                'nama_item' => $items['nama_item'],
+                'amount' => $items['qty'],
+                'price' => $items['price'],
+                'total_cost' => $total,
+                'gross_profit' => '8500',
+                'pph' => '8500',
+                'profit' => '8500',
+            ]);
+        }
+        session()->forget('cost_items');
 
         $jobs = $request->job_no ?? 'AT';
         $lastOrder = Orders::where('job_no', 'like', "%,$jobs," . date('y/m'))

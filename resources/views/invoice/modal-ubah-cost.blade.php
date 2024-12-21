@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalUbah" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+<div class="modal fade" id="modalUbahCost" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,7 +12,7 @@
                         <input type="number" id="qty" class="form-control" placeholder="Masukan Jumlah Produk" min="1" value="1">
                     </div>
                     <div class="col-sm-5">
-                        <button class="btn btn-primary" type="button" onclick="update_cart()">Simpan</button>
+                        <button class="btn btn-primary" type="button" onclick="update_cost()">Simpan</button>
                     </div>
                 </div>
             </div>
