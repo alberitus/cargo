@@ -103,9 +103,15 @@
                                         placeholder="HAWB NUMBER">
                                 </div>
                                 <div class="form-group">
-                                    <label for="largeInput">CONSIGNE</label>
-                                    <input type="text" class="form-control form-control" name="consigne"
-                                        id="defaultInput" placeholder="CONSIGNE">
+                                    <label for="defaultSelect">Consgine</label>
+                                    <select name="consigne_Name" class="form-select">
+                                        @foreach ($consigne as $Cons)
+                                        <option id="addConsigne" value="{{ $Cons->nama_consigne }}"
+                                            {{ old('consigne_id') == $Cons->nama_consigne ? 'selected' : '' }}>
+                                            {{ $Cons->nama_consigne }}
+                                        </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group @error('shipper') has-error has-feedback @enderror">
                                     <label for="largeInput">SHIPPER</label>
@@ -140,7 +146,7 @@
                         <table id="cartTable" class="table table-striped table-hover mt-4">
                             <thead>
                                 <tr>
-                                    <th>No</th>
+                                      <th>No</th>
                                     <th>Item</th>
                                     <th>QTY</th>
                                     <th>Satuan</th>
