@@ -84,8 +84,8 @@
                         </a>
                     </li>
                     {{-- <li class="{{ Request::is('report/tax*') ? 'active' : '' }}"> --}}
-                    <li>
-                        <a href="/">
+                    <li class="{{ Request::is('report/tax*') ? 'active' : '' }}">
+                        <a href="{{ route('report.tax') }}">
                             <span class="sub-item">Tax</span>
                         </a>
                     </li>
