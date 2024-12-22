@@ -78,9 +78,21 @@
                         </a>
                     </li>
                     {{-- <li class="{{ Request::is('report/item*') ? 'active' : '' }}"> --}}
+                    <li class="{{ Request::is('report/item*') ? 'active' : '' }}">
+                        <a href="{{ route('report.payment') }}">
+                            <span class="sub-item">Payment Customer</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a href="/">
-                            <span class="sub-item">Item</span>
+                            <span class="sub-item">xxxxx</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/">
+                            <span class="sub-item">xxxxx</span>
                         </a>
                     </li>
                     {{-- <li class="{{ Request::is('report/tax*') ? 'active' : '' }}"> --}}
