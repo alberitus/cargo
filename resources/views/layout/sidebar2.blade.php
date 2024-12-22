@@ -86,15 +86,15 @@
                         </a>
                     </li>
                     {{-- <li class="{{ Request::is('report/item*') ? 'active' : '' }}"> --}}
-                    <li class="{{ Request::is('report/item*') ? 'active' : '' }}">
+                    <li class="{{ Request::is('report/payment*') ? 'active' : '' }}">
                         <a href="{{ route('report.payment') }}">
-                            <span class="sub-item">Payment Customer</span>
+                            <span class="sub-item">Payment</span>
                         </a>
                     </li>
 
-                    <li>
-                        <a href="/">
-                            <span class="sub-item">xxxxx</span>
+                    <li class="{{ Request::is('report/outstanding*') ? 'active' : '' }}">
+                        <a href="{{ route('report.outstanding') }}">
+                            <span class="sub-item">Outstanding</span>
                         </a>
                     </li>
 

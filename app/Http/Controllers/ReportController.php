@@ -45,7 +45,7 @@ class ReportController extends Controller
         return view('report.tax', compact('transaction'));
     }
     function payment(){
-        $transaction = Transaction::with('transactionDetails.item', 'user','orders')->get();
+        $transaction = Transaction::with('transactionDetails', 'orders')->get();
 
         foreach ($transaction as $pay) {
             $pay->total_price = $pay->transactionDetails->sum('total_price');
@@ -54,6 +54,18 @@ class ReportController extends Controller
         }
 
         return view('report.payment', compact('transaction'));
+    }
+
+    function outstanding(){
+        $transaction = Transaction::with('transactionDetails', 'orders')->get();
+
+        foreach ($transaction as $outs) {
+            $outs->total_price = $outs->transactionDetails->sum('total_price');
+            $outs->total_tax = $outs->transactionDetails->sum('tax');
+            $outs->grand_total = $outs->total_price + $outs->total_tax;
+        }
+
+        return view('report.outstanding', compact('transaction'));
     }
     function show()
     {

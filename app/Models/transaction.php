@@ -25,9 +25,6 @@ class transaction extends Model
     {
         return $this->hasMany(Transaction_detail::class, 'transaction_id', 'transaction_id');
     }
-        public function orders(){
-        return $this->belongsTo(Orders::class, 'orders_id', 'orders_id');
-    }
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id', 'company_id');

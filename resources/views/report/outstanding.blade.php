@@ -38,40 +38,29 @@
                                     <th>Invoice</th>
                                     <th>No Job</th>
                                     <th>Customer Name</th>
-                                    <th colspan="2" class="text-center" style="width: 20%">Amount</th>
-                                    <th colspan="2" class="text-center" style="width: 20%">Payment</th>
+                                    <th>MAWB</th>
+                                    <th>Amount(Rp)</th>
+                                    <th>Due Date</th>
                                     <th style="width: 10%">Action</th>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th>USD</th>
-                                    <th>IDR</th>
-                                    <th>CASH</th>
-                                    <th>TRANSFER</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                 $no = 1;
                                 @endphp
-                                @foreach ($transaction as $pay)
-                                @foreach ($pay->orders as $detail)
+                                @foreach ($transaction as $outs)
+                                @foreach ($outs->orders as $detail)
                                     <tr>
                                         <td>{{ $no++ }}</td>    
-                                        <td>{{ $pay->transaction_id }}</td>
+                                        <td>{{ $outs->transaction_id }}</td>
                                         <td>{{ $detail->job_no }}</td>
-                                        <td>{{ $pay->company_name }}</td>
-                                        <td>$.0</td>
-                                        <td>{{ 'Rp ' . number_format($pay->grand_total, 0, ',', '.') }}</td>
-                                        <td></td>
-                                        <td>Mandiri</td>
+                                        <td>{{ $outs->company_name }}</td>
+                                        <td>{{ $detail->mawb }}</td>
+                                        <td>{{ 'Rp ' . number_format($outs->grand_total, 0, ',', '.') }}</td>
+                                        <td><?= date('d/m/y') ?></td>
                                         <td>
                                             <div class="form-button-action">
-                                                <form action="{{ route('job.delete', $pay->transaction_id) }}" method="POST" style="display:inline;">
+                                                <form action="{{ route('job.delete', $outs->transaction_id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-link btn-danger"
