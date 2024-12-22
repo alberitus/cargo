@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\Orders;
 
 
 class ReportController extends Controller
@@ -26,7 +27,6 @@ class ReportController extends Controller
     function item(){
         $transaction = Transaction::with('transactionDetails.item', 'user')->get();
 
-
         foreach ($transaction as $trans) {
             $trans->total_price = $trans->transactionDetails->sum('total_price');
             $trans->total_tax = $trans->transactionDetails->sum('tax');
@@ -35,7 +35,15 @@ class ReportController extends Controller
 
         return view('report.invoice', compact('transaction'));
     }
+    function tax(){
+        $transaction = Transaction::with('transactionDetails.item','company', 'user')->get();
 
+        foreach ($transaction as $ord) {
+        $ord->total_tax = $ord->transactionDetails->sum('tax');
+        }
+
+        return view('report.tax', compact('transaction'));
+    }
     function show()
     {
 
