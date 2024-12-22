@@ -37,7 +37,7 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                        <a target="_blank" class="btn btn-primary  mb-3" type="button" href="/invoice/pdf"><span class="btn-label">
+                        <a target="_blank" class="btn btn-primary  mb-3" type="button" href="{{ url('/invoice/pdf', $transaction->transaction_id) }}"><span class="btn-label">
                                     <i class="fa fa-print"></i>
                                 </span> Export PDF</a>
                         <a target="_blank" class="btn btn-primary  mb-3" type="button" href="/invoice/exportexcel"> <span class="btn-label">
@@ -59,10 +59,10 @@
                                 <h9><span id="spanTotal">MAWB NO</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">DESTINATION</span></h9>
+                                <h9><span id="spanTotal">HAWB NO</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">HAWB NO</span></h9>
+                                <h9><span id="spanTotal">DESTINATION</span></h9>
                             </div>
                             <div class="col-8">
                                 <h9><span id="spanTotal">JOB REF</span></h9>
@@ -73,30 +73,31 @@
                         </div>
                         <div class="col-md-6 col-lg-10">
                             <div class="col-8">
-                                <h9><span id="spanTotal">: PT. EXAMPLE</span></h9>
+                                <h9><span id="spanTotal">: {{ $transaction->company_name }}</span></h9>
+                            </div>
+                            @foreach($transaction->orders as $order)
+                            <div class="col-8">
+                                <h9><span id="spanTotal">: {{ $order->job_no }}</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">: 545/GEO-OB/<?= date ("ym") ?></span></h9>
+                                <h9><span id="spanTotal">: {{ $order->flight_date }}</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">: KL<?= date ("my") ?></span></h9>
+                                <h9><span id="spanTotal">: {{ $order->mawb }}</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">: 074-02345232</span></h9>
+                                <h9><span id="spanTotal">: {{ $order->hawb }}</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">: FRA-CGK
-                                    </span></h9>
+                                <h9><span id="spanTotal">: {{ $order->destination }}</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">: -</span></h9>
+                                <h9><span id="spanTotal">: {{ $order->job_ref }}</span></h9>
                             </div>
                             <div class="col-8">
-                                <h9><span id="spanTotal">: SFRAA194859</span></h9>
+                                <h9><span id="spanTotal">: {{ $order->detail }}</span></h9>
                             </div>
-                            <div class="col-8">
-                                <h9><span id="spanTotal">: 1 KOLI 35,5 KGS</span></h9>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                     <br>
@@ -112,18 +113,14 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($transaction->transactionDetails as $detail)
                                 <tr>
-                                    <td>HANDLING</td>
-                                    <td>Rp 140.000</td>
-                                    <td>1</td>
-                                    <td>Rp 140.000</td>
+                                    <td>{{ $detail->nama_item }}</td>
+                                    <td>Rp {{ number_format($detail->price, 0, ',', '.') }}</td>
+                                    <td>{{ $detail->amount }}</td>
+                                    <td>Rp {{ number_format($detail->price * $detail->amount, 0, ',', '.') }}</td>
                                 </tr>
-                                <tr>
-                                    <td>PICK UP DOKUMEN</td>
-                                    <td>Rp 10.000</td>
-                                    <td>1</td>
-                                    <td>Rp 10.000</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

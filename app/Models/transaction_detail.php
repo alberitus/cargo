@@ -11,7 +11,7 @@ class transaction_detail extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'transaction_id', 'item_id', 'amount', 'price', 'tax', 'total_price'
+        'transaction_id', 'nama_item', 'amount', 'price', 'tax', 'total_price'
     ];
 
     public function item()

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ItemController;
@@ -16,24 +17,26 @@ Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,super
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/invoice/list', [TransactionController::class, 'list'])->name('invoice.list');
     // cart
-    Route::get('/invoice/loadCart', [TransactionController::class, 'loadCart'])->name('transaction.loadCart');
-    Route::post('/invoice/addItem', [TransactionController::class, 'addItem'])->name('addItem');
-    Route::post('/invoice/update-cart', [TransactionController::class, 'updateCart'])->name('updateCart');
-    Route::post('/invoice/delete', [TransactionController::class, 'deleteItem'])->name('deleteItem');
-    Route::post('/invoice/update-price', [TransactionController::class, 'updatePrice'])->name('updatePrice');
+    Route::get('/transaction/loadCart', [TransactionController::class, 'loadCart'])->name('transaction.loadCart');
+    Route::post('/transaction/addItem', [TransactionController::class, 'addItem'])->name('addItem');
+    Route::post('/transaction/update-cart', [TransactionController::class, 'updateCart'])->name('updateCart');
+    Route::post('/transaction/delete', [TransactionController::class, 'deleteItem'])->name('deleteItem');
+    Route::post('/transaction/update-price', [TransactionController::class, 'updatePrice'])->name('updatePrice');
     // cost
-    Route::get('/invoice/loadCost', [TransactionController::class, 'loadCost'])->name('transaction.loadCost');
-    Route::post('/invoice/addCost', [TransactionController::class, 'addCost'])->name('addCost');
-    Route::post('/invoice/update-cost', [TransactionController::class, 'updateCost'])->name('updateCost');
-    Route::post('/invoice/delete-cost', [TransactionController::class, 'deleteCost'])->name('deleteCost');
+    Route::get('/transaction/loadCost', [TransactionController::class, 'loadCost'])->name('transaction.loadCost');
+    Route::post('/transaction/addCost', [TransactionController::class, 'addCost'])->name('addCost');
+    Route::post('/transaction/update-cost', [TransactionController::class, 'updateCost'])->name('updateCost');
+    Route::post('/transaction/delete-cost', [TransactionController::class, 'deleteCost'])->name('deleteCost');
     // transaction
-    Route::post('/invoice/submit-transaction', [TransactionController::class, 'store'])->name('store');
-    Route::get('/invoice/report', [TransactionController::class, 'report'])->name('invoice.report');
-    Route::get('/invoice/pdf', [TransactionController::class, 'export_pdf'])->name('invoice.pdf');
-    Route::post('/invoice/save-transaction-details', [TransactionController::class, 'saveTransactionDetails'])->name('invoice.inv');
+    Route::post('/transaction/submit-transaction', [TransactionController::class, 'store'])->name('store');
     Route::resource('transaction', TransactionController::class);
+})->middleware('auth');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/invoice/cetak/{id}', [InvoiceController::class, 'cetak'])->name('cetak');
+    Route::get('/invoice/pdf/{id}', [InvoiceController::class, 'export_pdf']);
+    Route::resource('invoice', InvoiceController::class);
 })->middleware('auth');
 
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
