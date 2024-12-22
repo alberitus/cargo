@@ -60,6 +60,14 @@
             </a>
         </li>
         @endif
+        @if(Auth::user()->role == 2)
+        <li class="nav-item {{ Request::routeIs('invoice.index') ? 'active' : '' }}">
+            <a href="{{ route('invoice.index') }}">
+                <i class="fas fa-dollar-sign"></i>
+                <p>Invoice</p>
+            </a>
+        </li>
+        @endif
         @if(Auth::user()->role == 2) <!-- Role 2 is Admin -->
         {{-- <li class="nav-item {{ Request::is('report/company*') || Request::is('report/item*') || Request::is('report/tax*') || Request::is('report/invoice*') ? 'active submenu' : '' }}"> --}}
         <li class="nav-item {{ Request::routeIs('report.company') ? 'active' : '' }}">

@@ -54,12 +54,12 @@
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $inv->transaction_id }}</td>
-                                        <td>{{ $detail->item->nama_item }}</td>
+                                        <td>{{ $detail->nama_item }}</td>
                                         <td>{{ $detail->amount }}</td>
                                         <td>{{ 'Rp ' . number_format($detail->price, 0, ',', '.') }}</td>
                                         <td>{{ 'Rp ' . number_format($detail->tax, 0, ',', '.') }}</td>
                                         <td>{{ 'Rp ' . number_format($inv->grand_total, 0, ',', '.') }}</td>
-                                        <td>{{ $inv->user->name }}</td>
+                                        <td>{{ $inv->name }}</td>
                                         <td>
                                             <div class="form-button-action">
                                                 <form action="{{ route('job.delete', $inv->transaction_id) }}" method="POST" style="display:inline;">

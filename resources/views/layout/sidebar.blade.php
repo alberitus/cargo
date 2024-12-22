@@ -45,7 +45,7 @@
                 <ul class="nav nav-collapse">
                     <li>
                         <a href="/invoice">
-                            <span class="sub-item">Order</span>
+                            <span class="sub-item">Invoice</span>
                         </a>
                     </li>
                     <li>

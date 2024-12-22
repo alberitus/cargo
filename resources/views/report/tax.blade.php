@@ -45,7 +45,7 @@
                                 @foreach ($odr->transactionDetails as $detail)
                                     <tr>
                                         <td>{{ $odr->transaction_id }}</td>
-                                        <td>{{ $odr->company->name }}</td>
+                                        <td>{{ $odr->company_name }}</td>
                                         <td>{{ 'Rp ' . number_format($detail->tax, 0, ',', '.') }}</td>
                                         <td>
                                             <div class="form-button-action">

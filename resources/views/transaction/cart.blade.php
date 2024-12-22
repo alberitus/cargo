@@ -1,6 +1,5 @@
 <script>
     window.addEventListener('load', loadCart);
-
     let totalPrice = 0;
 
     function formatRupiah(angka) {
@@ -111,7 +110,7 @@
             },
             success: function (response) {
                 alert(response.message);
-                $('#cost-' + itemId).remove();
+                $('#item-' + itemId).remove();
                 loadCart();
             },
             error: function (xhr, status, error) {
@@ -136,7 +135,7 @@
         document.getElementById('grand-total').textContent = formattedGrandTotal;
 
         const formattedTotalPrice = formatRupiah(totalPrice);
-        document.getElementById('total-price').textContent = formattedTotalPrice;
+        document.getElementById('total-harga').textContent = formattedTotalPrice;
     }
 
     const taxRadios = document.querySelectorAll('.tax-radio');
@@ -146,7 +145,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         loadCart();
-        loadCost();
         updateTaxValue();
     });
 

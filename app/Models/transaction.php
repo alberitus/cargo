@@ -18,7 +18,7 @@ class transaction extends Model
     // protected $primaryKey = 'transaction_id'; 
 
     protected $fillable = [
-        'transaction_id', 'id', 'company_id'
+        'transaction_id', 'name', 'company_name'        
     ];
 
     public function transactionDetails()
@@ -31,6 +31,11 @@ class transaction extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id', 'company_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Orders::class, 'transaction_id', 'transaction_id');
     }
 
     public function user()

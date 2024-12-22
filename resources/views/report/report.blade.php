@@ -51,10 +51,10 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $report->transaction_id }}</td>
-                                    <td>{{ $report->company->name }}</td>
+                                    <td>{{ $report->company_name }}</td>
                                     <td>{{ 'Rp ' . number_format($report->total_tax, 0, ',', '.') }}</td>
                                     <td>{{ 'Rp ' . number_format($report->grand_total, 0, ',', '.') }}</td>
-                                    <td>{{ $report->user->name }}</td>
+                                    <td>{{ $report->name }}</td>
                                     <td>
                                         <div class="form-button-action">
                                             <form action="{{ route('job.delete', $report->transaction_id) }}"

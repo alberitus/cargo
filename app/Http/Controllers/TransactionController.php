@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Mpdf\Mpdf;
 use App\Models\Company;
 use App\Models\Consigne;
 use App\Models\Job;
@@ -33,7 +32,7 @@ class TransactionController extends Controller
         $cart = session('cart_items', []);
         $cost = session('cost_items', []);
         
-        return view('invoice.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
+        return view('transaction.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
     }
 
     function loadCart()
@@ -57,19 +56,19 @@ class TransactionController extends Controller
             $totalPrice += $item['price'] * $item['quantity'];
         }
 
-        return view('invoice.index', compact('cart', 'totalPrice'));
+        return view('transaction.index', compact('cart', 'totalPrice'));
     }
 
     function showCost()
     {
         $cost = session()->get('cost', []);
 
-        $totalPriceCost = 0;
-        foreach ($cost as $item) {
-            $totalPriceCost += $item['price'] * $item['quantity'];
+        $totalCost = 0;
+        foreach ($cost as $itemCost) {
+            $totalCost += $itemCost['price'] * $itemCost['quantity'];
         }
 
-        return view('invoice.index', compact('cost', 'totalPriceCost'));
+        return view('transaction.index', compact('cost', 'totalCost'));
     }
 
     function addItem(Request $request)
@@ -140,15 +139,15 @@ class TransactionController extends Controller
 
         session(['cost_items' => $cost]);
 
-        $totalPriceCost = 0;
-        foreach ($cost as $contents) {
-            $totalPriceCost += $contents['price'] * $contents['qty'];
+        $totalCost = 0;
+        foreach ($cost as $content) {
+            $totalCost += $content['price'] * $content['qty'];
         }
 
         return response()->json([
             'msg' => 'Item added to cart',
             'status' => true,
-            'totalPriceCost' => number_format($totalPriceCost, 0, ',', '.')
+            'totalCost' => number_format($totalCost, 0, ',', '.')
         ]);
     }
 
@@ -239,8 +238,8 @@ class TransactionController extends Controller
 
 
         $transaction = Transaction::create([
-            'id' => Auth::id(),
-            'company_id' => $request->company_id,
+            'name' => Auth::user()->name,
+            'company_name' => $request->company,
             'transaction_id' => $transactionId, 
         ]);
         $transaction->save();
@@ -256,7 +255,7 @@ class TransactionController extends Controller
             $total = $item['price'] * $item['qty'];
         Transaction_detail::create([
                 'transaction_id' => $transactionId,
-                'item_id' => $item['item_id'],
+                'nama_item' => $item['nama_item'],
                 'amount' => $item['qty'],
                 'price' => $item['price'],
                 'tax' => $request->tax,
@@ -321,34 +320,6 @@ class TransactionController extends Controller
             'detail' => $request->detail ?? '-',
         ]);
         alert()->success('Success', 'Transaction submitted successfully!');
-        return redirect()->route('index');
-    }
-
-
-
-    function list()
-    {
-        return view('invoice.list');
-    }
-
-    function report()
-    {
-        return view('invoice.report');
-    }
-
-    function export_pdf()
-    {
-        // $mpdf = new Mpdf();
-        // $mpdf->WriteHTML(view('invoice.PDF'));
-        // $mpdf->Output('invoice.pdf','D');
-        // $mpdf->Output();  
-
-        // Ambil HTML dari view
-        $html = View('invoice.pdf')->render();
-
-        // Inisialisasi MPDF
-        $mpdf = new Mpdf();
-        $mpdf->WriteHTML($html);
-        $mpdf->Output();
+        return redirect()->route('invoice.index');
     }
 }

@@ -93,39 +93,41 @@
             <h6>example@email.com</h6>
         </div>
         <div>
-        <table class="form-table">
+            <table class="form-table">
+                @foreach($transaction->orders as $order)
                     <tr>
-                        <td width="19%" class ="left">CUSTOMER</td>
-                        <td width="25%" class ="left">: PT. EXAMPLE</td>
+                        <td width="19%" class="left">CUSTOMER</td>
+                        <td width="25%" class="left">: {{ $transaction->company_name }}</td>
                     </tr>
                     <tr>
-                        <td width="19%" class ="left">JOB NO</td>
-                        <td width="25%" class ="left">: 545/GEO-OB/<?= date("ym") ?></td>
+                        <td width="19%" class="left">JOB NO</td>
+                        <td width="25%" class="left">: {{ $order->job_no }}</td>
                     </tr>
                     <tr>
-                        <td width="19%" class ="left">FLIGHT / DATE</td>
-                        <td width="25%" class ="left">: KL<?= date("my") ?></td>
+                        <td width="19%" class="left">FLIGHT / DATE</td>
+                        <td width="25%" class="left">: {{ $order->flight_date }}</td>
                     </tr>
                     <tr>
-                        <td width="19%" class ="left">MAWB NO</td>
-                        <td width="25%" class ="left">: 074-02345232</td>
+                        <td width="19%" class="left">MAWB NO</td>
+                        <td width="25%" class="left">: {{ $order->mawb }}</td>
                     </tr>
                     <tr>
-                        <td width="19%" class ="left">DESTINATION</td>
-                        <td width="25%" class ="left">: FRA-CGK</td>
+                        <td width="19%" class="left">DESTINATION</td>
+                        <td width="25%" class="left">: {{ $order->destination }}</td>
                     </tr>
                     <tr>
-                        <td width="19%" class ="left">MAWB NO</td>
-                        <td width="25%" class ="left">: -</td>
+                        <td width="19%" class="left">HAWB NO</td>
+                        <td width="25%" class="left">: {{ $order->hawb }}</td>
                     </tr>
                     <tr>
-                        <td width="19%" class ="left">JOB NO</td>
-                        <td width="25%" class ="left">: SFRAA194859</td>
+                        <td width="19%" class="left">JOB REF</td>
+                        <td width="25%" class="left">: {{ $order->job_ref }}</td>
                     </tr>
                     <tr>
-                        <td width="19%" class ="left">DETAIL</td>
-                        <td width="25%" class ="left">: 1 KOLI 35,5 KGS</td>
+                        <td width="19%" class="left">DETAIL</td>
+                        <td width="25%" class="left">: {{ $order->detail }}</td>
                     </tr>
+                @endforeach
             </table>
             <div><br></div>
             <table class="border-table">
@@ -139,36 +141,44 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php 
+                    $no = 1;
+                    $total = 0;
+                    @endphp
+                    @foreach($transaction->transactionDetails as $detail)
+                    @php
+                    $subtotal = $detail->price * $detail->amount;
+                    $ppn = $detail->tax;
+                    $total += $subtotal;
+                    @endphp
                     <tr>
-                        <td width="5%">1</td>
-                        <td width="25%">HANDLING</td>
-                        <td width="20%">Rp 140.000</td>
-                        <td width="20%">1</td>
-                        <td width="25%">Rp 140.000</td>
+                        <td width="5%">{{ $no++ }}</td>
+                        <td width="25%">{{ $detail->nama_item }}</td>
+                        <td width="20%">Rp {{ number_format($detail->price, 0, ',', '.') }}</td>
+                        <td width="20%">{{ $detail->amount }}</td>
+                        <td width="25%">Rp {{ number_format($detail->price * $detail->amount, 0, ',', '.') }}</td>
                     </tr>
-                    <tr>
-                        <td width="5%">2</td>
-                        <td width="25%">PICK UP DOKUMEN</td>
-                        <td width="20%">Rp 10.000</td>
-                        <td width="20%">1</td>
-                        <td width="25%">Rp 10.000</td>
-                    </tr>
+                    
                 </tbody>
             </table>
             <div calss="total">
-            <table class="clean-table">
+                <table class="clean-table">
+                    @php
+                    $grandTotal = $total + $ppn;
+                    @endphp
                     <tr>
-                        <td width="70%" class ="right">Total Harga</td>
-                        <td width="25%">Rp 150.000</td>
+                        <td width="70%" class="right">Total Harga</td>
+                        <td width="25%">Rp {{ number_format($total, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td width="70%" class ="right">PPN 11%</td>
-                        <td width="25%">Rp 16.500</td>
+                        <td width="70%" class="right">PPN 11%</td>
+                        <td width="25%">Rp {{ number_format($detail->tax, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td width="70%" class ="right">Grand Total</td>
-                        <td width="25%">Rp 166.500</td>
+                        <td width="70%" class="right">Grand Total</td>
+                        <td width="25%">Rp {{ number_format($grandTotal, 0, ',', '.') }}</td>
                     </tr>
+                    @endforeach
             </table>
             </div>
         </div>
