@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
 use App\Models\Company;
+use App\Models\Consigne;
 use App\Models\Job;
 use App\Models\Item;
 use App\Models\Transaction;
@@ -20,6 +21,7 @@ class TransactionController extends Controller
     function index()
     {
         $company = Company::all();
+        $consigne = Consigne::all();
         $job = Job::all();
         $currentDate = date('y/m');
         $jobsWithDate = $job->map(function ($jobs) use ($currentDate) {
@@ -31,7 +33,7 @@ class TransactionController extends Controller
         $cart = session('cart_items', []);
         $cost = session('cost_items', []);
         
-        return view('invoice.index', compact('company', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
+        return view('invoice.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
     }
 
     function loadCart()

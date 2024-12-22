@@ -70,14 +70,14 @@
 
     function update_cost() {
         var itemId = $('#item_id').val();
-        var qty = $('#qty').val();
+        var qtyCost = $('#qtyCost').val();
 
         $.ajax({
             url: "{{ route('updateCost') }}",
             method: "POST",
             data: {
                 item_id: itemId,
-                qty: qty,
+                qty: qtyCost,
                 _token: "{{ csrf_token() }}"
             },
             success: function (response) {
@@ -117,9 +117,9 @@
         updateTaxValue();
     });
     
-    function openModalCost(itemId, qty) {
+    function openModalCost(itemId, qtyCost) {
         $('#item_id').val(itemId);
-        $('#qty').val(qty);
+        $('#qtyCost').val(qtyCost);
         $('#modalUbahCost').modal('show');
     }
 </script>
