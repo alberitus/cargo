@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
 // report
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
 Route::get('/report/company', [ReportController::class, 'company'])->name('report.company');
+Route::get('/report/payment', [ReportController::class, 'payment'])->name('report.payment');
 Route::get('/report/tax', [ReportController::class, 'tax'])->name('report.tax');
 Route::get('/report/item', [ReportController::class, 'item'])->name('report.item');
 Route::resource('report', ReportController::class);

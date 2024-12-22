@@ -44,6 +44,17 @@ class ReportController extends Controller
 
         return view('report.tax', compact('transaction'));
     }
+    function payment(){
+        $transaction = Transaction::with('transactionDetails.item', 'user','orders')->get();
+
+        foreach ($transaction as $pay) {
+            $pay->total_price = $pay->transactionDetails->sum('total_price');
+            $pay->total_tax = $pay->transactionDetails->sum('tax');
+            $pay->grand_total = $pay->total_price + $pay->total_tax;
+        }
+
+        return view('report.payment', compact('transaction'));
+    }
     function show()
     {
 
