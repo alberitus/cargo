@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <!--- Berisi CSS --->
     <style>
@@ -24,7 +25,7 @@
             font-size: 12px;
         }
 
-        .header{
+        .header {
             background-color: #5ce65c;
         }
 
@@ -81,6 +82,7 @@
             text-align: right;
             margin-right: 50px;
         }
+
     </style>
 </head>
 
@@ -95,38 +97,38 @@
         <div>
             <table class="form-table">
                 @foreach($transaction->orders as $order)
-                    <tr>
-                        <td width="19%" class="left">CUSTOMER</td>
-                        <td width="25%" class="left">: {{ $transaction->company_name }}</td>
-                    </tr>
-                    <tr>
-                        <td width="19%" class="left">JOB NO</td>
-                        <td width="25%" class="left">: {{ $order->job_no }}</td>
-                    </tr>
-                    <tr>
-                        <td width="19%" class="left">FLIGHT / DATE</td>
-                        <td width="25%" class="left">: {{ $order->flight_date }}</td>
-                    </tr>
-                    <tr>
-                        <td width="19%" class="left">MAWB NO</td>
-                        <td width="25%" class="left">: {{ $order->mawb }}</td>
-                    </tr>
-                    <tr>
-                        <td width="19%" class="left">DESTINATION</td>
-                        <td width="25%" class="left">: {{ $order->destination }}</td>
-                    </tr>
-                    <tr>
-                        <td width="19%" class="left">HAWB NO</td>
-                        <td width="25%" class="left">: {{ $order->hawb }}</td>
-                    </tr>
-                    <tr>
-                        <td width="19%" class="left">JOB REF</td>
-                        <td width="25%" class="left">: {{ $order->job_ref }}</td>
-                    </tr>
-                    <tr>
-                        <td width="19%" class="left">DETAIL</td>
-                        <td width="25%" class="left">: {{ $order->detail }}</td>
-                    </tr>
+                <tr>
+                    <td width="19%" class="left">CUSTOMER</td>
+                    <td width="25%" class="left">: {{ $transaction->company_name }}</td>
+                </tr>
+                <tr>
+                    <td width="19%" class="left">JOB NO</td>
+                    <td width="25%" class="left">: {{ $order->job_no }}</td>
+                </tr>
+                <tr>
+                    <td width="19%" class="left">FLIGHT / DATE</td>
+                    <td width="25%" class="left">: {{ $order->flight_date }}</td>
+                </tr>
+                <tr>
+                    <td width="19%" class="left">MAWB NO</td>
+                    <td width="25%" class="left">: {{ $order->mawb }}</td>
+                </tr>
+                <tr>
+                    <td width="19%" class="left">DESTINATION</td>
+                    <td width="25%" class="left">: {{ $order->destination }}</td>
+                </tr>
+                <tr>
+                    <td width="19%" class="left">HAWB NO</td>
+                    <td width="25%" class="left">: {{ $order->hawb }}</td>
+                </tr>
+                <tr>
+                    <td width="19%" class="left">JOB REF</td>
+                    <td width="25%" class="left">: {{ $order->job_ref }}</td>
+                </tr>
+                <tr>
+                    <td width="19%" class="left">DETAIL</td>
+                    <td width="25%" class="left">: {{ $order->detail }}</td>
+                </tr>
                 @endforeach
             </table>
             <div><br></div>
@@ -141,45 +143,46 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php 
+                    @php
                     $no = 1;
-                    $total = 0;
+                    $subtotal = 0;
+
                     @endphp
                     @foreach($transaction->transactionDetails as $detail)
+                    
                     @php
-                    $subtotal = $detail->price * $detail->amount;
-                    $ppn = $detail->tax;
-                    $total += $subtotal;
+                    $totalprice = $detail->price * $detail->amount;
+                    $ppn =$detail->tax;
+                    $subtotal += $totalprice;
                     @endphp
                     <tr>
                         <td width="5%">{{ $no++ }}</td>
                         <td width="25%">{{ $detail->nama_item }}</td>
                         <td width="20%">Rp {{ number_format($detail->price, 0, ',', '.') }}</td>
                         <td width="20%">{{ $detail->amount }}</td>
-                        <td width="25%">Rp {{ number_format($detail->price * $detail->amount, 0, ',', '.') }}</td>
+                        <td width="25%">Rp {{ number_format($totalprice, 0, ',', '.') }}</td>
                     </tr>
-                    
+                    @endforeach
                 </tbody>
             </table>
             <div calss="total">
                 <table class="clean-table">
                     @php
-                    $grandTotal = $total + $ppn;
+                     $grandTotal = $subtotal + $ppn;
                     @endphp
                     <tr>
                         <td width="70%" class="right">Total Harga</td>
-                        <td width="25%">Rp {{ number_format($total, 0, ',', '.') }}</td>
+                        <td width="25%">Rp {{ number_format($subtotal, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <td width="70%" class="right">PPN 11%</td>
-                        <td width="25%">Rp {{ number_format($detail->tax, 0, ',', '.') }}</td>
+                        <td width="25%">Rp {{ number_format($ppn, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <td width="70%" class="right">Grand Total</td>
                         <td width="25%">Rp {{ number_format($grandTotal, 0, ',', '.') }}</td>
                     </tr>
-                    @endforeach
-            </table>
+                </table>
             </div>
         </div>
     </main>

@@ -34,24 +34,19 @@
                         <table id="add-row" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Invoice</th>
-                                    <th>No Job</th>
-                                    <th>Customer Name</th>
+                                    <th rowspan="2">No</th>
+                                    <th rowspan="2">Invoice</th>
+                                    <th rowspan="2">No Job</th>
+                                    <th rowspan="2">Customer Name</th>
                                     <th colspan="2" class="text-center" style="width: 20%">Amount</th>
                                     <th colspan="2" class="text-center" style="width: 20%">Payment</th>
-                                    <th style="width: 10%">Action</th>
+                                    <th rowspan="2" style="width: 10%">Action</th>
                                 </tr>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
                                     <th>USD</th>
                                     <th>IDR</th>
                                     <th>CASH</th>
                                     <th>TRANSFER</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
