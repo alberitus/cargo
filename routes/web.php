@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/cetak/{id}', [InvoiceController::class, 'cetak'])->name('invoice.cetak');
     Route::get('/invoice/status/{id}', [InvoiceController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/invoice/pdf/{id}', [InvoiceController::class, 'export_pdf'])->name('invoice.pdf');
+    Route::delete('/invoice/delete/{transaction_id}', [InvoiceController::class, 'destroy'])->name('invoice.delete');
     Route::resource('invoice', InvoiceController::class);
 })->middleware('auth');
 

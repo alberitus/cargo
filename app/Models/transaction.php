@@ -15,6 +15,10 @@ class transaction extends Model
     
     protected $table = 'transaction';
 
+    protected $primaryKey = 'transaction_id'; // Primary key adalah 'transaction_id'
+    public $incrementing = false;             // Non-incrementing key
+    protected $keyType = 'string'; 
+
     // protected $primaryKey = 'transaction_id'; 
 
     protected $fillable = [

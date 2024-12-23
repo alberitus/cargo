@@ -59,16 +59,23 @@
                                         <td>{{ 'Rp ' . number_format($outs->grand_total, 0, ',', '.') }}</td>
                                         <td><?= date('d/m/y') ?></td>
                                         <td>
-                                            <div class="form-button-action">
-                                                <form action="{{ route('job.delete', $outs->transaction_id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-link btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this job?');">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            @php
+                                        $encryptedId = Crypt::encryptString($outs->transaction_id);
+                                        @endphp
+                                        <a href="{{ route('invoice.cetak', ['id' => $encryptedId]) }}">
+                                            <button class="btn btn-primary btn-xs" title="view">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </a>
+                                            <form action="{{ route('invoice.delete', $outs->transaction_id) }}"
+                                                method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-xs"
+                                                    onclick="return confirm('Are you sure you want to delete this Invoice?');">
+                                                    <i class="fa fa-times"></i> Delete
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Mpdf\Mpdf;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Crypt;
-use Vinkla\Hashids\Facades\Hashids;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 
 class InvoiceController extends Controller
@@ -61,4 +62,23 @@ class InvoiceController extends Controller
         $mpdf->WriteHTML($html);
         $mpdf->Output();
     }
+
+    public function destroy($transaction_id)
+{
+    $transaction = Transaction::with(['transactionDetails', 'orders'])->where('transaction_id', $transaction_id)->first();
+
+    if ($transaction) {
+        // Hapus semua data relasi menggunakan Eloquent
+        $transaction->transactionDetails()->delete();
+        $transaction->orders()->delete();
+
+        // Hapus data utama
+        $transaction->delete();
+        
+        Alert::success('Success', 'Invoice deleted successfully.');
+        return redirect()->route('invoice.index');
+    }
+    Alert::error('Error', 'Invoice not found.');
+    return redirect()->back();
+}
 }

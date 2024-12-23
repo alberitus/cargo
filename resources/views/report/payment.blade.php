@@ -65,16 +65,23 @@
                                         <td></td>
                                         <td>Mandiri</td>
                                         <td>
-                                            <div class="form-button-action">
-                                                <form action="{{ route('job.delete', $pay->transaction_id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-link btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this job?');">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            @php
+                                        $encryptedId = Crypt::encryptString($pay->transaction_id);
+                                        @endphp
+                                        <a href="{{ route('invoice.cetak', ['id' => $encryptedId]) }}">
+                                            <button class="btn btn-primary btn-xs" title="view">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </a>
+                                            <form action="{{ route('invoice.delete', $pay->transaction_id) }}"
+                                                method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-xs"
+                                                    onclick="return confirm('Are you sure you want to delete this Invoice?');">
+                                                    <i class="fa fa-times"></i> Delete
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

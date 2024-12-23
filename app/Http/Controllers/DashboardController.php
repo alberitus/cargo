@@ -22,15 +22,19 @@ class DashboardController extends Controller
         ->get();
 
         $dailyIncome = Transaction_detail::selectRaw('DATE(created_at) as date, SUM(total_price) as total_income')
+        ->whereRaw('DATE(created_at) >= ?', [now()->subDays(7)])  // Ambil 7 hari terakhir
         ->groupBy('date')
         ->orderBy('date')
         ->get();
 
-    $labels = $dailyIncome->pluck('date')->toArray();
+    $labels = $dailyIncome->pluck('date')->map(function($date) {
+        return date('d M', strtotime($date));
+    })->toArray();
+    
     $data = $dailyIncome->pluck('total_income')->toArray();
 
-    $startDate = $dailyIncome->first()->date ?? 'N/A';
-        $endDate = $dailyIncome->last()->date ?? 'N/A';
+    $startDate = $dailyIncome->first()->date ?? now();
+    $endDate = $dailyIncome->last()->date ?? now();
 
         return view('index', compact('totalCompanies','transactions', 'orderCount', 'totalTransaction', 'totalIncome', 'labels', 'data', 'startDate', 'endDate'));
     }
