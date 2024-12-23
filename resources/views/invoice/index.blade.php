@@ -51,9 +51,12 @@
                                     <td>{{ $detail->job_no }}</td>
                                     <td><?= date('d/m/y') ?></td>
                                     <td>
+                                        @php
+                                        $encryptedId = Crypt::encryptString($invoice->transaction_id);
+                                        @endphp
                                         @if($invoice->status != 2)
                                         <a href="#"
-                                            onclick="confirmClose('{{ url('/invoice/status', $invoice->transaction_id) }}')">
+                                            onclick="confirmClose('{{ url('/invoice/status', ['id' => $encryptedId]) }}')">
                                             <button class="btn btn-primary btn-xs" title="close">
                                                 <i class="fas fa-times"></i> Close Invoice
                                             </button>
@@ -63,7 +66,7 @@
                                             <i class="fas fa-check"></i> Invoice Closed
                                         </button>
                                         @endif
-                                        <a href="{{ url('/invoice/cetak', $invoice->transaction_id) }}">
+                                        <a href="{{ route('invoice.cetak', ['id' => $encryptedId]) }}">
                                             <button class="btn btn-primary btn-xs" title="view">
                                                 <i class="fas fa-eye"></i> View
                                             </button>

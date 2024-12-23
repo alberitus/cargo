@@ -4,31 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
-use App\Models\Orders;
 use App\Models\Transaction;
-use App\Models\Transaction_detail;
+use Illuminate\Support\Facades\Crypt;
+use Vinkla\Hashids\Facades\Hashids;
 
 
 class InvoiceController extends Controller
 {
+
     function index()
     {
         $transaction = Transaction::with('transactionDetails', 'orders')->get();
         return view('invoice.index', compact('transaction'));
     }
 
-    public function cetak($id)
+    public function cetak($encryptedId)
     {
-        $transaction = Transaction::with(['orders', 'transactionDetails'])
-            ->where('transaction_id', $id)
-            ->firstOrFail();
-            
-        return view('invoice.cetak', compact('transaction'));
+        try {
+            // Dekripsi ID
+            $id = Crypt::decryptString($encryptedId);
+
+            $transaction = Transaction::with(['orders', 'transactionDetails'])
+                ->where('transaction_id', $id)
+                ->firstOrFail();
+
+            return view('invoice.cetak', compact('transaction'));
+        } catch (\Exception $e) {
+            abort(404, 'Invalid URL');
+        }
     }
 
-    public function updateStatus($id)
+    public function updateStatus($encryptedId)
 {
     try {
+        $id = Crypt::decryptString($encryptedId);
+        
         Transaction::where('transaction_id', $id)
             ->update(['status' => 2]);
 
@@ -38,8 +48,10 @@ class InvoiceController extends Controller
     }
 }
 
-    public function export_pdf($id)
+    public function export_pdf($encryptedId)
     {
+        $id = Crypt::decryptString($encryptedId);
+
         $transaction = Transaction::with(['orders', 'transactionDetails'])
             ->where('transaction_id', $id)
             ->firstOrFail();

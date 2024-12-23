@@ -61,7 +61,7 @@
         </li>
         @endif
         @if(Auth::user()->role == 2)
-        <li class="nav-item {{ Request::routeIs('invoice.index') ? 'active' : '' }}">
+        <li class="nav-item {{ Request::routeIs('invoice*') ? 'active' : '' }}">
             <a href="{{ route('invoice.index') }}">
                 <i class="fas fa-dollar-sign"></i>
                 <p>Invoice</p>
