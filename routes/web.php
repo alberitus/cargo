@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/cetak/{id}', [InvoiceController::class, 'cetak'])->name('cetak');
+    Route::get('/invoice/status/{id}', [InvoiceController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/invoice/pdf/{id}', [InvoiceController::class, 'export_pdf']);
     Route::resource('invoice', InvoiceController::class);
 })->middleware('auth');

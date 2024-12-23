@@ -240,7 +240,8 @@ class TransactionController extends Controller
         $transaction = Transaction::create([
             'name' => Auth::user()->name,
             'company_name' => $request->company,
-            'transaction_id' => $transactionId, 
+            'transaction_id' => $transactionId,
+            'status' => 1,
         ]);
         $transaction->save();
 
@@ -287,17 +288,19 @@ class TransactionController extends Controller
         session()->forget('cost_items');
 
         $jobs = $request->job_no ?? 'AT';
-        $lastOrder = Orders::where('job_no', 'like', "%,$jobs," . date('y/m'))
-                        ->latest('orders_id')
-                        ->first();
-
-        if ($lastOrder) {
-            $lastJobNumber = intval(substr($lastOrder->job_no, 0, 4));
-            $nextNumber = str_pad($lastJobNumber + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $nextNumber = '0001';
+        $latestOrder = Orders::latest('created_at')->first();
+        
+        // Generate prefix
+        $prefix = !$latestOrder ? '0001' : 
+        str_pad((int)substr($latestOrder->job_no, 0, 4) + 1, 4, '0', STR_PAD_LEFT);
+        
+        // Reset to 0001 if exceeds 9999
+        if ((int)$prefix > 9999) {
+            $prefix = '0001';
         }
-        $jobNumber = $nextNumber . '/' . $jobs . '/' . date('y/m');
+
+        // Format job number with prefix and current year-month
+        $jobNumber = $prefix . '/' . $request->job_no . '/' . date('ym');
 
         $request->validate([
             'job_ref' => 'required|string|max:255',

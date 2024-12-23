@@ -18,7 +18,7 @@ class transaction extends Model
     // protected $primaryKey = 'transaction_id'; 
 
     protected $fillable = [
-        'transaction_id', 'name', 'company_name'        
+        'transaction_id', 'name', 'company_name', 'status'        
     ];
 
     public function transactionDetails()

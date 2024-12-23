@@ -46,20 +46,32 @@
                                 @endphp
                                 @foreach ($transaction as $invoice)
                                 @foreach ($invoice->orders as $detail)
-                                    <tr>
-                                        <td>{{ $invoice->company_name }}</td>
-                                        <td>{{ $detail->job_no }}</td>
-                                        <td><?= date('d/m/y') ?></td>
-                                        <td>
-                                            <a href="{{ url('/invoice/cetak', $invoice->transaction_id) }}">
-                                                <button class="ubah_cart btn btn-primary btn-xs" title="view">
-                                                    <i class="fas fa-eye"></i> View
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $invoice->company_name }}</td>
+                                    <td>{{ $detail->job_no }}</td>
+                                    <td><?= date('d/m/y') ?></td>
+                                    <td>
+                                        @if($invoice->status != 2)
+                                        <a href="#"
+                                            onclick="confirmClose('{{ url('/invoice/status', $invoice->transaction_id) }}')">
+                                            <button class="btn btn-primary btn-xs" title="close">
+                                                <i class="fas fa-times"></i> Close Invoice
+                                            </button>
+                                        </a>
+                                        @else
+                                        <button class="btn btn-secondary btn-xs" disabled title="invoice closed">
+                                            <i class="fas fa-check"></i> Invoice Closed
+                                        </button>
+                                        @endif
+                                        <a href="{{ url('/invoice/cetak', $invoice->transaction_id) }}">
+                                            <button class="btn btn-primary btn-xs" title="view">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
-                            @endforeach
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -68,5 +80,12 @@
         </div>
     </div>
 </div>
-@endSection
+<script>
+    function confirmClose(url) {
+        if (confirm('Apakah Anda yakin ingin menutup invoice ini?')) {
+            window.location.href = url;
+        }
+    }
 
+</script>
+@endSection
