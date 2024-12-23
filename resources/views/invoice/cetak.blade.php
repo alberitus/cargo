@@ -35,9 +35,12 @@
                         <h6>example@email.com</h6>
                     </div>
                 </div>
+                @php
+                                        $encryptedId = Crypt::encryptString($transaction->transaction_id);
+                                        @endphp
                 <div class="card-body">
                     <div class="d-grid gap-3 d-md-flex justify-content-md-end">
-                        <a target="_blank" class="btn btn-primary  mb-3" type="button" href="{{ url('/invoice/pdf', $transaction->transaction_id) }}"><span class="btn-label">
+                        <a target="_blank" class="btn btn-primary  mb-3" type="button" href="{{ route('invoice.pdf', ['id' => $encryptedId]) }}"><span class="btn-label">
                                     <i class="fa fa-print"></i>
                                 </span> Export PDF</a>
                         <a target="_blank" class="btn btn-primary  mb-3" type="button" href="/invoice/exportexcel"> <span class="btn-label">

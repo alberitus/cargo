@@ -16,6 +16,10 @@ class DashboardController extends Controller
         $totalCompanies = Company::count();
         $totalTransaction = Transaction::count();
         $totalIncome = Transaction_detail::sum('total_price');
+        $orderCount = Transaction::where('status', 1)->count();
+        $transactions = Transaction::with('transactionDetails')
+        ->latest('created_at')
+        ->get();
 
         $dailyIncome = Transaction_detail::selectRaw('DATE(created_at) as date, SUM(total_price) as total_income')
         ->groupBy('date')
@@ -28,6 +32,6 @@ class DashboardController extends Controller
     $startDate = $dailyIncome->first()->date ?? 'N/A';
         $endDate = $dailyIncome->last()->date ?? 'N/A';
 
-        return view('index', compact('totalCompanies', 'totalTransaction', 'totalIncome', 'labels', 'data', 'startDate', 'endDate'));
+        return view('index', compact('totalCompanies','transactions', 'orderCount', 'totalTransaction', 'totalIncome', 'labels', 'data', 'startDate', 'endDate'));
     }
 }

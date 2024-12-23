@@ -14,6 +14,7 @@ use App\Models\Cost;
 use App\Models\Transaction_detail;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Crypt;
 
 class TransactionController extends Controller
 {
