@@ -178,69 +178,62 @@
     
         var dailySalesChart = document.getElementById('dailySalesChart').getContext('2d');
     
-        new Chart(dailySalesChart, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "Sales Analytics",
-                    fill: true,
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    borderColor: "#fff",
-                    borderCapStyle: "butt",
-                    borderDash: [],
-                    borderDashOffset: 0,
-                    pointBorderColor: "#fff",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "#fff",
-                    pointHoverBorderColor: "#fff",
-                    pointHoverBorderWidth: 1,
-                    pointRadius: 1,
-                    pointHitRadius: 5,
-                    data: incomeData
-                }]
+        // Update script chart
+new Chart(dailySalesChart, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Sales Analytics",
+            fill: true,
+            backgroundColor: "rgba(255,255,255,0.2)",
+            borderColor: "#fff",
+            borderWidth: 2,
+            data: incomeData,
+            tension: 0.4
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+        scales: {
+            y: {
+                display: true,
+                grid: {
+                    display: true,
+                    color: "rgba(255,255,255,0.1)"
+                },
+                ticks: {
+                    color: "#fff",
+                    beginAtZero: true,
+                    callback: function(value) {
+                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                    }
+                }
             },
-            options: {
-                maintainAspectRatio: false,
-                legend: {
+            x: {
+                display: true,
+                grid: {
                     display: false
                 },
-                animation: {
-                    easing: "easeInOutBack"
-                },
-                scales: {
-                    yAxes: [{
-                        display: false,
-                        ticks: {
-                            fontColor: "rgba(0,0,0,0.5)",
-                            fontStyle: "bold",
-                            beginAtZero: true,
-                            maxTicksLimit: 10,
-                            padding: 0,
-                            beginAtZero: true,
-            autoSkip: true
-                        },
-                        gridLines: {
-                            drawTicks: false,
-                            display: true
-                        }
-                    }],
-                    xAxes: [{
-                        display: false,
-                        gridLines: {
-                            zeroLineColor: "transparent"
-                        },
-                        ticks: {
-                            padding: -20,
-                            fontColor: "rgba(255,255,255,0.2)",
-                            fontStyle: "bold"
-                        }
-                    }]
+                ticks: {
+                    color: "#fff"
                 }
             }
-        });
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return 'Rp ' + new Intl.NumberFormat('id-ID').format(context.raw);
+                    }
+                }
+            }
+        }
+    }
+});
     });
     </script>
 @endSection

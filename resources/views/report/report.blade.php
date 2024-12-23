@@ -2,7 +2,7 @@
 @section('content')
 <div class="page-inner">
     <div class="page-header">
-        <h3 class="fw-bold mb-3">Report</h3>
+        <h3 class="fw-bold mb-3">Company</h3>
         <ul class="breadcrumbs mb-3">
             <li class="nav-home">
                 <a href="/">
@@ -19,7 +19,7 @@
                 <i class="icon-arrow-right"></i>
             </li>
             <li class="nav-item">
-                <a href="#">Report</a>
+                <a href="#">Company</a>
             </li>
         </ul>
     </div>
@@ -27,7 +27,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Report</h4>
+                    <h4 class="card-title">Company</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -56,17 +56,23 @@
                                     <td>{{ 'Rp ' . number_format($report->grand_total, 0, ',', '.') }}</td>
                                     <td>{{ $report->name }}</td>
                                     <td>
-                                        <div class="form-button-action">
-                                            <form action="{{ route('job.delete', $report->transaction_id) }}"
+                                        @php
+                                        $encryptedId = Crypt::encryptString($report->transaction_id);
+                                        @endphp
+                                        <a href="{{ route('invoice.cetak', ['id' => $encryptedId]) }}">
+                                            <button class="btn btn-primary btn-xs" title="view">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                        </a>
+                                            <form action="{{ route('invoice.delete', $report->transaction_id) }}"
                                                 method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-link btn-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this job?');">
-                                                    <i class="fa fa-times"></i>
+                                                <button type="submit" class="btn btn-danger btn-xs"
+                                                    onclick="return confirm('Are you sure you want to delete this Invoice?');">
+                                                    <i class="fa fa-times"></i> Delete
                                                 </button>
                                             </form>
-                                        </div>
                                 </td>
                             </tr>
                                 @endforeach

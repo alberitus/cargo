@@ -71,6 +71,15 @@
                                                 <i class="fas fa-eye"></i> View
                                             </button>
                                         </a>
+                                        <form action="{{ route('invoice.delete', $invoice->transaction_id) }}"
+                                            method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-xs"
+                                                onclick="return confirm('Are you sure you want to delete this Invoice?');">
+                                                <i class="fa fa-times"></i> Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -83,12 +92,4 @@
         </div>
     </div>
 </div>
-<script>
-    function confirmClose(url) {
-        if (confirm('Apakah Anda yakin ingin menutup invoice ini?')) {
-            window.location.href = url;
-        }
-    }
-
-</script>
 @endSection

@@ -63,7 +63,22 @@
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{ $user->role }}</td>
+                                    <td>
+                                        @switch($user->role)
+                                            @case(1)
+                                                Customer Service
+                                                @break
+                                            @case(2)
+                                                Admin
+                                                @break
+                                            @case(3)
+                                                Supervisor
+                                                @break
+                                            @default
+                                                Unknown Role
+                                        @endswitch
+                                    </td>
+                                    
                                     <td>
                                         <div class="form-button-action">
                                             <a href="{{ route('profile.editById', ['id' => $user->id]) }}" class="btn btn-link btn-primary btn-lg">
