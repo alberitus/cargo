@@ -26,6 +26,18 @@ class InvoiceController extends Controller
         return view('invoice.cetak', compact('transaction'));
     }
 
+    public function updateStatus($id)
+{
+    try {
+        Transaction::where('transaction_id', $id)
+            ->update(['status' => 2]);
+
+        return redirect()->back()->with('success', 'Invoice berhasil ditutup');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Terjadi kesalahan saat menutup invoice');
+    }
+}
+
     public function export_pdf($id)
     {
         $transaction = Transaction::with(['orders', 'transactionDetails'])

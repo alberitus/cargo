@@ -178,6 +178,13 @@
                                                     11%
                                                 </label>
                                             </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input tax-radio" type="radio" name="tax"
+                                                    id="tax3" value="0" checked />
+                                                <label class="form-check-label" for="tax3">
+                                                    No PPN
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -199,6 +206,7 @@
                                     <div class="d-flex justify-content-center">
                                         <h5 id="tax-value" style="width: 80%; text-align: left;">RP 0</h5>
                                     </div>
+                                    
                                     <div class="d-flex justify-content-center">
                                         <h5 style="width: 80%; text-align: left;" name="total" id="grand-total">RP 0
                                         </h5>
