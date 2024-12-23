@@ -2,7 +2,7 @@
 @section('content')
 <div class="page-inner">
     <div class="page-header">
-        <h3 class="fw-bold mb-3">Report</h3>
+        <h3 class="fw-bold mb-3">Tax</h3>
         <ul class="breadcrumbs mb-3">
             <li class="nav-home">
                 <a href="/">
@@ -19,7 +19,7 @@
                 <i class="icon-arrow-right"></i>
             </li>
             <li class="nav-item">
-                <a href="#">Report</a>
+                <a href="#">Tax</a>
             </li>
         </ul>
     </div>
@@ -27,7 +27,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Report</h4>
+                    <h4 class="card-title">Tax</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
