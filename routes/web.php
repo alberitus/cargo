@@ -93,6 +93,8 @@ Route::get('/report/payment', [ReportController::class, 'payment'])->name('repor
 Route::get('/report/outstanding', [ReportController::class, 'outstanding'])->name('report.outstanding');
 Route::get('/report/tax', [ReportController::class, 'tax'])->name('report.tax');
 Route::get('/report/item', [ReportController::class, 'item'])->name('report.item');
+Route::get('/report/detailinv', [ReportController::class, 'detailinv'])->name('report.detailinv');
+Route::get('/report/detailinvcus', [ReportController::class, 'detailinvcus'])->name('report.detailinvcus');
 Route::resource('report', ReportController::class);
 // Route::get('/pdf', [InvoiceController::class, 'export_pdf']);
 // Route::get('/csv', [InvoiceController::class, 'export_csv']); 

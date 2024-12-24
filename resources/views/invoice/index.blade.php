@@ -92,4 +92,12 @@
         </div>
     </div>
 </div>
+<script>
+    function confirmClose(url) {
+        if (confirm('Apakah Anda yakin ingin menutup invoice ini?')) {
+            window.location.href = url;
+        }
+    }
+
+</script>
 @endSection
