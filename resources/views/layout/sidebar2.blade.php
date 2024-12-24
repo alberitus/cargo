@@ -98,9 +98,15 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a href="/">
-                            <span class="sub-item">xxxxx</span>
+                    <li class="{{ Request::is('report/detailinv*') ? 'active' : '' }}">
+                        <a href="{{ route('report.detailinv') }}">
+                            <span class="sub-item">Detail Invoice</span>
+                        </a>
+                    </li>
+
+                    <li class="{{ Request::is('report/detailinvcus*') ? 'active' : '' }}">
+                        <a href="{{ route('report.detailinvcus') }}">
+                            <span class="sub-item">Detail Invoice Customer</span>
                         </a>
                     </li>
                     {{-- <li class="{{ Request::is('report/tax*') ? 'active' : '' }}"> --}}

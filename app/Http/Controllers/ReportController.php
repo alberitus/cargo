@@ -69,6 +69,30 @@ class ReportController extends Controller
 
         return view('report.outstanding', compact('transaction'));
     }
+    
+    function detailinv(){
+        $transaction = Transaction::with('transactionDetails', 'orders')->where('status', 2)->get();
+
+        foreach ($transaction as $detail) {
+            $detail->total_price = $detail->transactionDetails->sum('total_price');
+            $detail->total_tax = $detail->transactionDetails->sum('tax');
+            $detail->grand_total = $detail->total_price + $detail->total_tax;
+        }
+
+        return view('report.detailinv', compact('transaction'));
+    }
+
+    function detailinvcus(){
+        $transaction = Transaction::with('transactionDetails', 'orders')->where('status', 2)->get();
+
+        foreach ($transaction as $detail) {
+            $detail->total_price = $detail->transactionDetails->sum('total_price');
+            $detail->total_tax = $detail->transactionDetails->sum('tax');
+            $detail->grand_total = $detail->total_price + $detail->total_tax;
+        }
+
+        return view('report.detailinvcus', compact('transaction'));
+    }
     function show()
     {
 
