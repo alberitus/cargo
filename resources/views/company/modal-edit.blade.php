@@ -29,16 +29,16 @@
                             </div>
                             <div class="col-md-6 pe-0">
                                 <div class="form-group form-group-default">
-                                    <label>Address</label>
-                                    <input id="addAddress" name="address" type="text" class="form-control"
-                                        value="{{ $data->address }}" placeholder="Fill address" />
+                                    <label>Code</label>
+                                    <input id="addCode" name="code_name" type="text" class="form-control"
+                                        value="{{ $data->code_name }}" placeholder="Fill Code" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
-                                    <label>City</label>
-                                    <input id="addCity" name="city" type="text" class="form-control"
-                                        value="{{ $data->city }}" placeholder="Fill city" />
+                                    <label>Contact</label>
+                                    <input id="addContact" name="contact" type="text" class="form-control"
+                                        value="{{ $data->contact }}" placeholder="Fill contact" />
                                 </div>
                             </div>
                         </div>

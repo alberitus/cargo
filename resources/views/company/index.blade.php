@@ -49,8 +49,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
+                                    <th>Code</th>
+                                    <th>Contact Person</th>
                                     <th style="width: 10%">Action</th>
                                 </tr>
                             </thead>
@@ -62,8 +62,8 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->name }}</td>
-                                    <td>{{ $data->address }}</td>
-                                    <td>{{ $data->city }}</td>
+                                    <td>{{ $data->code_name }}</td>
+                                    <td>{{ $data->contact }}</td>
                                     <td>
                                         <div class="form-button-action">
                                             <button type="button" class="btn btn-link btn-primary btn-lg"

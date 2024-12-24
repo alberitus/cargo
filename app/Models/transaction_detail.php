@@ -14,6 +14,13 @@ class transaction_detail extends Model
         'transaction_id', 'nama_item', 'amount', 'price', 'tax', 'total_price'
     ];
 
+    public function scopeLatestByJobType($query, $jobType)
+    {
+        return $query->where('job_no', 'LIKE', '%/' . $jobType . '/%')
+                    ->latest('created_at')
+                    ->first();
+    }
+
     public function item()
     {
         return $this->belongsTo(Item::class, 'item_id', 'item_id',);
