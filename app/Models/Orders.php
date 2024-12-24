@@ -15,6 +15,6 @@ class Orders extends Model
     protected $primaryKey = 'orders_id';
 
     protected $fillable = [
-        'transaction_id', 'job_no', 'job_ref', 'flight_date', 'destination', 'mawb', 'hawb', 'consigne', 'shipper', 'detail'
+        'transaction_id','job_type', 'job_no', 'job_ref', 'flight_date', 'destination', 'mawb', 'hawb', 'consigne', 'shipper', 'detail'
     ];
 }

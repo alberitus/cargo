@@ -42,10 +42,10 @@
                             <div class="card-title">Order</div>
                             <div class="col-md-6 col-lg-6">
                                 <div class="form-group">
-                                    <label for="defaultSelect">Customer</label>
-                                    <select name="company" class="form-select">
+                                    <label for="defaultSelect">Company</label>
+                                    <select name="company" class="form-select" id="companySelect">
                                         @foreach ($company as $cust)
-                                        <option id="addConsigne" value="{{ $cust->name }}"
+                                        <option value="{{ $cust->name }}" data-code="{{ $cust->code_name }}"
                                             {{ old('company_id') == $cust->name ? 'selected' : '' }}>
                                             {{ $cust->name }}
                                         </option>
@@ -53,15 +53,18 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="defaultSelect">JOB No</label>
-                                    <select name="job_no" class="form-select">
+                                    <label for="defaultSelect">Job Type</label>
+                                    <select name="job_type" class="form-select" id="jobSelect">
                                         @foreach ($jobsWithDate as $job)
-                                        <option id="addPosition" value="{{ $job->job_name }}"
-                                            {{ old('job_id') == $job->job_name ? 'selected' : '' }}>
-                                            {{ $job->job_name }} / {{ $job->display_date }}
+                                        <option value="{{ $job->job_code }}" data-prefix="{{ $job->next_prefix }}">
+                                            {{ $job->job_name }}
                                         </option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jobFormat">Job Number Format</label>
+                                    <input type="text" class="form-control" id="jobFormat" name="job_format" readonly>
                                 </div>
                                 <div class="form-group @error('job_ref') has-error has-feedback @enderror">
                                     <label for="largeInput">JOB REF</label>
@@ -285,6 +288,39 @@
         </div>
     </div>
 </div>
+<script>
+    // Event listener ketika salah satu dropdown berubah
+    document.addEventListener('DOMContentLoaded', function() {
+        const companySelect = document.getElementById('companySelect');
+        const jobSelect = document.getElementById('jobSelect');
+        const jobFormatInput = document.getElementById('jobFormat');
+
+        function updateJobFormat() {
+            // Ambil data dari dropdown
+            const companyOption = companySelect.options[companySelect.selectedIndex];
+            const jobOption = jobSelect.options[jobSelect.selectedIndex];
+
+            const customerCode = companyOption.getAttribute('data-code') || '';
+            const jobCode = jobOption.value || '';
+            const nextPrefix = jobOption.getAttribute('data-prefix') || '0001';
+
+            // Ambil tahun dan bulan sekarang
+            const date = new Date();
+            const yearMonth = `${date.getFullYear().toString().slice(-2)}${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+            // Formatkan kode transaksi
+            const transactionCode = `${nextPrefix}/${customerCode}-${jobCode}/${yearMonth}`;
+            jobFormatInput.value = transactionCode;
+        }
+
+        // Tambahkan event listener pada perubahan dropdown
+        companySelect.addEventListener('change', updateJobFormat);
+        jobSelect.addEventListener('change', updateJobFormat);
+
+        // Inisialisasi format awal
+        updateJobFormat();
+    });
+</script>
 
 @include('transaction/modal-cart')
 @include('transaction/modal-cost')

@@ -17,23 +17,44 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class TransactionController extends Controller
 {
-    function index()
-    {
-        $company = Company::all();
-        $consigne = Consigne::all();
-        $job = Job::all();
-        $currentDate = date('y/m');
-        $jobsWithDate = $job->map(function ($jobs) use ($currentDate) {
-            $jobs->display_date = $currentDate;
-            return $jobs;
-        });
-        $item = Item::all();
-        $itemCost = Item::all();
-        $cart = session('cart_items', []);
-        $cost = session('cost_items', []);
-        
-        return view('transaction.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
-    }
+    public function index()
+{
+    $company = Company::all();
+    $consigne = Consigne::all();
+    $job = Job::all();
+    $currentDate = date('ym'); // Current date in YYMM format
+
+    $jobsWithDate = $job->map(function ($jobs) {
+        $latestOrder = Orders::where('job_no', 'LIKE', '%/' . $jobs->job_code . '/%')
+            ->latest('created_at')
+            ->first();
+    
+        if ($latestOrder) {
+            $currentPrefix = (int) substr($latestOrder->job_no, 0, strpos($latestOrder->job_no, '/'));
+            $nextPrefix = str_pad($currentPrefix + 1, 4, '0', STR_PAD_LEFT);
+        } else {
+            $nextPrefix = '0001';
+        }
+    
+        // Pastikan format tetap benar
+        if ((int)$nextPrefix > 9999) {
+            $nextPrefix = '0001'; // Reset jika lebih dari 9999
+        }
+    
+        // Format job_no baru
+        $jobs->next_prefix = $nextPrefix;
+        return $jobs;
+    });
+
+    $item = Item::all();
+    $itemCost = Item::all();
+    $cart = session('cart_items', []);
+    $cost = session('cost_items', []);
+
+    return view('transaction.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
+}
+
+
 
     function loadCart()
     {
@@ -287,20 +308,24 @@ class TransactionController extends Controller
         }
         session()->forget('cost_items');
 
-        $jobs = $request->job_no ?? 'AT';
-        $latestOrder = Orders::latest('created_at')->first();
-        
-        // Generate prefix
-        $prefix = !$latestOrder ? '0001' : 
-        str_pad((int)substr($latestOrder->job_no, 0, 4) + 1, 4, '0', STR_PAD_LEFT);
-        
-        // Reset to 0001 if exceeds 9999
-        if ((int)$prefix > 9999) {
-            $prefix = '0001';
-        }
+        $company = Company::first(); // Ambil data company
 
-        // Format job number with prefix and current year-month
-        $jobNumber = $prefix . '/' . $request->job_no . '/' . date('ym');
+// Cari order terakhir dengan format baru
+$latestOrder = Orders::where('job_no', 'LIKE', '%/' . $company->code_name . '-' . $request->job_no . '/%')
+    ->latest('created_at')
+    ->first();
+
+// Generate prefix
+$prefix = !$latestOrder ? '0001' : 
+    str_pad((int)substr($latestOrder->job_no, 0, 4) + 1, 4, '0', STR_PAD_LEFT);
+
+// Reset to 0001 if exceeds 9999
+if ((int)$prefix > 9999) {
+    $prefix = '0001';
+}
+
+// Format job number with prefix, company code, job name and current year-month
+$jobNumber = $prefix . '/' . $company->code_name . '-' . $request->job_no . '/' . date('ym');
 
         $request->validate([
             'job_ref' => 'required|string|max:255',
@@ -312,7 +337,8 @@ class TransactionController extends Controller
 
         Orders::create([
             'transaction_id' => $transactionId,
-            'job_no' => $jobNumber,
+            'job_type' => $request->job_type,
+            'job_no' => $request->job_format,
             'job_ref' => $request->job_ref,
             'flight_date' => $request->flight_date,
             'destination' => $request->destination,

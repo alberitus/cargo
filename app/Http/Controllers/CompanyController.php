@@ -17,8 +17,8 @@ class CompanyController extends Controller
     {
         $company = new Company();
         $company->name = $request->name;
-        $company->address = $request->address;
-        $company->city = $request->city;
+        $company->code_name = $request->code_name;
+        $company->contact = $request->contact;
         $company->save();
 
         return redirect()->route('company.index')->with('success', 'Company created successfully.');
@@ -31,8 +31,8 @@ class CompanyController extends Controller
             return redirect()->route('company.index')->with('error', 'Company not found');
         }
         $company->name = $request->name;
-        $company->address = $request->address;
-        $company->city = $request->city;
+        $company->code_name = $request->code_name;
+        $company->contact = $request->contact;
         $company->update();
 
         return redirect()->route('company.index')->with('success', 'Company update successfully.');
