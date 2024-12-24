@@ -14,47 +14,48 @@ use App\Models\Cost;
 use App\Models\Transaction_detail;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
     public function index()
-{
-    $company = Company::all();
-    $consigne = Consigne::all();
-    $job = Job::all();
-    $currentDate = date('ym'); // Current date in YYMM format
+    {
+        $company = Company::all();
+        $consigne = Consigne::all();
+        $job = Job::all();
 
-    $jobsWithDate = $job->map(function ($jobs) {
-        $latestOrder = Orders::where('job_no', 'LIKE', '%/' . $jobs->job_code . '/%')
-            ->latest('created_at')
-            ->first();
-    
-        if ($latestOrder) {
-            $currentPrefix = (int) substr($latestOrder->job_no, 0, strpos($latestOrder->job_no, '/'));
-            $nextPrefix = str_pad($currentPrefix + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $nextPrefix = '0001';
-        }
-    
-        // Pastikan format tetap benar
-        if ((int)$nextPrefix > 9999) {
-            $nextPrefix = '0001'; // Reset jika lebih dari 9999
-        }
-    
-        // Format job_no baru
-        $jobs->next_prefix = $nextPrefix;
-        return $jobs;
-    });
+        $jobsWithDate = $job->map(function ($jobs) {
+            // Get latest order for specific job_code
+            $latestOrder = Orders::where('job_no', 'LIKE', '%/' . $jobs->job_code . '/%')
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', now()->month)
+                ->latest('created_at')
+                ->first();
+                
+        
+            if ($latestOrder) {
+                $currentPrefix = (int) substr($latestOrder->job_no, 0, strpos($latestOrder->job_no, '/'));
+                $nextPrefix = str_pad($currentPrefix + 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $nextPrefix = '0001';
+            }
+        
+            if ((int)$nextPrefix > 9999) {
+                $nextPrefix = '0001';
+            }
+        
+            $jobs->next_prefix = $nextPrefix;
+            // dd($latestOrder);
+            return $jobs;
+        });
 
-    $item = Item::all();
-    $itemCost = Item::all();
-    $cart = session('cart_items', []);
-    $cost = session('cost_items', []);
+        $item = Item::all();
+        $itemCost = Item::all();
+        $cart = session('cart_items', []);
+        $cost = session('cost_items', []);
 
-    return view('transaction.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
-}
-
-
+        return view('transaction.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
+    }
 
     function loadCart()
     {

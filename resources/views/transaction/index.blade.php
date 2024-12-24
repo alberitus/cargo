@@ -300,16 +300,16 @@
             const companyOption = companySelect.options[companySelect.selectedIndex];
             const jobOption = jobSelect.options[jobSelect.selectedIndex];
 
-            const customerCode = companyOption.getAttribute('data-code') || '';
-            const jobCode = jobOption.value || '';
-            const nextPrefix = jobOption.getAttribute('data-prefix') || '0001';
+            const customerCode = companyOption.getAttribute('data-code');
+            const jobCode = jobOption.value;
+            const nextPrefix = jobOption.getAttribute('data-prefix');
 
             // Ambil tahun dan bulan sekarang
             const date = new Date();
             const yearMonth = `${date.getFullYear().toString().slice(-2)}${String(date.getMonth() + 1).padStart(2, '0')}`;
 
             // Formatkan kode transaksi
-            const transactionCode = `${nextPrefix}/${customerCode}-${jobCode}/${yearMonth}`;
+            const transactionCode = `${nextPrefix}/${customerCode}/${jobCode}/${yearMonth}`;
             jobFormatInput.value = transactionCode;
         }
 
