@@ -49,7 +49,7 @@
                                 <tr>
                                     <td>{{ $invoice->company_name }}</td>
                                     <td>{{ $detail->job_no }}</td>
-                                    <td><?= date('d/m/y') ?></td>
+                                    <td>{{ $invoice->created_at->format('d-m-Y') }}</td>
                                     <td>
                                         @php
                                         $encryptedId = Crypt::encryptString($invoice->transaction_id);

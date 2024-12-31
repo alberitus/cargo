@@ -68,16 +68,23 @@
             </a>
         </li>
         @endif
+        @if(Auth::user()->role == 2)
+        <li class="nav-item {{ Request::routeIs('faktur*') ? 'active' : '' }}">
+            <a href="{{ route('faktur.index') }}">
+                <i class="fas fa-dollar-sign"></i>
+                <p>Faktur</p>
+            </a>
+        </li>
+        @endif
         @if(Auth::user()->role == 2) <!-- Role 2 is Admin -->
-        {{-- <li class="nav-item {{ Request::is('report/company*') || Request::is('report/item*') || Request::is('report/tax*') || Request::is('report/invoice*') ? 'active submenu' : '' }}"> --}}
-        <li class="nav-item {{ Request::routeIs('report.company') ? 'active' : '' }}">
-            {{-- <a data-bs-toggle="collapse" href="#base" class="{{ Request::is('report/company*') || Request::is('report/item*') || Request::is('report/tax*') || Request::is('report/invoice*') ? '' : 'collapsed' }}"> --}}
-            <a data-bs-toggle="collapse" href="#reportnav" class="{{ Request::is('report/company*') ? '' : 'collapsed' }}">
+        <li class="nav-item {{ Request::is('report*') ? 'active submenu' : '' }}">
+        {{-- <li class="nav-item {{ Request::routeIs('report.company') ? 'active' : '' }}"> --}}
+            <a data-bs-toggle="collapse" href="#reportnav" class="{{ Request::is('report*') ? '' : 'collapsed' }}">
+            {{-- <a data-bs-toggle="collapse" href="#reportnav" class="{{ Request::is('report/company*') ? '' : 'collapsed' }}"> --}}
                 <i class="fas fa-file"></i>
                 <p>Report</p>
                 <span class="caret"></span>
             </a>
-            {{-- <div class="collapse {{ Request::is('report/company*') || Request::is('report/item*') || Request::is('report/tax*') || Request::is('report/invoice*') ? 'show' : '' }}" id="base"> --}}
             <div class="collapse {{ Request::is('report/company*') ? 'show' : '' }}" id="reportnav">
                 <ul class="nav nav-collapse">
                     <li class="{{ Request::is('report/company*') ? 'active' : '' }}">
@@ -85,7 +92,6 @@
                             <span class="sub-item">Company</span>
                         </a>
                     </li>
-                    {{-- <li class="{{ Request::is('report/item*') ? 'active' : '' }}"> --}}
                     <li class="{{ Request::is('report/payment*') ? 'active' : '' }}">
                         <a href="{{ route('report.payment') }}">
                             <span class="sub-item">Payment</span>
@@ -97,25 +103,21 @@
                             <span class="sub-item">Outstanding</span>
                         </a>
                     </li>
-
-                    <li class="{{ Request::is('report/detailinv*') ? 'active' : '' }}">
+                    <li class="{{ Request::is('report/detailinv') ? 'active' : '' }}">
                         <a href="{{ route('report.detailinv') }}">
                             <span class="sub-item">Detail Invoice</span>
                         </a>
                     </li>
-
                     <li class="{{ Request::is('report/detailinvcus*') ? 'active' : '' }}">
                         <a href="{{ route('report.detailinvcus') }}">
                             <span class="sub-item">Detail Invoice Customer</span>
                         </a>
                     </li>
-                    {{-- <li class="{{ Request::is('report/tax*') ? 'active' : '' }}"> --}}
                     <li class="{{ Request::is('report/tax*') ? 'active' : '' }}">
                         <a href="{{ route('report.tax') }}">
                             <span class="sub-item">Tax</span>
                         </a>
                     </li>
-                    {{-- <li class="{{ Request::is('report/invoice*') ? 'active' : '' }}"> --}}
                     <li class="{{ Request::is('report/item*') ? 'active' : '' }}">
                         <a href="{{ route('report.item') }}">
                             <span class="sub-item">Invoice</span>

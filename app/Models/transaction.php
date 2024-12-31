@@ -22,7 +22,7 @@ class transaction extends Model
     // protected $primaryKey = 'transaction_id'; 
 
     protected $fillable = [
-        'transaction_id', 'name', 'company_name', 'status'        
+        'transaction_id', 'name', 'company_name', 'status', 'stsfaktur','faktur'        
     ];
 
     public function transactionDetails()

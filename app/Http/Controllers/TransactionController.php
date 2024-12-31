@@ -26,7 +26,7 @@ class TransactionController extends Controller
 
         $jobsWithDate = $job->map(function ($jobs) {
             // Get latest order for specific job_code
-            $latestOrder = Orders::where('job_no', 'LIKE', '%/' . $jobs->job_code . '/%')
+            $latestOrder = Orders::where('job_no', 'LIKE', '%-' . $jobs->job_code . '/%')
                 ->whereYear('created_at', now()->year)
                 ->whereMonth('created_at', now()->month)
                 ->latest('created_at')
@@ -264,6 +264,8 @@ class TransactionController extends Controller
             'company_name' => $request->company,
             'transaction_id' => $transactionId,
             'status' => 1,
+            'stsfaktur' => $request->stsfaktur,
+            'faktur' => 0,
         ]);
         $transaction->save();
 
