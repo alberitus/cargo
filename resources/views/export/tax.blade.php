@@ -88,7 +88,7 @@
                 @php $totalAmount = 0; @endphp
                 @foreach ($transaction as $odr)
                     @foreach ($odr->transactionDetails as $detail)
-                    @php $totalAmount += $detail->tax_Price; @endphp
+                    @php $totalAmount += $detail->tax_price; @endphp
                         <tr>
                             <td>{{ $odr->transaction_id }}</td>
                             <td>{{ $odr->company_name }}</td>
