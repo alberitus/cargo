@@ -61,7 +61,7 @@
                                 @foreach ($company as $data)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $data->name }}</td>
+                                    <td>{{ $data->company_name }}</td>
                                     <td>{{ $data->code_name }}</td>
                                     <td>{{ $data->contact }}</td>
                                     <td>

@@ -23,8 +23,8 @@
                             <div class="col-sm-12">
                                 <div class="form-group form-group-default">
                                     <label>Name</label>
-                                    <input id="addName" name="name" type="text" class="form-control"
-                                        value="{{ $data->name }}" placeholder="Fill name" />
+                                    <input id="addName" name="company_name" type="text" class="form-control"
+                                        value="{{ $data->company_name }}" placeholder="Fill name" />
                                 </div>
                             </div>
                             <div class="col-md-6 pe-0">

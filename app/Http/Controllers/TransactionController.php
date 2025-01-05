@@ -18,15 +18,52 @@ use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     $company = Company::all();
+    //     $consigne = Consigne::all();
+    //     $job = Job::all();
+
+    //     $jobsWithDate = $job->map(function ($jobs) {
+    //         $latestOrder = Orders::where('job_no', 'LIKE', '%-' . $jobs->job_code . '/%')
+    //             ->whereYear('created_at', now()->year)
+    //             ->whereMonth('created_at', now()->month)
+    //             ->latest('created_at')
+    //             ->first();
+                
+        
+    //         if ($latestOrder) {
+    //             $currentPrefix = (int) substr($latestOrder->job_no, 0, strpos($latestOrder->job_no, '/'));
+    //             $nextPrefix = str_pad($currentPrefix + 1, 4, '0', STR_PAD_LEFT);
+    //         } else {
+    //             $nextPrefix = '0001';
+    //         }
+        
+    //         if ((int)$nextPrefix > 9999) {
+    //             $nextPrefix = '0001';
+    //         }
+        
+    //         $jobs->next_prefix = $nextPrefix;
+    //         // dd($latestOrder);
+    //         return $jobs;
+    //     });
+
+    //     $item = Item::all();
+    //     $itemCost = Item::all();
+    //     $cart = session('cart_items', []);
+    //     $cost = session('cost_items', []);
+
+    //     return view('transaction.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
+    // }
+
+    public function indexw()
     {
         $company = Company::all();
         $consigne = Consigne::all();
         $job = Job::all();
 
         $jobsWithDate = $job->map(function ($jobs) {
-            // Get latest order for specific job_code
-            $latestOrder = Orders::where('job_no', 'LIKE', '%-' . $jobs->job_code . '/%')
+            $latestOrder = Orders::where('job_no', 'LIKE', 'AT/' . $jobs->job_code . '/%')
                 ->whereYear('created_at', now()->year)
                 ->whereMonth('created_at', now()->month)
                 ->latest('created_at')
@@ -56,6 +93,55 @@ class TransactionController extends Controller
 
         return view('transaction.index', compact('company', 'consigne', 'jobsWithDate', 'cart', 'cost', 'item', 'itemCost'));
     }
+
+    public function index()
+{
+    $company = Company::all();
+    $consigne = Consigne::all();
+    $job = Job::all();
+
+    // Format untuk prefix bulan dan tahun (YYMM)
+    $currentYearMonth = now()->format('ym'); // Akan menghasilkan format '2412' untuk December 2024
+
+    // Mencari job number terakhir dengan format AT/YYMM/*
+    $latestOrder = Orders::where('job_no', 'LIKE', 'AT/' . $currentYearMonth . '/%')
+        ->latest('created_at')
+        ->first();
+
+    // Menentukan prefix berikutnya
+    if ($latestOrder) {
+        $currentNumber = (int) substr($latestOrder->job_no, -4); // Mengambil 4 digit terakhir
+        $nextNumber = $currentNumber + 1;
+        
+        // Reset ke 0001 jika melebihi 9999
+        if ($nextNumber > 9999) {
+            $nextNumber = 1;
+        }
+        
+        $nextPrefix = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    } else {
+        $nextPrefix = '0001';
+    }
+
+    // Format job number lengkap
+    $nextJobNumber = 'AT/' . $currentYearMonth . '/' . $nextPrefix;
+
+    $item = Item::all();
+    $itemCost = Item::all();
+    $cart = session('cart_items', []);
+    $cost = session('cost_items', []);
+
+    return view('transaction.index', compact(
+        'company', 
+        'consigne', 
+        'job', 
+        'nextJobNumber',
+        'cart', 
+        'cost', 
+        'item', 
+        'itemCost'
+    ));
+}
 
     function loadCart()
     {
@@ -241,21 +327,26 @@ class TransactionController extends Controller
     function store(Request $request)
     {
         $user = Auth::user();
-            if (!$user) {
-                return redirect()->route('login');
-            }
-
-        $lastTransaction = Transaction::orderBy('transaction_id', 'desc')->first();
-        $prefix = 'B';
-        $lastNumber = 0;
-        if ($lastTransaction) {
-            $lastNumber = (int)substr($lastTransaction->transaction_id, 1);
+        if (!$user) {
+            return redirect()->route('login');
         }
-        $newNumber = $lastNumber + 1;
-        $transactionId = $prefix . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+    
+        $prefix = $request->stsfaktur == 1 ? 'B' : 'A';
+        $year = date('y');
+        $lastTransaction = Transaction::where('transaction_id', 'LIKE', $prefix . $year . '%')
+        ->orderBy('transaction_id', 'desc')
+        ->first();
+        
+        if ($lastTransaction) {
+            $lastSequence = (int)substr($lastTransaction->transaction_id, -5);
+            $newSequence = $lastSequence + 1;
+        } else {
+            $newSequence = 1;
+        }
+        $transactionId = $prefix . $year . str_pad($newSequence, 5, '0', STR_PAD_LEFT);
         while (Transaction::where('transaction_id', $transactionId)->exists()) {
-            $newNumber++;
-            $transactionId = $prefix . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+            $newSequence++;
+            $transactionId = $prefix . $year . str_pad($newSequence, 5, '0', STR_PAD_LEFT);
         }
 
 
@@ -266,6 +357,7 @@ class TransactionController extends Controller
             'status' => 1,
             'stsfaktur' => $request->stsfaktur,
             'faktur' => 0,
+            'date_payment' => null,
         ]);
         $transaction->save();
 
@@ -284,6 +376,7 @@ class TransactionController extends Controller
                 'amount' => $item['qty'],
                 'price' => $item['price'],
                 'tax' => $request->tax,
+                'tax_price' => $request->tax_price,
                 'total_price' => $total,
             ]);
         }
@@ -311,24 +404,32 @@ class TransactionController extends Controller
         }
         session()->forget('cost_items');
 
-        $company = Company::first(); // Ambil data company
+        $company = Company::first();
 
-// Cari order terakhir dengan format baru
-$latestOrder = Orders::where('job_no', 'LIKE', '%/' . $company->code_name . '-' . $request->job_no . '/%')
-    ->latest('created_at')
-    ->first();
+        // $latestOrder = Orders::where('job_no', 'LIKE', '%/' . $company->code_name . '-' . $request->job_no . '/%')
+        //     ->latest('created_at')
+        //     ->first();
+        // $prefix = !$latestOrder ? '0001' : 
+        //     str_pad((int)substr($latestOrder->job_no, 0, 4) + 1, 4, '0', STR_PAD_LEFT);
+        // if ((int)$prefix > 9999) {
+        //     $prefix = '0001';
+        // }
 
-// Generate prefix
-$prefix = !$latestOrder ? '0001' : 
-    str_pad((int)substr($latestOrder->job_no, 0, 4) + 1, 4, '0', STR_PAD_LEFT);
+        $latestOrder = Orders::where('job_no', 'LIKE', 'AT/' . date('ym') . '/%')
+        ->latest('created_at')
+        ->first();
 
-// Reset to 0001 if exceeds 9999
-if ((int)$prefix > 9999) {
-    $prefix = '0001';
-}
+        // Get the next prefix number
+        $prefix = !$latestOrder ? '0001' : 
+            str_pad((int)substr($latestOrder->job_no, -4) + 1, 4, '0', STR_PAD_LEFT);
 
-// Format job number with prefix, company code, job name and current year-month
-$jobNumber = $prefix . '/' . $company->code_name . '-' . $request->job_no . '/' . date('ym');
+        // Reset prefix to 0001 if it exceeds 9999
+        if ((int)$prefix > 9999) {
+            $prefix = '0001';
+        }
+
+        // Generate the final job number
+        $jobNumber = 'AT/' . date('ym') . '/' . $prefix;
 
         $request->validate([
             'job_ref' => 'required|string|max:255',
@@ -341,7 +442,8 @@ $jobNumber = $prefix . '/' . $company->code_name . '-' . $request->job_no . '/' 
         Orders::create([
             'transaction_id' => $transactionId,
             'job_type' => $request->job_type,
-            'job_no' => $request->job_format,
+            // 'job_no' => $request->job_format,
+            'job_no' => $jobNumber,
             'job_ref' => $request->job_ref,
             'flight_date' => $request->flight_date,
             'destination' => $request->destination,

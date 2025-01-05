@@ -41,7 +41,8 @@ class InvoiceController extends Controller
         $id = Crypt::decryptString($encryptedId);
         
         Transaction::where('transaction_id', $id)
-            ->update(['status' => 2]);
+            ->update(['status' => 2,
+            'date_payment' => now(),]);
 
         return redirect()->back()->with('success', 'Invoice berhasil ditutup');
     } catch (\Exception $e) {

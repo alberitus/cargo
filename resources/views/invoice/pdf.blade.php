@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -90,7 +91,7 @@
     <main>
         <div class="header"></div>
         <div class="title">
-            <h1>PT. ANDIMA TRANSPORTINDO</h1>
+            <h1>PT. AYUTRANS</h1>
             <h5>Jl. nama jalan</h5>
             <h6>example@email.com</h6>
         </div>

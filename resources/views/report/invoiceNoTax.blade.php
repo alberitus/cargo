@@ -2,7 +2,7 @@
 @section('content')
 <div class="page-inner">
     <div class="page-header">
-        <h3 class="fw-bold mb-3">Payment</h3>
+        <h3 class="fw-bold mb-3">Invoice</h3>
         <ul class="breadcrumbs mb-3">
             <li class="nav-home">
                 <a href="/">
@@ -19,7 +19,7 @@
                 <i class="icon-arrow-right"></i>
             </li>
             <li class="nav-item">
-                <a href="#">Payment</a>
+                <a href="#">Invoice</a>
             </li>
         </ul>
     </div>
@@ -27,54 +27,47 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Payment</h4>
+                    <h4 class="card-title">Invoice</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="add-row" class="display table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th rowspan="2">No</th>
-                                    <th rowspan="2">Invoice</th>
-                                    <th rowspan="2">No Job</th>
-                                    <th rowspan="2">Customer Name</th>
-                                    <th colspan="2" class="text-center" style="width: 20%">Amount</th>
-                                    <th colspan="2" class="text-center" style="width: 20%">Payment</th>
-                                    <th rowspan="2" style="width: 10%">Action</th>
-                                </tr>
-                                <tr>
-                                    <th>USD</th>
-                                    <th>IDR</th>
-                                    <th>CASH</th>
-                                    <th>TRANSFER</th>
+                                    <th>No</th>
+                                    <th>Invoice</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Grand Total</th>
+                                    <th>User</th>
+                                    <th style="width: 10%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                 $no = 1;
                                 @endphp
-                                @foreach ($transaction as $pay)
-                                @foreach ($pay->orders as $detail)
+                                @foreach ($transaction as $inv)
+                                @foreach ($inv->transactionDetails as $detail)
                                     <tr>
-                                        <td>{{ $no++ }}</td>    
-                                        <td>{{ $pay->transaction_id }}</td>
-                                        <td>{{ $detail->job_no }}</td>
-                                        <td>{{ $pay->company_name }}</td>
-                                        <td>$.0</td>
-                                        <td>{{ 'Rp ' . number_format($pay->grand_total, 0, ',', '.') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($pay->date_payment)->format('d-M-y') }}</td>
-
-                                        <td></td>
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $inv->transaction_id }}</td>
+                                        <td>{{ $detail->nama_item }}</td>
+                                        <td>{{ $detail->amount }}</td>
+                                        <td>{{ 'Rp ' . number_format($detail->price, 0, ',', '.') }}</td>
+                                        <td>{{ 'Rp ' . number_format($inv->grand_total, 0, ',', '.') }}</td>
+                                        <td>{{ $inv->name }}</td>
                                         <td>
                                             @php
-                                        $encryptedId = Crypt::encryptString($pay->transaction_id);
+                                        $encryptedId = Crypt::encryptString($inv->transaction_id);
                                         @endphp
                                         <a href="{{ route('invoice.cetak', ['id' => $encryptedId]) }}">
                                             <button class="btn btn-primary btn-xs" title="view">
                                                 <i class="fas fa-eye"></i> View
                                             </button>
                                         </a>
-                                            <form action="{{ route('invoice.delete', $pay->transaction_id) }}"
+                                            <form action="{{ route('invoice.delete', $inv->transaction_id) }}"
                                                 method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')

@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\CompanyController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ConsigneController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FakturController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ConsigneController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransactionController;
 
 Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('/', [DashboardController::class, 'index'])->name('index');
 Route::middleware(['auth', 'verified', 'rolemanager:customer_service,admin,supervisor'])->get('index', [DashboardController::class, 'index'])->name('index');
@@ -91,11 +92,19 @@ Route::middleware(['auth'])->group(function () {
 })->middleware('auth');
 
 
+// Export
+Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
+    Route::get('/export/company-pdf', [ExportController::class, 'exportCompany'])->name('company.export-pdf');
+    Route::get('/export/outstandingcust-pdf', [ExportController::class, 'exportCustOutsanding'])->name('outstandingcust.export-pdf');
+    Route::get('/export/tax-pdf', [ExportController::class, 'exportTax'])->name('tax.export-pdf');
+    });
+
 // report
 Route::middleware(['auth', 'rolemanager:admin'])->group(function () {
 Route::get('/report/company', [ReportController::class, 'company'])->name('report.company');
 Route::get('/report/payment', [ReportController::class, 'payment'])->name('report.payment');
 Route::get('/report/outstanding', [ReportController::class, 'outstanding'])->name('report.outstanding');
+Route::get('/report/outstanding-customer', [ReportController::class, 'outstandingCust'])->name('report.outscust');
 Route::get('/report/tax', [ReportController::class, 'tax'])->name('report.tax');
 Route::get('/report/item', [ReportController::class, 'item'])->name('report.item');
 Route::get('/report/detailinv', [ReportController::class, 'detailinv'])->name('report.detailinv');

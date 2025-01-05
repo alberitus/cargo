@@ -27,7 +27,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Outstanding</h4>
+                    <h4 class="card-title">Payment and Outstanding</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -40,8 +40,14 @@
                                     <th>Customer Name</th>
                                     <th>MAWB</th>
                                     <th>Amount(Rp)</th>
-                                    <th>Due Date</th>
+                                    <th>Payment</th>
                                     <th style="width: 10%">Action</th>
+                                </tr>
+                                <tr>
+                                    <th>USD</th>
+                                    <th>IDR</th>
+                                    <th>CASH</th>
+                                    <th>TRANSFER</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,7 +63,7 @@
                                         <td>{{ $outs->company_name }}</td>
                                         <td>{{ $detail->mawb }}</td>
                                         <td>{{ 'Rp ' . number_format($outs->grand_total, 0, ',', '.') }}</td>
-                                        <td><?= date('d/m/y') ?></td>
+                                        <td>{{ $outs->created_at->format('d-m-y') }}</td>
                                         <td>
                                             @php
                                         $encryptedId = Crypt::encryptString($outs->transaction_id);

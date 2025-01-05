@@ -3,7 +3,11 @@
     let totalPrice = 0;
 
     function formatRupiah(angka) {
-        return angka.toLocaleString('id-ID', {
+        const number = Number(angka);
+        if (isNaN(number)) {
+            return 'Rp 0';
+        }
+        return number.toLocaleString('id-ID', {
             style: 'currency',
             currency: 'IDR'
         });
@@ -18,10 +22,10 @@
                 var counter = 1;
                 totalPrice = 0;
                 data.forEach(function (item) {
-                    var TotalPrice = item.price * item.qty;
-                    totalPrice += TotalPrice;
-                    var formattedPrice = formatRupiah(item.price);
-                    var formattedTotalPrice = formatRupiah(TotalPrice);
+                var TotalPrice = item.price * item.qty;
+                totalPrice += TotalPrice;
+                var formattedPrice = formatRupiah(Number(item.price));
+                var formattedTotalPrice = formatRupiah(Number(TotalPrice));
                     cartHTML += `<tr id="item-${item.item_id}">
                             <td>${counter}</td>
                             <td>${item.nama_item}</td>
@@ -38,6 +42,8 @@
                 });
                 $('#cartTable tbody').html(cartHTML);
                 updateTotalPrice();
+            updateTaxValue();
+            updateTotalCost();
             },
             error: function (xhr, status, error) {
                 console.log("Terjadi kesalahan: " + error);
@@ -68,6 +74,7 @@
             success: function (data) {
                 $('#modalCart').modal('hide');
                 updateTotalPrice();
+        updateTaxValue();
                 loadCart();
                 $('#total-price').text('RP ' + response.totalPrice('id-ID'));
             },
@@ -123,19 +130,30 @@
 
     function updateTaxValue() {
         const selectedTax = parseFloat(document.querySelector('input[name="tax"]:checked').value) || 0;
-        const formattedTax = formatRupiah(selectedTax);
+        const taxLabel = document.getElementById('tax-label');
+        
+        if (selectedTax === 0) {
+            taxLabel.textContent = 'No PPN';
+        } else {
+            taxLabel.textContent = `TAX ${selectedTax}%`;
+        }
+
+        const taxAmount = (totalPrice * selectedTax) / 100;
+        const formattedTax = formatRupiah(taxAmount);
         document.getElementById('tax-value').textContent = formattedTax;
+        document.getElementById('tax-price-input').value = taxAmount;
         updateTotalPrice();
+        updateTotalCost();
     }
 
     function updateTotalPrice() {
-        const selectedTax = parseFloat(document.querySelector('input[name="tax"]:checked').value) || 0;
-        const grandTotal = totalPrice + selectedTax;
-        const formattedGrandTotal = formatRupiah(grandTotal);
-        document.getElementById('grand-total').textContent = formattedGrandTotal;
-
+        const selectedTaxPercentage = parseFloat(document.querySelector('input[name="tax"]:checked').value) || 0;
+        const taxAmount = (totalPrice * selectedTaxPercentage) / 100;
+        const grandTotal = totalPrice + taxAmount;
         const formattedTotalPrice = formatRupiah(totalPrice);
+        const formattedGrandTotal = formatRupiah(grandTotal);
         document.getElementById('total-harga').textContent = formattedTotalPrice;
+        document.getElementById('grand-total').textContent = formattedGrandTotal;
     }
 
     const taxRadios = document.querySelectorAll('.tax-radio');
@@ -146,6 +164,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         loadCart();
         updateTaxValue();
+        updateTotalPrice();
     });
 
     function openModal(itemId, qty) {
@@ -154,11 +173,11 @@
         $('#modalUbah').modal('show');
     }
 
-    function formatRupiah(angka) {
-        var reverse = angka.toString().split('').reverse().join(''),
-            ribuan = reverse.match(/\d{1,3}/g);
+        // function formatRupiah(angka) {
+        //     var reverse = angka.toString().split('').reverse().join(''),
+        //         ribuan = reverse.match(/\d{1,3}/g);
 
-        ribuan = ribuan.join('.').split('').reverse().join('');
-        return 'Rp ' + ribuan;
-    }
+        //     ribuan = ribuan.join('.').split('').reverse().join('');
+        //     return 'Rp ' + ribuan;
+        // }
 </script>

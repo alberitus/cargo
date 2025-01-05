@@ -27,7 +27,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title text-center">PT. ANDIMA TRANSPORTINDO</div>
+                    <div class="card-title text-center">PT. AYUTRANS</div>
                     <div class="text-center">
                         <h5>Jl. nama jalan</h5>
                     </div>

@@ -85,7 +85,7 @@
                 <p>Report</p>
                 <span class="caret"></span>
             </a>
-            <div class="collapse {{ Request::is('report/company*') ? 'show' : '' }}" id="reportnav">
+            <div class="collapse {{ Request::is('report*') ? 'show' : '' }}" id="reportnav">
                 <ul class="nav nav-collapse">
                     <li class="{{ Request::is('report/company*') ? 'active' : '' }}">
                         <a href="{{ route('report.company') }}">
@@ -97,10 +97,14 @@
                             <span class="sub-item">Payment</span>
                         </a>
                     </li>
-
                     <li class="{{ Request::is('report/outstanding*') ? 'active' : '' }}">
                         <a href="{{ route('report.outstanding') }}">
                             <span class="sub-item">Outstanding</span>
+                        </a>
+                    </li>
+                    <li class="{{ Request::is('report/outscust*') ? 'active' : '' }}">
+                        <a href="{{ route('report.outscust') }}">
+                            <span class="sub-item">Outstanding Customer</span>
                         </a>
                     </li>
                     <li class="{{ Request::is('report/detailinv') ? 'active' : '' }}">

@@ -151,7 +151,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
             <div class="card card-primary card-round">
                 <div class="card-header">
                     <div class="card-head-row">
@@ -168,7 +168,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 <script>
