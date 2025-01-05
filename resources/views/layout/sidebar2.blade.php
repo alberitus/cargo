@@ -48,7 +48,7 @@
         <li class="nav-item {{ Request::routeIs('consigne.index') ? 'active' : '' }}">
             <a href="{{ route('consigne.index') }}">
                 <i class="fas fa-user"></i>
-                <p>Consigne</p>
+                <p>Consignee</p>
             </a>
         </li>
         @endif
@@ -97,12 +97,12 @@
                             <span class="sub-item">Payment</span>
                         </a>
                     </li>
-                    <li class="{{ Request::is('report/outstanding*') ? 'active' : '' }}">
+                    {{-- <li class="{{ Request::is('report/outstanding') ? 'active' : '' }}">
                         <a href="{{ route('report.outstanding') }}">
                             <span class="sub-item">Outstanding</span>
                         </a>
-                    </li>
-                    <li class="{{ Request::is('report/outscust*') ? 'active' : '' }}">
+                    </li> --}}
+                    <li class="{{ Request::is('report/outstanding-customer') ? 'active' : '' }}">
                         <a href="{{ route('report.outscust') }}">
                             <span class="sub-item">Outstanding Customer</span>
                         </a>

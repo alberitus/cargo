@@ -7,7 +7,7 @@
     </div>
     @endif
     <div class="page-header">
-        <h3 class="fw-bold mb-3">Consigne</h3>
+        <h3 class="fw-bold mb-3">Consignee</h3>
         <ul class="breadcrumbs mb-3">
             <li class="nav-home">
                 <a href="/">
@@ -24,7 +24,7 @@
                 <i class="icon-arrow-right"></i>
             </li>
             <li class="nav-item">
-                <a href="#">Consigne </a>
+                <a href="#">Consignee </a>
             </li>
         </ul>
     </div>
@@ -33,11 +33,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <h4 class="card-title">Consigne</h4>
+                        <h4 class="card-title">Consignee</h4>
                         <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
                             data-bs-target="#modalTambah">
                             <i class="fa fa-plus"></i>
-                            Add Consigne
+                            Add Consignee
                         </button>
 
                     </div>
@@ -47,7 +47,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Consigne</th>
+                                <th>Nama Consignee</th>
                                 {{-- <th>Position</th>
                                     <th>Office</th> --}}
                                 <th style="width: 10%">Action</th>
@@ -56,7 +56,7 @@
                         <tfoot>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Consigne</th>
+                                <th>Nama Consignee</th>
                                 {{-- <th>Position</th>
                                     <th>Office</th> --}}
                                 <th>Action</th>
