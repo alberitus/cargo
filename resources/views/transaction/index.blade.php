@@ -107,7 +107,7 @@
                                         placeholder="HAWB NUMBER">
                                 </div>
                                 <div class="form-group">
-                                    <label for="defaultSelect">Consgine</label>
+                                    <label for="defaultSelect">Consginee</label>
                                     <select name="consigne" class="form-select">
                                         @foreach ($consigne as $Cons)
                                         <option id="addConsigne" value="{{ $Cons->nama_consigne }}"
