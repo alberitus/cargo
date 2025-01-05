@@ -16,7 +16,7 @@ class CompanyController extends Controller
     function submit(Request $request)
     {
         $company = new Company();
-        $company->name = $request->name;
+        $company->company_name = $request->company_name;
         $company->code_name = $request->code_name;
         $company->contact = $request->contact;
         $company->save();
@@ -30,7 +30,7 @@ class CompanyController extends Controller
         if (!$company) {
             return redirect()->route('company.index')->with('error', 'Company not found');
         }
-        $company->name = $request->name;
+        $company->company_name = $request->company_name;
         $company->code_name = $request->code_name;
         $company->contact = $request->contact;
         $company->update();

@@ -27,7 +27,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title text-center">PT. ANDIMA TRANSPORTINDO</div>
+                    <div class="card-title text-center">PT. AYUTRANS</div>
                     <div class="text-center">
                         <h5>Jl. nama jalan</h5>
                     </div>
@@ -45,9 +45,9 @@
                                     <label for="defaultSelect">Company</label>
                                     <select name="company" class="form-select" id="companySelect">
                                         @foreach ($company as $cust)
-                                        <option value="{{ $cust->name }}" data-code="{{ $cust->code_name }}"
-                                            {{ old('company_id') == $cust->name ? 'selected' : '' }}>
-                                            {{ $cust->name }}
+                                        <option value="{{ $cust->company_name }}" data-code="{{ $cust->code_name }}"
+                                            {{ old('company_id') == $cust->company_name ? 'selected' : '' }}>
+                                            {{ $cust->company_name }}
                                         </option>
                                         @endforeach
                                     </select>
@@ -55,16 +55,17 @@
                                 <div class="form-group">
                                     <label for="defaultSelect">Job Type</label>
                                     <select name="job_type" class="form-select" id="jobSelect">
-                                        @foreach ($jobsWithDate as $job)
-                                        <option value="{{ $job->job_code }}" data-prefix="{{ $job->next_prefix }}">
-                                            {{ $job->job_name }}
+                                        @foreach ($job as $jobs)
+                                        <option value="{{ $jobs->job_code }}" data-prefix="{{ $jobs->next_prefix }}">
+                                            {{ $jobs->job_name }}
                                         </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="jobFormat">Job Number Format</label>
-                                    <input type="text" class="form-control" id="jobFormat" name="job_format" readonly>
+                                    {{-- <input type="text" class="form-control" id="jobFormat" name="job_format" readonly> --}}
+                                    <input type="text" class="form-control" id="jobFormat" data-next-job-number="{{ $nextJobNumber }}" readonly>
                                 </div>
                                 <div class="form-group @error('job_ref') has-error has-feedback @enderror">
                                     <label for="largeInput">JOB REF</label>
@@ -187,14 +188,14 @@
                                         <div class="d-flex">
                                             <div class="form-check">
                                                 <input class="form-check-input tax-radio" type="radio" name="tax"
-                                                    id="tax1" value="6600" />
+                                                    id="tax1" value="1.1" />
                                                 <label class="form-check-label" for="tax1">
                                                     1.1%
                                                 </label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input tax-radio" type="radio" name="tax"
-                                                    id="tax2" value="16500" checked />
+                                                    id="tax2" value="11" checked />
                                                 <label class="form-check-label" for="tax2">
                                                     11%
                                                 </label>
@@ -214,7 +215,7 @@
                                         <h5>TOTAL HARGA</h5>
                                     </div>
                                     <div class="d-grip gap-3 d-md-flex justify-content-md-end">
-                                        <h5>TAX 11%</h5>
+                                        <h5 id="tax-label">TAX</h5>
                                     </div>
                                     <div class="d-grip gap-3 d-md-flex justify-content-md-end">
                                         <h5>GRAND TOTAL</h5>
@@ -226,6 +227,7 @@
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <h5 id="tax-value" style="width: 80%; text-align: left;">RP 0</h5>
+                                        <input type="hidden" id="tax-price-input" name="tax_price" value="0">
                                     </div>
 
                                     <div class="d-flex justify-content-center">
@@ -306,7 +308,7 @@
         </div>
     </div>
 </div>
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         const companySelect = document.getElementById('companySelect');
         const jobSelect = document.getElementById('jobSelect');
@@ -327,6 +329,31 @@
         }
 
         jobSelect.addEventListener('change', updateJobFormat);
+        updateJobFormat();
+    });
+</script> --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const companySelect = document.getElementById('companySelect');
+        const jobSelect = document.getElementById('jobSelect');
+        const jobFormatInput = document.getElementById('jobFormat');
+
+        // Ambil nilai nextJobNumber dari elemen data
+        const nextJobNumber = document.getElementById('jobFormat').dataset.nextJobNumber;
+
+        function updateJobFormat() {
+            const date = new Date();
+            const yearMonth = `${date.getFullYear().toString().slice(-2)}${String(date.getMonth() + 1).padStart(2, '0')}`;
+            
+            // Gunakan next prefix yang diberikan dari server
+            const jobNumber = nextJobNumber || `AT/${yearMonth}/0001`;
+            jobFormatInput.value = jobNumber;
+        }
+
+        // Update format ketika job type berubah
+        jobSelect.addEventListener('change', updateJobFormat);
+        
+        // Format awal saat halaman dimuat
         updateJobFormat();
     });
 </script>

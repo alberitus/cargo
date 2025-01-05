@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
-use App\Models\Orders;
+use App\Models\Transaction_detail;
+
 
 
 class ReportController extends Controller
@@ -13,16 +14,15 @@ class ReportController extends Controller
 
     }
 
-    function company(){
-        $transactions = Transaction::with( 'company', 'user')->get();
-
-        foreach ($transactions as $transaction) {
-            $transaction->grand_total = $transaction->transactionDetails->sum('total_price');
-            $transaction->total_tax = $transaction->transactionDetails->sum('tax');
-        }
-        
-        return view('report.report', compact('transactions'));
-    }
+    // Controller
+public function company()
+{
+    $transactions = Transaction::select('transaction_id', 'name', 'company_name', 'status', 'stsfaktur', 'faktur')
+        ->get()
+        ->groupBy('company_name');
+    
+    return view('report.report', compact('transactions'));
+}
 
     function item(){
         $transaction = Transaction::with('transactionDetails.item', 'user')->get();
@@ -35,15 +35,42 @@ class ReportController extends Controller
 
         return view('report.invoice', compact('transaction'));
     }
-    function tax(){
-        $transaction = Transaction::with('transactionDetails.item','company', 'user')->get();
 
-        foreach ($transaction as $ord) {
-        $ord->total_tax = $ord->transactionDetails->sum('tax');
+    public function tax(Request $request)
+{
+    $query = Transaction::with('transactionDetails.item', 'company', 'user');
+    
+    // Apply tax filter
+    if ($request->has('filter')) {
+        switch ($request->filter) {
+            case '1.1':
+                $query->whereHas('transactionDetails', function($q) {
+                    $q->whereRaw('ABS(tax - ?) < 0.0001', [1.1]); // Menggunakan pembulatan untuk perbandingan
+                });
+                break;
+            case '11':
+                $query->whereHas('transactionDetails', function($q) {
+                    $q->where('tax', 11);
+                });
+                break;
+            case 'no':
+                $query->whereHas('transactionDetails', function($q) {
+                    $q->where('tax', 0)->orWhereNull('tax');
+                });
+                break;
         }
-
-        return view('report.tax', compact('transaction'));
     }
+    
+    $transaction = $query->get();
+
+    foreach ($transaction as $ord) {
+        $ord->total_tax = $ord->transactionDetails->sum('tax');
+    }
+
+    return view('report.tax', compact('transaction'));
+}
+
+
     function payment(){
         $transaction = Transaction::where('status', 2)
         ->with('transactionDetails', 'orders')
@@ -58,17 +85,42 @@ class ReportController extends Controller
         return view('report.payment', compact('transaction'));
     }
 
-    function outstanding(){
-        $transaction = Transaction::with('transactionDetails', 'orders')->get();
+    function outstanding()
+    {
+        $transactions = Transaction::with('transactionDetails', 'orders')
+            ->select('transaction_id', 'name', 'company_name', 'status', 'created_at', 'date_payment')
+            ->get()
+            ->groupBy('company_name');
 
-        foreach ($transaction as $outs) {
-            $outs->total_price = $outs->transactionDetails->sum('total_price');
-            $outs->total_tax = $outs->transactionDetails->sum('tax');
-            $outs->grand_total = $outs->total_price + $outs->total_tax;
+        foreach ($transactions as $companyName => $groupedTransactions) {
+            foreach ($groupedTransactions as $transaction) {
+                $transaction->total_price = $transaction->transactionDetails->sum('total_price');
+                $transaction->total_tax = $transaction->transactionDetails->sum('tax');
+                $transaction->grand_total = $transaction->total_price + $transaction->total_tax;
+            }
         }
 
-        return view('report.outstanding', compact('transaction'));
+        return view('report.outstanding', compact('transactions'));
     }
+
+    function outstandingCust()
+    {
+        $transactions = Transaction::with('transactionDetails', 'orders')
+            ->select('transaction_id', 'name', 'company_name', 'status', 'created_at', 'date_payment')
+            ->get()
+            ->groupBy('company_name');
+
+        foreach ($transactions as $companyName => $groupedTransactions) {
+            foreach ($groupedTransactions as $transaction) {
+                $transaction->total_price = $transaction->transactionDetails->sum('total_price');
+                $transaction->total_tax = $transaction->transactionDetails->sum('tax');
+                $transaction->grand_total = $transaction->total_price + $transaction->total_tax;
+            }
+        }
+
+        return view('report.outstanding-customer', compact('transactions'));
+    }
+
     
     function detailinv(){
         $transaction = Transaction::with('transactionDetails', 'orders')->where('status', 2)->get();

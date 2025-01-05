@@ -25,7 +25,7 @@
                         </div>
                         <div class="modal-footer border-0">
                             <button type="submit" class="btn btn-primary">
-                                Update
+                                Input
                             </button>
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-hidden="true">
                                 Close

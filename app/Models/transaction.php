@@ -18,11 +18,17 @@ class transaction extends Model
     protected $primaryKey = 'transaction_id'; // Primary key adalah 'transaction_id'
     public $incrementing = false;             // Non-incrementing key
     protected $keyType = 'string'; 
+    protected $dates = ['date_payment']; 
+
+    public function getFormattedDatePaymentAttribute()
+{
+    return $this->date_payment ? strtolower($this->date_payment->format('d-M-y')) : '-';
+}
 
     // protected $primaryKey = 'transaction_id'; 
 
     protected $fillable = [
-        'transaction_id', 'name', 'company_name', 'status', 'stsfaktur','faktur'        
+        'transaction_id', 'name', 'company_name', 'status', 'stsfaktur','faktur', 'date_payment'    
     ];
 
     public function transactionDetails()

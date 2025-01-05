@@ -3,7 +3,11 @@
     let totalCost = 0;
 
     function formatRupiah(angka) {
-        return angka.toLocaleString('id-ID', {
+        const number = Number(angka);
+        if (isNaN(number)) {
+            return 'Rp 0';
+        }
+        return number.toLocaleString('id-ID', {
             style: 'currency',
             currency: 'IDR'
         });
@@ -20,8 +24,8 @@
                 dataCost.forEach(function (cost) {
                     var TotalCost = cost.price * cost.qty;
                     totalCost += TotalCost;
-                    var formattedCost = formatRupiah(cost.price);
-                    var formattedTotalCost = formatRupiah(TotalCost);
+                    var formattedCost = formatRupiah(Number(cost.price));
+                    var formattedTotalCost = formatRupiah(Number(TotalCost));
                     costHTML += `<tr id="item-${cost.item_id}">
                     <td>${counter}</td>
                     <td>${cost.nama_item}</td>

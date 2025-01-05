@@ -22,7 +22,7 @@ class FakturController extends Controller
             Alert::error('Error', 'Transaction not found!');
             return redirect()->route('faktur.index');
         }
-        $faktur->fraktur = $request->faktur;
+        $faktur->faktur = $request->faktur;
 
         $faktur->update();
 

@@ -20,7 +20,7 @@
                         <div class="col-sm-12">
                             <div class="form-group form-group-default">
                                 <label>Name</label>
-                                <input id="addName" name="name" type="text" class="form-control"
+                                <input id="addName" name="company_name" type="text" class="form-control"
                                     placeholder="fill name" />
                             </div>
                         </div>
