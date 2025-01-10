@@ -103,25 +103,35 @@ public function company()
         return view('report.outstanding', compact('transactions'));
     }
 
-    function outstandingCust()
-    {
-        $transactions = Transaction::with('transactionDetails', 'orders')
-            ->select('transaction_id', 'name', 'company_name', 'status', 'created_at', 'date_payment')
-            ->get()
-            ->groupBy('company_name');
+    public function outstandingCust(Request $request)
+{
+    $allCompanies = Transaction::select('company_name')
+        ->distinct()
+        ->orderBy('company_name')
+        ->pluck('company_name');
 
-        foreach ($transactions as $companyName => $groupedTransactions) {
-            foreach ($groupedTransactions as $transaction) {
-                $transaction->total_price = $transaction->transactionDetails->sum('total_price');
-                $transaction->total_tax = $transaction->transactionDetails->sum('tax');
-                $transaction->grand_total = $transaction->total_price + $transaction->total_tax;
-            }
-        }
+    $query = Transaction::with('transactionDetails', 'orders')
+        ->select('transaction_id', 'name', 'company_name', 'status', 'created_at', 'date_payment');
 
-        return view('report.outstanding-customer', compact('transactions'));
+    // Filter berdasarkan company_name jika ada
+    if ($request->has('company_name') && $request->company_name != 'all') {
+        $query->where('company_name', $request->company_name);
     }
 
-    
+    // Ambil data
+    $transactions = $query->get()->groupBy('company_name');
+
+    // Hitung total
+    foreach ($transactions as $companyName => $groupedTransactions) {
+        foreach ($groupedTransactions as $transaction) {
+            $transaction->total_price = $transaction->transactionDetails->sum('total_price');
+            $transaction->total_tax = $transaction->transactionDetails->sum('tax');
+            $transaction->grand_total = $transaction->total_price + $transaction->total_tax;
+        }
+    }
+
+    return view('report.outstanding-customer', compact('transactions', 'allCompanies'));
+}
     function detailinv(){
         $transaction = Transaction::with('transactionDetails', 'orders')->where('status', 2)->get();
 
