@@ -16,7 +16,7 @@
                         Update company
                     </p>
                     <!-- Perhatikan route harus sesuai dengan id perusahaan -->
-                    <form action="{{ route('company.update', $data->company_id) }}" method="POST">
+                    <form method="POST" action="{{ route('company.update', $data->company_id) }}">
                         @csrf
                         @method('PUT') <!-- Untuk method update -->
                         <div class="row">

@@ -63,7 +63,6 @@
                                         <td>$.0</td>
                                         <td>{{ 'Rp ' . number_format($pay->grand_total, 0, ',', '.') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($pay->date_payment)->format('d-M-y') }}</td>
-
                                         <td></td>
                                         <td>
                                             @php

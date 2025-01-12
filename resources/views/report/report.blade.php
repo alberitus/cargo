@@ -49,7 +49,7 @@
                                     <td>{{ $transaction->stsfaktur }}</td>
                                     <td>
                                         @php
-                                        $encryptedId = Crypt::encryptString($transaction->transaction_id);
+                                        $encryptedId = Crypt::encryptS  tring($transaction->transaction_id);
                                         @endphp
                                         <a href="{{ route('invoice.cetak', ['id' => $encryptedId]) }}">
                                             <button class="btn btn-primary btn-xs" title="view">
