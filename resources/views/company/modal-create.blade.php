@@ -26,16 +26,16 @@
                         </div>
                         <div class="col-md-6 pe-0">
                             <div class="form-group form-group-default">
-                                <label>Address</label>
-                                <input id="addAddress" name="address" type="text" class="form-control"
-                                    placeholder="fill Address" />
+                                <label>Code</label>
+                                <input id="addCode" name="code_name" type="text" class="form-control"
+                                    placeholder="fill Code" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group form-group-default">
-                                <label>City</label>
-                                <input id="addCity" name="city" type="text" class="form-control"
-                                    placeholder="fill City" />
+                                <label>Contact</label>
+                                <input id="addContact" name="contact" type="text" class="form-control"
+                                    placeholder="fill Contact" />
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,6 @@
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-hidden="true">
                             Close
                         </button>
-                        
                     </div>
                 </form>
             </div>

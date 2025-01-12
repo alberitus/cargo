@@ -155,15 +155,15 @@ public function company()
 
         return view('report.detailinvcus', compact('transaction'));
     }
-    function show()
-    {
+        function show()
+        {
 
-    }
+        }
 
-    function list()
-    {
+        function list()
+        {
 
-    }
+        }
 
     function report()
     {

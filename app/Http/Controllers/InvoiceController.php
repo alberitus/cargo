@@ -22,7 +22,6 @@ class InvoiceController extends Controller
     public function cetak($encryptedId)
     {
         try {
-            // Dekripsi ID
             $id = Crypt::decryptString($encryptedId);
 
             $transaction = Transaction::with(['orders', 'transactionDetails'])
@@ -69,11 +68,8 @@ class InvoiceController extends Controller
     $transaction = Transaction::with(['transactionDetails', 'orders'])->where('transaction_id', $transaction_id)->first();
 
     if ($transaction) {
-        // Hapus semua data relasi menggunakan Eloquent
         $transaction->transactionDetails()->delete();
         $transaction->orders()->delete();
-
-        // Hapus data utama
         $transaction->delete();
         
         Alert::success('Success', 'Invoice deleted successfully.');

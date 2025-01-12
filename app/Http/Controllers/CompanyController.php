@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Company; 
+use App\Models\Company;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CompanyController extends Controller
 {
@@ -21,7 +22,8 @@ class CompanyController extends Controller
         $company->contact = $request->contact;
         $company->save();
 
-        return redirect()->route('company.index')->with('success', 'Company created successfully.');
+        alert()->success('Success', 'Company submitted successfully!');
+        return redirect()->route('company.index');
     }
 
     function update(Request $request, $company_id)
@@ -35,7 +37,8 @@ class CompanyController extends Controller
         $company->contact = $request->contact;
         $company->update();
 
-        return redirect()->route('company.index')->with('success', 'Company update successfully.');
+        alert()->success('Success', 'Company update successfully!');
+        return redirect()->route('company.index');
     }
 
     function destroy($company_id)
@@ -43,6 +46,7 @@ class CompanyController extends Controller
         $company = Company::find($company_id);
         $company->delete();
 
-        return redirect()->route('company.index')->with('success', 'Company deleted successfully.');
+        alert()->success('Success', 'Company deleted successfully!');
+        return redirect()->route('company.index');
     }
 }
