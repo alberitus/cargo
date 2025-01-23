@@ -117,4 +117,12 @@ Route::resource('report', ReportController::class);
 });
 
 
+//Subview
+Route::get('/subview-selling-card', function () {
+    return view('transaction/selling-card');
+});
+Route::get('/subview-cost-card', function () {
+    return view('transaction/cost-card');
+});
+
 require __DIR__.'/auth.php';
