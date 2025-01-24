@@ -29,19 +29,19 @@ class TransactionController extends Controller
     //             ->whereMonth('created_at', now()->month)
     //             ->latest('created_at')
     //             ->first();
-                
-        
+
+
     //         if ($latestOrder) {
     //             $currentPrefix = (int) substr($latestOrder->job_no, 0, strpos($latestOrder->job_no, '/'));
     //             $nextPrefix = str_pad($currentPrefix + 1, 4, '0', STR_PAD_LEFT);
     //         } else {
     //             $nextPrefix = '0001';
     //         }
-        
+
     //         if ((int)$nextPrefix > 9999) {
     //             $nextPrefix = '0001';
     //         }
-        
+
     //         $jobs->next_prefix = $nextPrefix;
     //         // dd($latestOrder);
     //         return $jobs;
@@ -67,19 +67,19 @@ class TransactionController extends Controller
                 ->whereMonth('created_at', now()->month)
                 ->latest('created_at')
                 ->first();
-                
-        
+
+
             if ($latestOrder) {
                 $currentPrefix = (int) substr($latestOrder->job_no, 0, strpos($latestOrder->job_no, '/'));
                 $nextPrefix = str_pad($currentPrefix + 1, 4, '0', STR_PAD_LEFT);
             } else {
                 $nextPrefix = '0001';
             }
-        
+
             if ((int)$nextPrefix > 9999) {
                 $nextPrefix = '0001';
             }
-        
+
             $jobs->next_prefix = $nextPrefix;
             // dd($latestOrder);
             return $jobs;
@@ -94,53 +94,53 @@ class TransactionController extends Controller
     }
 
     public function index()
-{
-    $company = Company::all();
-    $consigne = Consigne::all();
-    $job = Job::all();
+    {
+        $company = Company::all();
+        $consigne = Consigne::all();
+        $job = Job::all();
 
-    // Format untuk prefix bulan dan tahun (YYMM)
-    $currentYearMonth = now()->format('ym'); // Akan menghasilkan format '2412' untuk December 2024
+        // Format untuk prefix bulan dan tahun (YYMM)
+        $currentYearMonth = now()->format('ym'); // Akan menghasilkan format '2412' untuk December 2024
 
-    // Mencari job number terakhir dengan format AT/YYMM/*
-    $latestOrder = Orders::where('job_no', 'LIKE', 'AT/' . $currentYearMonth . '/%')
-        ->latest('created_at')
-        ->first();
+        // Mencari job number terakhir dengan format AT/YYMM/*
+        $latestOrder = Orders::where('job_no', 'LIKE', 'AT/' . $currentYearMonth . '/%')
+            ->latest('created_at')
+            ->first();
 
-    // Menentukan prefix berikutnya
-    if ($latestOrder) {
-        $currentNumber = (int) substr($latestOrder->job_no, -4); // Mengambil 4 digit terakhir
-        $nextNumber = $currentNumber + 1;
-        
-        // Reset ke 0001 jika melebihi 9999
-        if ($nextNumber > 9999) {
-            $nextNumber = 1;
+        // Menentukan prefix berikutnya
+        if ($latestOrder) {
+            $currentNumber = (int) substr($latestOrder->job_no, -4); // Mengambil 4 digit terakhir
+            $nextNumber = $currentNumber + 1;
+
+            // Reset ke 0001 jika melebihi 9999
+            if ($nextNumber > 9999) {
+                $nextNumber = 1;
+            }
+
+            $nextPrefix = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        } else {
+            $nextPrefix = '0001';
         }
-        
-        $nextPrefix = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-    } else {
-        $nextPrefix = '0001';
+
+        // Format job number lengkap
+        $nextJobNumber = 'AT/' . $currentYearMonth . '/' . $nextPrefix;
+
+        $item = Item::all();
+        $itemCost = Item::all();
+        $cart = session('cart_items', []);
+        $cost = session('cost_items', []);
+
+        return view('transaction.index', compact(
+            'company',
+            'consigne',
+            'job',
+            'nextJobNumber',
+            'cart',
+            'cost',
+            'item',
+            'itemCost'
+        ));
     }
-
-    // Format job number lengkap
-    $nextJobNumber = 'AT/' . $currentYearMonth . '/' . $nextPrefix;
-
-    $item = Item::all();
-    $itemCost = Item::all();
-    $cart = session('cart_items', []);
-    $cost = session('cost_items', []);
-
-    return view('transaction.index', compact(
-        'company', 
-        'consigne', 
-        'job', 
-        'nextJobNumber',
-        'cart', 
-        'cost', 
-        'item', 
-        'itemCost'
-    ));
-}
 
     function loadCart()
     {
@@ -189,7 +189,7 @@ class TransactionController extends Controller
         ];
 
         $cart = session('cart_items', []);
-        
+
         $found = false;
         foreach ($cart as &$cartItem) {
             if (isset($cartItem['item_id']) && $cartItem['item_id'] == $item['item_id']) {
@@ -202,7 +202,7 @@ class TransactionController extends Controller
         if (!$found) {
             $cart[] = $item;
         }
-        
+
 
         session(['cart_items' => $cart]);
 
@@ -229,7 +229,7 @@ class TransactionController extends Controller
         ];
 
         $cost = session('cost_items', []);
-        
+
         $found = false;
         foreach ($cost as &$costItem) {
             if (isset($costItem['item_id']) && $costItem['item_id'] == $itemCost['item_id']) {
@@ -242,7 +242,7 @@ class TransactionController extends Controller
         if (!$found) {
             $cost[] = $itemCost;
         }
-        
+
 
         session(['cost_items' => $cost]);
 
@@ -267,7 +267,7 @@ class TransactionController extends Controller
 
         foreach ($cart as &$cartItem) {
             if ($cartItem['item_id'] == $itemId) {
-                $cartItem['qty'] = $qty; 
+                $cartItem['qty'] = $qty;
                 break;
             }
         }
@@ -286,7 +286,7 @@ class TransactionController extends Controller
 
         foreach ($cost as &$costItem) {
             if ($costItem['item_id'] == $itemId) {
-                $costItem['qty'] = $qty; 
+                $costItem['qty'] = $qty;
                 break;
             }
         }
@@ -329,13 +329,13 @@ class TransactionController extends Controller
         if (!$user) {
             return redirect()->route('login');
         }
-    
+
         $prefix = $request->stsfaktur == 1 ? 'B' : 'A';
         $year = date('y');
         $lastTransaction = Transaction::where('transaction_id', 'LIKE', $prefix . $year . '%')
-        ->orderBy('transaction_id', 'desc')
-        ->first();
-        
+            ->orderBy('transaction_id', 'desc')
+            ->first();
+
         if ($lastTransaction) {
             $lastSequence = (int)substr($lastTransaction->transaction_id, -5);
             $newSequence = $lastSequence + 1;
@@ -369,7 +369,7 @@ class TransactionController extends Controller
         $cart = session('cart_items', []);
         foreach ($cart as $item) {
             $total = $item['price'] * $item['qty'];
-        Transaction_detail::create([
+            Transaction_detail::create([
                 'transaction_id' => $transactionId,
                 'nama_item' => $item['nama_item'],
                 'amount' => $item['qty'],
@@ -390,7 +390,7 @@ class TransactionController extends Controller
         $cost = session('cost_items', []);
         foreach ($cost as $items) {
             $total = $items['price'] * $items['qty'];
-        Cost::create([
+            Cost::create([
                 'transaction_id' => $transactionId,
                 'nama_item' => $items['nama_item'],
                 'amount' => $items['qty'],
@@ -415,11 +415,11 @@ class TransactionController extends Controller
         // }
 
         $latestOrder = Orders::where('job_no', 'LIKE', 'AT/' . date('ym') . '/%')
-        ->latest('created_at')
-        ->first();
+            ->latest('created_at')
+            ->first();
 
         // Get the next prefix number
-        $prefix = !$latestOrder ? '0001' : 
+        $prefix = !$latestOrder ? '0001' :
             str_pad((int)substr($latestOrder->job_no, -4) + 1, 4, '0', STR_PAD_LEFT);
 
         // Reset prefix to 0001 if it exceeds 9999

@@ -21,7 +21,7 @@
                 ],
                 urls: ["{{ asset('import/assets/css/fonts.min.css') }}"],
             },
-            active: function () {
+            active: function() {
                 sessionStorage.fonts = true;
             },
         });
@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{{ asset('import/assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('import/assets/css/kaiadmin.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('import/assets/css/demo.css') }}" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
@@ -152,9 +153,9 @@
             fillColor: "rgba(255, 165, 52, .14)",
         });
     </script>
-    
+
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#basic-datatables").DataTable({});
 
             // Add Row
@@ -165,7 +166,7 @@
             var action =
                 '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
 
-            $("#addRowButton").click(function () {
+            $("#addRowButton").click(function() {
                 $("#add-row")
                     .dataTable()
                     .fnAddData([
@@ -179,7 +180,6 @@
                 $("#addRowModal").modal("hide");
             });
         });
-
     </script>
 
 </body>
